@@ -200,7 +200,18 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Lỗi!',
-                                    text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',                                    
+                                    text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+                                    confirmButtonText: "Đăng nhập",
+                                    cancelButtonText: "Quay lại",
+                                    showCancelButton: true,
+                                    closeOnConfirm: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '/account/login';  // Thay /duong-dan-dang-nhap bằng đường dẫn thực tế của bạn
+                                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                        // Hành động tắt thông báo (tự động đóng)
+                                        Swal.close(); // Có thể gọi hàm này để tắt thông báo, nhưng mặc định nút Cancel đã đóng thông báo.
+                                    }
                                 });
                             }
                         }
