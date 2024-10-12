@@ -67,10 +67,9 @@
         </div>
         <div class="form-group">
             <label for="citySelect">Tỉnh/ Thành phố</label>
-            <select id="citySelect" name="City" required class="form-control" onchange="fetchDistricts(); getCoordinates();">
+            <select id="citySelect" name="City" required class="form-control" onchange="fetchDistricts();">
                 <option value="">-- Chọn tỉnh/ thành phố --</option>
             </select>
-            @*<div id="coordinates"></div>*@
         </div>
         <div class="form-group">
             <label for="districtSelect">Quận/ Huyện</label>
@@ -114,11 +113,14 @@
         </select>
     </div>
 
-    <div class="form-group" id="load_form_payment" style="display:none">
-        <h4><label>Chọn phương thức thanh toán:</label><br></h4>
-        <label><input type="radio" name="TypePaymentVN" value="0" checked="">Cổng thanh toán VNPAY</label> <br>
-        <label><input type="radio" name="TypePaymentVN" value="1">Cổng thanh toán PayPal</label><br>
-
+    <div class="form-group" id="load_form_payment" style="display:none;">
+        <h4><label>Chọn phương thức thanh toán:</label><br /></h4>
+        <h5>Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>
+        <label><input type="radio" name="TypePaymentVN" value="0" checked />Cổng thanh toán VNPAY</label>
+        <h5>Cách 2: Tách phương thức thanh toán tại site của Merchant</h5>
+        <label><input type="radio" name="TypePaymentVN" value="1" />Thanh toán qua ứng dụng hỗ trợ VNPAYQR</label><br />
+        <label><input type="radio" name="TypePaymentVN" value="2" />ATM - Tài khoản ngân hàng nội địa</label><br />
+        <label><input type="radio" name="TypePaymentVN" value="3" />Thanh toán qua thẻ quốc tế</label><br />
     </div>
    
     <div class="form-group" id="load_send"></div>
@@ -174,7 +176,7 @@
             .catch(error => console.error('Lỗi khi lấy tọa độ:', error));
     }
 
-    function calculateDistance(origin, destination) {
+/*    function calculateDistance(origin, destination) {
         const url = `https://rsapi.goong.io/DistanceMatrix?origins=${origin.lat},${origin.lon}&destinations=${destination.lat},${destination.lon}&vehicle=car&api_key=yr0B0oRR9YfPI7RO8l8QTPmtiJxDlz8EmWXDuIqE`;
         return fetch(url)
             .then(response => response.json())
@@ -185,7 +187,7 @@
                     throw new Error('No distance data found.');
                 }
             });
-    }
+    }*/
 
     function generateFullAddress() {
         const city = document.getElementById('citySelect').selectedOptions[0].textContent;
