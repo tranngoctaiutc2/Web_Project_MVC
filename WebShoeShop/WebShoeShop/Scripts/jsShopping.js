@@ -23,8 +23,16 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi!',
-                        text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng'
+                        text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
+                        confirmButtonText: "Đăng nhập",
+                        showCancelButton: true,
+                        closeOnConfirm: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/account/login';  
+                        }
                     });
+
                 }
             }
         });
