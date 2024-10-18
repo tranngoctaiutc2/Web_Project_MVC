@@ -205,54 +205,6 @@
     <button class="back-to-top" onclick="scrollToTop()">
         <i class="fa fa-arrow-up"></i>
     </button>
-    <button class="back-to-top1" onclick="showPartialView()">
-        <i class="fa fa-cloud"></i>
-    </button>
-    <div id="partial-view-container" class="partial-view-container" style="display:none;">
-        <div class="wrong">
-            <p id='wrong-msg'></p>
-        </div>
-        <div class="weather">
-            <div class="weather-box">
-                <h1>Bảng tin thời tiết tại <span id="location1"></span></h1>
-                <div class="correct-city">
-                    <img id="weather-icon">
-
-                    <div class="main">
-                        <h2 id="temp"></h2>
-                        <span id="condition"></span>
-                    </div>
-
-                    <div class="forecast">
-                        <h2>Forecast</h2>
-                        <span id="temp_max"></span>
-                        <span id="temp_min"></span>
-                    </div>
-
-                    <div class="humidity">
-                        <h2>Độ ẩm</h2>
-                        <span id="humidity"></span>
-                        <h2>Tốc độ gió</h2>
-                        <span id="wind-speed"></span>
-                    </div>
-
-                    <div class="humidity">
-                        <h2>Chỉ số UV</h2>
-                        <span id="uv-index"></span>
-                        <h2>Tình trạng</h2>
-                        <span id="air-pollution-index"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer1">
-                <time id="dmy"></time>
-                <time id="dt"></time>
-                <i class="fa fa-calendar-times-o" aria-hidden="true" style="text-align:right;margin:3px"></i>
-            </div>
-
-        </div>
-    </div>
     <div id="overlay" class="overlay"></div>
     @*@Scripts.Render("~/bundles/jquery")*@
     <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.2/libs/oversea/index.js"></script>
@@ -280,7 +232,6 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Content/assets/js/main.js"></script>
-    <script src="~/Content/assets/js/Weather.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
     @*    <script src="~/Content/assets/js/jquery.prettyPhoto.js"></script>
