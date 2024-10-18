@@ -13,13 +13,10 @@ window.onscroll = function () {
 
 function toggleBackToTopButton() {
 	var button = document.querySelector('.back-to-top');
-	var button1 = document.querySelector('.back-to-top1');
 	if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
 		button.classList.add('show');
-		button1.classList.add('show');
 	} else {
 		button.classList.remove('show');
-		button1.classList.add('show');
 	}
 }
 
