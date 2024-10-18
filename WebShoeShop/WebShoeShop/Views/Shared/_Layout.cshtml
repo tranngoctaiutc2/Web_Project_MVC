@@ -94,7 +94,6 @@
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
-                                                <li><a href="/account/profile"><i class="fa fa-address-card" aria-hidden="true"></i> Hồ sơ</a></li>
                                                 <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-arrow-right" aria-hidden="true"></i> Đăng xuất</a></li>
                                             </ul>
                                         }
@@ -133,31 +132,46 @@
                                     <li id="search_li">
                                         @using (Html.BeginForm("index", "Search", FormMethod.Get, new { }))
                                         {
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="Searchtext" class="form-control" placeholder="Tìm kiếm sản phẩm">
-                                                <span class="input-group-append">
-                                                    <button type="submit" class="btn btn-outline-dark"><i class="fa fa-search"></i></button>
+                                            <div class="input-group" style="margin: 10px 0;">
+                                                <input type="text" name="Searchtext" class="form-control" placeholder="Tìm kiếm sản phẩm" style="opacity: 0; pointer-events: none; transition: opacity 0.3s;">
+                                                <span class="input-group-append" style="cursor: pointer;">
+                                                    <a href="#" class="btn" style="border-radius: 50%;background-color: #eceff6; color: black; padding: 10px;">
+                                                        <i class="fa fa-search" title="Tìm kiếm"></i>
+                                                    </a>
                                                 </span>
                                             </div>
+                                            <script>
+                                                const searchInput = document.querySelector('input[name="Searchtext"]');
+                                                const searchButton = document.querySelector('.input-group-append');
+                                                searchButton.addEventListener('click', () => {
+                                                    searchInput.style.opacity = '1';
+                                                    searchInput.style.pointerEvents = 'auto';
+                                                    searchInput.focus();
+                                                });
+                                                searchInput.addEventListener('blur', () => {
+                                                    if (!searchInput.value) {
+                                                        searchInput.style.opacity = '0';
+                                                        searchInput.style.pointerEvents = 'none';
+                                                    }
+                                                });
+                                            </script>
                                         }
                                     </li>
 
                                     <li class="checkout">
                                         <a href="/gio-hang">
-                                            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                            <i class="fa fa-shopping-bag" aria-hidden="true" title="Giỏ hàng"></i>
                                             <span id="checkout_items" class="checkout_items">0</span>
                                         </a>
                                     </li>
                                     <li class="checkout">
                                         <a href="/WishList/index">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-
+                                            <i class="fa fa-heart" aria-hidden="true" title="Sản phẩm yêu thích"></i>
                                         </a>
                                     </li>
                                     <li class="checkout">
                                         <a href="/Account/Profile">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-
+                                            <i class="fa fa-address-card" aria-hidden="true" title="Hồ sơ người dùng"></i>
                                         </a>
                                     </li>
                                 </ul>
