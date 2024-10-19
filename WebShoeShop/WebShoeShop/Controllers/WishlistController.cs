@@ -40,7 +40,7 @@ namespace WebShoeShop.Controllers
            var checkitem = db.Wishlists.FirstOrDefault(x=>x.ProductId == ProductId && x.UserName == User.Identity.Name);
             if (checkitem != null)
             {
-                return Json(new { Success = false, Message = "Sản phẩm đã được yêu thích" });
+                return Json(new { Success = false, Message = "Sản phẩm đã thêm vào yêu thích" });
             }
             var item = new Wishlist();
             item.ProductId = ProductId;

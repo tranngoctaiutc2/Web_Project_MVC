@@ -1818,7 +1818,7 @@ section
 {
 	color: #fe4c50;
 }*/
-.footer {
+/*.footer {
 	position: relative;
 	width: 100%;
 	background: #3586ff;
@@ -1951,7 +1951,8 @@ section
 		.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 		.show > .btn-primary.dropdown-toggle:focus {
 			box-shadow: 0 0 0 0.2rem rgba(222, 185, 50, 0.5);
-		}
+		}*/
+
 /*.back-to-top {
 	position: fixed;
 	display: none;

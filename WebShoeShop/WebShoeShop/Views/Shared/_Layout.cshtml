@@ -193,45 +193,162 @@
         @Html.Action("Partial_Subcrice", "Home")
         <!-- Footer -->
 
-        <footer id="footer">
-            <!--Footer-->
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="companyinfo">
-                                <img src="~/Content/assets/images/logoshop_visible.png" />
-                                <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
+
+        <!--Footer-->
+        <!--<div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="companyinfo">
+                        <img src="~/Content/assets/images/logoshop_visible.png" />
+                        <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
+                        <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
+                        <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="address">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <p style="margin-top:30px">Thống kê truy cập</p>
+                    <div class="address">
+                        @Html.Action("Refresh", "Home")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row">
+                <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>-->
+        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
+        <!--</div>
+        </div>
+    </div>-->
+ 
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="cta-text">
+                                <h4>Find us</h4>
+                                <span>1010 Avenue, sw 54321, chandigarh</span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="address">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span>9876543210 0</span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <p style="margin-top:30px">Thống kê truy cập</p>
-                            <div class="address">
-                                @Html.Action("Refresh", "Home")
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span>mail@info.com</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <div class="row">
-                        <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>
-                        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-logo">
+                                <a href="index.html"><img src="https://i.ibb.co/QDy827D/ak-logo.png" class="img-fluid" alt="logo"></a>
+                            </div>
+                            <div class="footer-text">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consec tetur adipisicing elit, sed do eiusmod tempor incididuntut consec tetur adipisicing
+                                    elit,Lorem ipsum dolor sit amet.
+                                </p>
+                            </div>
+                            <div class="footer-social-icon">
+                                <span>Follow us</span>
+                                <a href="#"><i class="fab fa-facebook-f facebook-bg"></i></a>
+                                <a href="#"><i class="fab fa-twitter twitter-bg"></i></a>
+                                <a href="#"><i class="fab fa-google-plus-g google-bg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Useful Links</h3>
+                            </div>
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">about</a></li>
+                                <li><a href="#">services</a></li>
+                                <li><a href="#">portfolio</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">About us</a></li>
+                                <li><a href="#">Our Services</a></li>
+                                <li><a href="#">Expert Team</a></li>
+                                <li><a href="#">Contact us</a></li>
+                                <li><a href="#">Latest News</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Subscribe</h3>
+                            </div>
+                            <div class="footer-text mb-25">
+                                <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
+                            </div>
+                            <div class="subscribe-form">
+                                <form action="#">
+                                    <input type="text" placeholder="Email Address">
+                                    <button><i class="fab fa-telegram-plane"></i></button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer><!--/Footer-->
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2018, All Right Reserved <a href="https://codepen.io/anupkumar92/">Anup</a></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Policy</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
     </div>
 
     <button class="back-to-top" onclick="scrollToTop()">
