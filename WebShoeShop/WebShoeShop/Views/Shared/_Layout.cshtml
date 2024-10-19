@@ -14,13 +14,13 @@
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/OwlCarousel2-2.2.1/animate.css">
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="description" content="@ViewBag.SeoDescription" />
     <meta name="keywords" itemprop="keywords" content="@ViewBag.SeoKeyWord" />
     <link href="~/Content/assets/styles/main.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/styles/animate.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/assets/styles/Weather.css" rel="stylesheet" />
     @*<meta name="news_keywords" content="@ViewBag.SeoKeyWord" />*@
-    <link rel="canonical" href="https://www.ten_mien_cua_cac_ban/" />
+    <link rel="canonical" href="https://www.ten_mien_/" />
     <meta name="robots" content="index,follow,noodp" />
     <meta name="robots" content="noarchive">
     <meta property="og:site_name" content="2T-2Q Sneaker" />
@@ -29,7 +29,7 @@
     @*<meta property="fb:app_id" content="232505114857147" />*@
     @*<meta property="fb:pages" content="1128104117285467" />*@
     <meta property="og:title" itemprop="name" content="@ViewBag.Title" />
-    <meta property="og:url" itemprop="url" content="https://www.ten_mien_cua_cac_ban/" />
+    <meta property="og:url" itemprop="url" content="https://www.ten_mien/" />
     <meta property="og:description" content="@ViewBag.SeoDescription" />
     <!--script_breadcrum-->
     @*@RenderSection("css", required: false)*@
@@ -55,10 +55,20 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="top_nav_left">
+                                <a href="/lien-he" title="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="/lien-he" title="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="/lien-he" title="Zalo">
+                                    <i class="fab fa-viber"></i>
+                                </a>
+                                <a href="/lien-he" title="Pinterest">
+                                    <i class="fab fa-pinterest"></i>
+                                </a>
                                 Hotline: @SettingHelper.GetValue("SettingHotline")
-                                | Free Ship cho đơn hàng trên 1tr đồng
                             </div>
-
                         </div>
                         <div class="col-md-6 text-right">
                             <div class="top_nav_right">
@@ -67,37 +77,39 @@
                                         @if (!Request.IsAuthenticated)
                                         {
                                             <a href="#">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
                                                 Tài khoản
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
-                                                <li><a href="/account/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng nhập</a></li>
-                                                <li><a href="/account/Register"><i class="fa fa-user-plus" aria-hidden="true"></i>Đăng kí</a></li>
+                                                <li><a href="/account/login"><i class="fa fa-sign-in" aria-hidden="true"></i> Đăng nhập</a></li>
+                                                <li><a href="/account/Register"><i class="fa fa-user-plus" aria-hidden="true"></i> Đăng kí</a></li>
                                             </ul>
                                         }
                                         else
                                         {
                                             <a href="#">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
                                                 Welcome: @User.Identity.Name
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
-                                                <li><a href="/account/profile"><i class="fa fa-address-card" aria-hidden="true"></i>Hồ sơ</a></li>
                                                 <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-arrow-right" aria-hidden="true"></i> Đăng xuất</a></li>
                                             </ul>
                                         }
-
                                     </li>
                                 </ul>
 
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <div style="display:none">
-                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logOffForm" }))
-                                        {
-                                            @Html.AntiForgeryToken()}
-                                    </div>}
                             </div>
+                            @if (Request.IsAuthenticated)
+                            {
+                                <div style="display:none">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logOffForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                    }
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -120,29 +132,49 @@
                                     <li id="search_li">
                                         @using (Html.BeginForm("index", "Search", FormMethod.Get, new { }))
                                         {
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="Searchtext" class="form-control" placeholder="Tìm kiếm sản phẩm">
-                                                <span class="input-group-append">
-                                                    <button type="submit" class="btn btn-outline-dark"><i class="fa fa-search"></i></button>
+                                            <div class="input-group" style="margin: 10px 0;">
+                                                <input type="text" name="Searchtext" class="form-control" placeholder="Tìm kiếm sản phẩm" style="opacity: 0; pointer-events: none; transition: opacity 0.3s;">
+                                                <span class="input-group-append" style="cursor: pointer;">
+                                                    <a href="#" class="btn" style="border-radius: 50%;background-color: #eceff6; color: black; padding: 10px;">
+                                                        <i class="fa fa-search" title="Tìm kiếm"></i>
+                                                    </a>
                                                 </span>
                                             </div>
+                                            <script>
+                                                const searchInput = document.querySelector('input[name="Searchtext"]');
+                                                const searchButton = document.querySelector('.input-group-append');
+                                                searchButton.addEventListener('click', () => {
+                                                    searchInput.style.opacity = '1';
+                                                    searchInput.style.pointerEvents = 'auto';
+                                                    searchInput.focus();
+                                                });
+                                                searchInput.addEventListener('blur', () => {
+                                                    if (!searchInput.value) {
+                                                        searchInput.style.opacity = '0';
+                                                        searchInput.style.pointerEvents = 'none';
+                                                    }
+                                                });
+                                            </script>
                                         }
                                     </li>
 
                                     <li class="checkout">
                                         <a href="/gio-hang">
-                                            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                            <i class="fa fa-shopping-bag" aria-hidden="true" title="Giỏ hàng"></i>
                                             <span id="checkout_items" class="checkout_items">0</span>
                                         </a>
                                     </li>
                                     <li class="checkout">
                                         <a href="/WishList/index">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-
+                                            <i class="fa fa-heart" aria-hidden="true" title="Sản phẩm yêu thích"></i>
+                                        </a>
+                                    </li>
+                                    <li class="checkout">
+                                        <a href="/Account/Profile">
+                                            <i class="fa fa-address-card" aria-hidden="true" title="Hồ sơ người dùng"></i>
                                         </a>
                                     </li>
                                 </ul>
-
                                 <div class="hamburger_container">
                                     <i class="fa fa-bars" aria-hidden="true"></i>
                                 </div>
@@ -161,98 +193,167 @@
         @Html.Action("Partial_Subcrice", "Home")
         <!-- Footer -->
 
-        <footer id="footer">
-            <!--Footer-->
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="companyinfo">
-                                <img src="~/Content/assets/images/logoshop_visible.png" />
-                                <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
+
+        <!--Footer-->
+        <!--<div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="companyinfo">
+                        <img src="~/Content/assets/images/logoshop_visible.png" />
+                        <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
+                        <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
+                        <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="address">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <p style="margin-top:30px">Thống kê truy cập</p>
+                    <div class="address">
+                        @Html.Action("Refresh", "Home")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row">
+                <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>-->
+        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
+        <!--</div>
+        </div>
+    </div>-->
+ 
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="cta-text">
+                                <h4>Find us</h4>
+                                <span>1010 Avenue, sw 54321, chandigarh</span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="address">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span>9876543210 0</span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <p style="margin-top:30px">Thống kê truy cập</p>
-                            <div class="address">
-                                @Html.Action("Refresh", "Home")
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span>mail@info.com</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <div class="row">
-                        <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>
-                        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-logo">
+                                <a href="index.html"><img src="https://i.ibb.co/QDy827D/ak-logo.png" class="img-fluid" alt="logo"></a>
+                            </div>
+                            <div class="footer-text">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consec tetur adipisicing elit, sed do eiusmod tempor incididuntut consec tetur adipisicing
+                                    elit,Lorem ipsum dolor sit amet.
+                                </p>
+                            </div>
+                            <div class="footer-social-icon">
+                                <span>Follow us</span>
+                                <a href="#"><i class="fab fa-facebook-f facebook-bg"></i></a>
+                                <a href="#"><i class="fab fa-twitter twitter-bg"></i></a>
+                                <a href="#"><i class="fab fa-google-plus-g google-bg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Useful Links</h3>
+                            </div>
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">about</a></li>
+                                <li><a href="#">services</a></li>
+                                <li><a href="#">portfolio</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">About us</a></li>
+                                <li><a href="#">Our Services</a></li>
+                                <li><a href="#">Expert Team</a></li>
+                                <li><a href="#">Contact us</a></li>
+                                <li><a href="#">Latest News</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h3>Subscribe</h3>
+                            </div>
+                            <div class="footer-text mb-25">
+                                <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
+                            </div>
+                            <div class="subscribe-form">
+                                <form action="#">
+                                    <input type="text" placeholder="Email Address">
+                                    <button><i class="fab fa-telegram-plane"></i></button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer><!--/Footer-->
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2018, All Right Reserved <a href="https://codepen.io/anupkumar92/">Anup</a></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Privacy</a></li>
+                                <li><a href="#">Policy</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
     </div>
 
     <button class="back-to-top" onclick="scrollToTop()">
         <i class="fa fa-arrow-up"></i>
     </button>
-    <button class="back-to-top1" onclick="showPartialView()">
-        <i class="fa fa-cloud"></i>
-    </button>
-    <div id="partial-view-container" class="partial-view-container" style="display:none;">
-        <div class="wrong">
-            <p id='wrong-msg'></p>
-        </div>
-        <div class="weather">
-            <div class="weather-box">
-                <h1>Bảng tin thời tiết tại <span id="location1"></span></h1>
-                <div class="correct-city">
-                    <img id="weather-icon">
-
-                    <div class="main">
-                        <h2 id="temp"></h2>
-                        <span id="condition"></span>
-                    </div>
-
-                    <div class="forecast">
-                        <h2>Forecast</h2>
-                        <span id="temp_max"></span>
-                        <span id="temp_min"></span>
-                    </div>
-
-                    <div class="humidity">
-                        <h2>Độ ẩm</h2>
-                        <span id="humidity"></span>
-                        <h2>Tốc độ gió</h2>
-                        <span id="wind-speed"></span>
-                    </div>
-
-                    <div class="humidity">
-                        <h2>Chỉ số UV</h2>
-                        <span id="uv-index"></span>
-                        <h2>Tình trạng</h2>
-                        <span id="air-pollution-index"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer1">
-                <time id="dmy"></time>
-                <time id="dt"></time>
-                <i class="fa fa-calendar-times-o" aria-hidden="true" style="text-align:right;margin:3px"></i>
-            </div>
-
-        </div>
-    </div>
     <div id="overlay" class="overlay"></div>
     @*@Scripts.Render("~/bundles/jquery")*@
     <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.2/libs/oversea/index.js"></script>
@@ -280,15 +381,10 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Content/assets/js/main.js"></script>
-    <script src="~/Content/assets/js/Weather.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
-    @*    <script src="~/Content/assets/js/jquery.prettyPhoto.js"></script>
-        <script src="~/Content/assets/js/jquery.scrollUp.min.js"></script>*@
-    @*@Scripts.Render("~/bundles/bootstrap")*@
+
     <script src="~/Scripts/jsShopping.js"></script>
-    @*    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
-        <script src="~/signalr/hubs"></script>*@
     @RenderSection("scripts", required: false)
 </body>
 </html>
