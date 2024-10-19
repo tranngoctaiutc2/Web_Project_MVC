@@ -15,7 +15,7 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="/admin/order" class="nav-link">Danh sách đơn hàng</a>
         </li>
-       
+
     </ul>
 }
 
@@ -28,12 +28,12 @@
             <h3 class="card-title">Danh sách đơn hàng</h3>
         </div>
         <div class="card-body" style="padding:0.5rem;">
-            <div class="row">
+            <!--<div class="row">
                 <div class="col-4">
                     @using (Html.BeginForm("index", "Order", FormMethod.Get, new { }))
                     {
                         <div class="input-group input-group-sm">
-                          @*  @Html.TextBox("Searchtext", null, new { @class = "form-control" })*@
+                      
                             <input type="text" name="Searchtext" class="form-control" placeholder="Nhập tên hoặc số điện thoại khách hàng">
                             <span class="input-group-append">
                                 <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
@@ -41,30 +41,30 @@
                         </div>
                     }
                 </div>
-                <div class="col-3">                   
-                        <form class="form-inline" action="/admin/order" method="get">
-                            <div class="input-group">
-                                <select name="month" class="form-control">
-                                    <option value="">Tất cả</option>
-                                    <option value="1">Tháng 1</option>
-                                    <option value="2">Tháng 2</option>
-                                    <option value="3">Tháng 3</option>
-                                    <option value="4">Tháng 4</option>
-                                    <option value="5">Tháng 5</option>
-                                    <option value="6">Tháng 6</option>
-                                    <option value="7">Tháng 7</option>
-                                    <option value="8">Tháng 8</option>
-                                    <option value="9">Tháng 9</option>
-                                    <option value="10">Tháng 10</option>
-                                    <option value="11">Tháng 11</option>
-                                    <option value="12">Tháng 12</option>
-                                    <!-- Thêm các tháng khác vào đây -->
-                                </select>
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-info">Lọc theo tháng</button>
-                                </div>
+                <div class="col-3">
+                    <form class="form-inline" action="/admin/order" method="get">
+                        <div class="input-group">
+                            <select name="month" class="form-control">
+                                <option value="">Tất cả</option>
+                                <option value="1">Tháng 1</option>
+                                <option value="2">Tháng 2</option>
+                                <option value="3">Tháng 3</option>
+                                <option value="4">Tháng 4</option>
+                                <option value="5">Tháng 5</option>
+                                <option value="6">Tháng 6</option>
+                                <option value="7">Tháng 7</option>
+                                <option value="8">Tháng 8</option>
+                                <option value="9">Tháng 9</option>
+                                <option value="10">Tháng 10</option>
+                                <option value="11">Tháng 11</option>
+                                <option value="12">Tháng 12</option>-->
+                                <!-- Thêm các tháng khác vào đây -->
+                            <!--</select>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-info">Lọc theo tháng</button>
                             </div>
-                        </form>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-3">
                     <form class="form-inline" action="/admin/order" method="get">
@@ -82,10 +82,10 @@
                         </div>
                     </form>
                 </div>
-             
-            </div>
+
+            </div>-->
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-striped table-bordered hover" style="width:100%" id="mytable">
                     <thead>
                         <tr>
                             <th>STT</th>
@@ -145,6 +145,12 @@
                             }
                         }
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="4" style="text-align:right">Total:</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
 
                 <div class="row">
@@ -215,6 +221,9 @@
 
 @section scripts{
     <script>
+        let table = new DataTable('#mytable');
+    </script>
+    <script>
         $(document).ready(function () {
             $('body').on('click', '.btnCapNhat', function () {
                 var id = $(this).data("id");
@@ -238,7 +247,7 @@
                 });
             });
 
-            $(document).on('click','.btnExportExcel', function () {
+            $(document).on('click', '.btnExportExcel', function () {
                 var orderid = $(this).data('id');
                 $.ajax({
                     url: '/admin/order/exportexcel',
@@ -252,7 +261,7 @@
                     }
                 });
             });
-           
+
         });
     </script>
 }
