@@ -67,20 +67,20 @@
         </div>
         <div class="form-group">
             <label for="citySelect">Tỉnh/ Thành phố</label>
-            <select id="citySelect" name="City" required class="form-control" onchange="fetchDistricts();">
+            <select id="citySelect" name="City" required class="form-control" onchange="fetchDistricts() && resetLocationFields()">
                 <option value="">-- Chọn tỉnh/ thành phố --</option>
             </select>
         </div>
         <div class="form-group">
             <label for="districtSelect">Quận/ Huyện</label>
             <select id="districtSelect" name="District" required class="form-control" onchange="fetchWards();">
-                <option value="">-- Chọn quận/ huyện --</option>
+                <option value="1">-- Chọn quận/ huyện --</option>
             </select>
         </div>
         <div class="form-group">
             <label for="wardSelect">Phường/ Xã</label>
             <select id="wardSelect" name="Ward" required class="form-control" oninput="generateFullAddress()" onchange="calculateShippingCost()">
-                <option value="">-- Chọn phường/ xã --</option>
+                <option value="1">-- Chọn phường/ xã --</option>
             </select>
         </div>
         <div class="form-group">
@@ -99,7 +99,8 @@
     }
     <div class="form-group">
         <label>Phương thức vận chuyển</label>
-        <select class="form-control" name="TypeShip">
+        <select class="form-control" name="TypeShip" id="shippingType">
+            <option value="0">-- Chọn --</option>
             <option value="1">Nhanh (phí giao hàng: miễn phí)</option>
             <option value="2">Hỏa tốc (phí giao hàng: 50000)</option>
         </select>

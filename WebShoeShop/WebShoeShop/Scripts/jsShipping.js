@@ -5,6 +5,7 @@ const originLon = 106.79418264976631;
 var destiLat = 0;
 var destiLon = 0;
 let shippingCost = 0;
+let originalProductPrice;
 
 
 // Fetch and populate provinces
@@ -27,6 +28,25 @@ fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province',
     })
     .catch(error => console.error('Error fetching provinces:', error));
 
+function initializeOriginalProductPrice() {
+    const totalElement = document.getElementById('total');
+    originalProductPrice = parseFloat(totalElement.textContent.replace(/\D/g, '')); // Get the initial price
+}
+
+function resetLocationFields() {
+    const addressDetailInput = document.getElementById('AddressDetail');
+    addressDetailInput.value = '';
+
+    const addressField = document.getElementById('Address');
+    addressField.value = '';
+
+    const totalElement = document.getElementById('total');
+    totalElement.textContent = originalProductPrice.toLocaleString();
+
+    shippingCost = 0;
+    const costShipElement = document.getElementById('cost');
+    costShipElement.textContent = '0';
+}
 
 function getCoordinates(cityName) {
     return fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1`)
@@ -68,8 +88,10 @@ function fetchDistricts() {
     })
         .then(response => response.json())
         .then(data => {
+            resetLocationFields();
+
             const districtSelect = document.getElementById('districtSelect');
-            districtSelect.innerHTML = '<option value="">-- Chọn quận/huyện --</option>'; // Clear previous options
+            districtSelect.innerHTML = '<option value="">-- Chọn quận/huyện --</option>'; 
             const wardSelect = document.getElementById('wardSelect');
             wardSelect.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
             data.data.forEach(district => {
@@ -83,7 +105,6 @@ function fetchDistricts() {
 
 }
 
-// Fetch and populate wards based on selected district
 function fetchWards() {
     const districtId = document.getElementById('districtSelect').value;
     fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id', {
@@ -97,7 +118,7 @@ function fetchWards() {
         .then(response => response.json())
         .then(data => {
             const wardSelect = document.getElementById('wardSelect');
-            wardSelect.innerHTML = '<option value="">-- Chọn phường/xã --</option>'; // Clear previous options
+            wardSelect.innerHTML = '<option value="">-- Chọn phường/xã --</option>'; 
             data.data.forEach(ward => {
                 const option = document.createElement('option');
                 option.value = ward.WardCode;
@@ -150,7 +171,6 @@ function calculateShippingCost() {
                 }
 
                 console.log(`Shipping Cost: ${shippingCost} VND`);
-                // Update the shipping cost display in your UI
                 document.getElementById('cost').textContent = shippingCost;
             } else {
                 console.log('No distance data found.');
@@ -158,17 +178,30 @@ function calculateShippingCost() {
         })
         .catch(error => console.error('Error calculating shipping cost:', error));
 }
+
 document.querySelector('select[name="TypeShip"]').addEventListener('change', function () {
     var totalElement = document.getElementById('total');
     var costShipElement = document.getElementById('cost');
     var tongtien = parseFloat(totalElement.textContent.replace(/\D/g, '')); // Lấy giá trị số từ chuỗi trong <td>
-    var phigiaohang = 50000;
-    if (this.value === '2') { // Phí giao hàng khi chọn option 2
-        var newTotal = tongtien + phigiaohang + shippingCost;
-        totalElement.textContent = newTotal; // Cập nhật giá trị trong <td>
-        costShipElement.textContent = phigiaohang + shippingCost;
-    } else {
-        totalElement.textContent = tongtien - (phigiaohang + shippingCost);// Giữ nguyên giá trị ban đầu
-        costShipElement.textContent = shippingCost;
+    var phigiaohang = 0;
+    // Check the selected shipping type
+    if (this.value === '2') { // Shipping cost for option 2
+        phigiaohang = 50000; // Set shipping cost for option 2
     }
+
+    // Calculate the new total based on the selected shipping type
+    var newTotal = originalProductPrice + phigiaohang + shippingCost; // Always base on the original product price
+
+    // Update the total and shipping cost display
+    totalElement.textContent = newTotal.toLocaleString(); // Update total value in <td>
+    costShipElement.textContent = (phigiaohang + shippingCost).toLocaleString(); // Update shipping cost display
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeOriginalProductPrice(); 
+
+    document.getElementById('citySelect').addEventListener('change', function () {
+        resetLocationFields(); // Reset fields first
+        fetchDistricts(); // Then fetch the districts for the selected province
+    });
 });
