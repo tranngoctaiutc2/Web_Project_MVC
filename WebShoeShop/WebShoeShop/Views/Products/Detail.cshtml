@@ -178,14 +178,14 @@
                 var quantityValue = parseInt(document.getElementById('quantity_value').innerText);
                 var quantityProduct = parseInt(document.getElementById('quantity_product').innerText);
                
-                if (quantityValue > quantityProduct) {
+                /*if (quantityValue > quantityProduct) {
 
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi',
                         text: 'Số lượng bạn muốn mua vượt quá số lượng hiện có trong kho.'
                     });
-                } else {
+                } else {*/
                     //alert(id + " " + quatity);
                     var id = addToCartButton.getAttribute('data-id');
                     $.ajax({
@@ -207,17 +207,17 @@
                                     closeOnConfirm: false
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/account/login';  // Thay /duong-dan-dang-nhap bằng đường dẫn thực tế của bạn
+                                        window.location.href = '/account/login'; 
                                     } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                        // Hành động tắt thông báo (tự động đóng)
-                                        Swal.close(); // Có thể gọi hàm này để tắt thông báo, nhưng mặc định nút Cancel đã đóng thông báo.
+                                       
+                                        Swal.close(); 
                                     }
                                 });
                             }
                         }
 
                     });
-                }
+                
             });
         });
     </script>

@@ -69,5 +69,32 @@ namespace WebShoeShop.Models.EF
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<ReviewProduct> Reviews { get; set; }
         public virtual ICollection<Wishlist> Wishlists { get; set; }
-    }
+		public int TotalQuantity
+		{
+			get
+			{
+				return ProductSize?.Sum(ps => ps.Quantity) ?? 0;
+			}
+		}
+		public void ReduceQuantity(int quantity, int size)
+		{
+			var sizeWithStock = ProductSize.FirstOrDefault(ps => ps.Size == size);
+
+			
+			if (sizeWithStock == null)
+			{
+				throw new InvalidOperationException($"Size {size} không tồn tại trong kho.");
+			}
+
+			
+			if (sizeWithStock.Quantity >= quantity)
+			{
+				sizeWithStock.Quantity -= quantity;
+			}
+			else
+			{
+				throw new InvalidOperationException("Không đủ hàng trong kho để đặt.");
+			}
+		}
+	}
 }

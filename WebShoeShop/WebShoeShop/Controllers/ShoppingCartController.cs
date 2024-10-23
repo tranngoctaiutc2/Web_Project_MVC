@@ -105,19 +105,13 @@ namespace WebShoeShop.Controllers
 						}
                         //Thanh toan thanh cong
                         ViewBag.InnerText = "Giao dịch được thực hiện thành công. Cảm ơn quý khách đã sử dụng dịch vụ";
-                        //log.InfoFormat("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", orderId, vnpayTranId);
                     }
                     else
                     {
                         //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
                         ViewBag.InnerText = "Có lỗi xảy ra trong quá trình xử lý. Xin vui lòng thử lại";
-                        //log.InfoFormat("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", orderId, vnpayTranId, vnp_ResponseCode);
                     }
-                    //displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
-                    //displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
-                    //displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-                    //ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + vnp_Amount.ToString();
-                    //displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
+
                 }
             }
             return View();
@@ -248,13 +242,14 @@ namespace WebShoeShop.Controllers
                        
                         strSanPham += "</tr>";
                         thanhtien += sp.Price * sp.Quantity;
-                        var product = db.Products.Find(sp.ProductId);
-                        if (product != null)
-                        {
-                            product.Quantity -= sp.Quantity;
-                            db.Entry(product).State = EntityState.Modified;
-                        }
-                        strPrice = WebShoeShop.Common.Common.FormatNumber(sp.TotalPrice, 0);
+						var product = db.Products.Include(p => p.ProductSize) 
+							.FirstOrDefault(p => p.Id == sp.ProductId);
+						if (product != null)
+						{
+							product.ReduceQuantity(sp.Quantity, sp.Size); 
+							db.Entry(product).State = EntityState.Modified;
+						}
+						strPrice = WebShoeShop.Common.Common.FormatNumber(sp.TotalPrice, 0);
                         strProductName = sp.ProductName;
                     }
                     db.SaveChanges();
@@ -267,7 +262,7 @@ namespace WebShoeShop.Controllers
                         TongTien = thanhtien + 70000;
                     }
                                   
-                        string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/invoice-1.html"));
+                    string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/invoice-1.html"));
                     contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
                     contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
                     contentCustomer = contentCustomer.Replace("{{Gia}}", strPrice);

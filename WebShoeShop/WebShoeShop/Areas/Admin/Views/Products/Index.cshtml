@@ -111,7 +111,10 @@
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+
+                        int page = ViewBag.Page ?? 1; // Giá trị mặc định nếu ViewBag.Page là null
+                        int pageSize = ViewBag.PageSize ?? 10; // Giá trị mặc định nếu ViewBag.PageSize là null
+                        int i = ((page - 1) * pageSize) + 1;
 
                         foreach (var item in Model)
                         {
@@ -131,7 +134,7 @@
                                 <td><img class="imgproduct" data-id="@item.Id" src="@strImg" width="50" /></td>
                                 <td>@item.Title</td>
                                 <td>@item.ProductCategory.Title</td>
-                                <td>@item.Quantity</td>
+                                <td>@item.TotalQuantity</td>
                                 <td>@WebShoeShop.Common.Common.FormatNumber(item.Price, 0)</td>
                                 <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
                                 <td class="text-center">

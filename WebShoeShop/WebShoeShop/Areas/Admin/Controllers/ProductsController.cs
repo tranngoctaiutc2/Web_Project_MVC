@@ -48,121 +48,206 @@ namespace WebShoeShop.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Product model, List<string> Images, List<int> rDefault, List<int> Sizes)
-        {
-            if (ModelState.IsValid)
-            {
-                var existingProduct = db.Products.FirstOrDefault(p => p.Title == model.Title);
-                if (existingProduct != null)
-                {
-                    // Sản phẩm đã tồn tại, chỉ ghi đè dữ liệu
-                    existingProduct.Title = model.Title;
-                    existingProduct.Description = model.Description;
-                    existingProduct.Price = model.Price;
-                    existingProduct.Quantity = model.Quantity;
-                    existingProduct.ProductCategoryId = model.ProductCategoryId;
-                    existingProduct.ModifiedDate = DateTime.Now;
-                    existingProduct.OriginalPrice2 = model.OriginalPrice2;
-                    existingProduct.Detail = model.Detail;
-                    existingProduct.PriceSale = model.PriceSale;
-                    existingProduct.IsActive = model.IsActive;
-                    existingProduct.IsSale = model.IsSale;
-                    existingProduct.IsHome = model.IsHome;
-                    existingProduct.IsFeature = model.IsFeature;
-                    // Xóa các hình ảnh cũ của sản phẩm
-                    db.ProductImages.RemoveRange(existingProduct.ProductImage);
+		public ActionResult Add(Product model, List<string> Images, List<int> rDefault, List<int> Sizes, List<int> Quantities)
+		{
+			if (ModelState.IsValid)
+			{
+				var existingProduct = db.Products.FirstOrDefault(p => p.Id == model.Id); 
+				if (existingProduct != null)
+				{
+					// Cập nhật sản phẩm
+					existingProduct.Title = model.Title;
+					existingProduct.Description = model.Description;
+					existingProduct.Price = model.Price;
+					existingProduct.Quantity = model.Quantity;
+					existingProduct.ProductCategoryId = model.ProductCategoryId;
+					existingProduct.ModifiedDate = DateTime.Now;
+					existingProduct.OriginalPrice2 = model.OriginalPrice2;
+					existingProduct.Detail = model.Detail;
+					existingProduct.PriceSale = model.PriceSale;
+					existingProduct.IsActive = model.IsActive;
+					existingProduct.IsSale = model.IsSale;
+					existingProduct.IsHome = model.IsHome;
+					existingProduct.IsFeature = model.IsFeature;
 
-                    // Thêm hình ảnh mới
-                    if (Images != null && Images.Count > 0)
-                    {
-                        for (int i = 0; i < Images.Count; i++)
-                        {
-                            var isDefault = (i + 1 == rDefault[0]);
-                            existingProduct.ProductImage.Add(new ProductImage
-                            {
-                                ProductId = existingProduct.Id,
-                                Image = Images[i],
-                                IsDefault = isDefault
-                            });
-                        }
-                    }
+					existingProduct.ProductSize.Clear(); // Xóa size cũ
+					if (Sizes != null && Sizes.Count > 0)
+					{
+						for (int i = 0; i < Sizes.Count; i++)
+						{
+							existingProduct.ProductSize.Add(new ProductSize
+							{
+								ProductId = existingProduct.Id,
+								Size = Sizes[i],
+								Quantity = Quantities[i]
+							});
+						}
+					}
 
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    if (Images != null && Images.Count > 0)
-                    {
-                        for (int i = 0; i < Images.Count; i++)
-                        {
-                            if (i + 1 == rDefault[0])
-                            {
-                                model.Image = Images[0];
-                                model.ProductImage.Add(new ProductImage
-                                {
-                                    ProductId = model.Id,
-                                    Image = Images[i],
-                                    IsDefault = true
-                                });
-                            }
-                            else
-                            {
-                                model.ProductImage.Add(new ProductImage
-                                {
-                                    ProductId = model.Id,
-                                    Image = Images[i],
-                                    IsDefault = false
-                                });
+					// Quản lý hình ảnh
+					if (Images != null && Images.Count > 0)
+					{
+						var currentImages = existingProduct.ProductImage.Select(i => i.Image).ToList();
+						db.ProductImages.RemoveRange(existingProduct.ProductImage.Where(i => !Images.Contains(i.Image)).ToList());
 
-                            }
-                        }
-                    }
+						for (int i = 0; i < Images.Count; i++)
+						{
+							var isDefault = (i + 1 == rDefault[0]);
+							if (!currentImages.Contains(Images[i]))
+							{
+								existingProduct.ProductImage.Add(new ProductImage
+								{
+									ProductId = existingProduct.Id,
+									Image = Images[i],
+									IsDefault = isDefault
+								});
+							}
+						}
+					}
 
-                    // Sản phẩm chưa tồn tại, tạo mới
-                    model.CreatedDate = DateTime.Now;
-                    model.ModifiedDate = DateTime.Now;
-                    if (string.IsNullOrEmpty(model.SeoTitle))
-                    {
-                        model.SeoTitle = model.Title;
-                    }
-                    if (string.IsNullOrEmpty(model.Alias))
-                    {
-                        model.Alias = WebShoeShop.Models.Common.Filter.FilterChar(model.Title);
-                    }
-                    db.Products.Add(model);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-            }
+					db.SaveChanges();
+					return RedirectToAction("Index");
+				}
+				else
+				{
+					// Tạo mới sản phẩm
+					model.CreatedDate = DateTime.Now;
+					model.ModifiedDate = DateTime.Now;
 
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
-            return View(model);
-        }
-        public ActionResult Edit(int id)
-        {
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
-            var item = db.Products.Find(id);
-            return View(item);
-        }
+					if (string.IsNullOrEmpty(model.SeoTitle))
+					{
+						model.SeoTitle = model.Title;
+					}
+					if (string.IsNullOrEmpty(model.Alias))
+					{
+						model.Alias = WebShoeShop.Models.Common.Filter.FilterChar(model.Title);
+					}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Product model)
-        {
-            if (ModelState.IsValid)
-            {
-                model.ModifiedDate = DateTime.Now;
-                model.Alias = WebShoeShop.Models.Common.Filter.FilterChar(model.Title);
-                db.Products.Attach(model);
-                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(model);
-        }
+					if (Images != null && Images.Count > 0)
+					{
+						for (int i = 0; i < Images.Count; i++)
+						{
+							var isDefault = (i + 1 == rDefault[0]);
+							model.ProductImage.Add(new ProductImage
+							{
+								ProductId = model.Id,
+								Image = Images[i],
+								IsDefault = isDefault
+							});
+						}
+					}
 
-        [HttpPost]
+					if (Sizes != null && Sizes.Count > 0)
+					{
+						for (int i = 0; i < Sizes.Count; i++)
+						{
+							model.ProductSize.Add(new ProductSize
+							{
+								Size = Sizes[i],
+								Quantity = Quantities[i]
+							});
+						}
+					}
+
+					db.Products.Add(model);
+					db.SaveChanges();
+					return RedirectToAction("Index");
+				}
+			}
+
+			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+			return View(model);
+		}
+
+		// Hiển thị view chỉnh sửa sản phẩm
+		public ActionResult Edit(int id)
+		{
+			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+
+			// Lấy thông tin sản phẩm theo id
+			var item = db.Products.Include("ProductSize").Include("ProductImage").FirstOrDefault(p => p.Id == id);
+
+			if (item == null)
+			{
+				return HttpNotFound();
+			}
+
+			return View(item);
+		}
+
+		// Xử lý khi submit form chỉnh sửa sản phẩm
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit(Product model, List<int> Sizes, List<int> Quantities, List<string> Images, List<int> rDefault)
+		{
+			if (ModelState.IsValid)
+			{
+				
+				model.ModifiedDate = DateTime.Now;
+				model.Alias = WebShoeShop.Models.Common.Filter.FilterChar(model.Title);
+
+				
+				var existingProduct = db.Products.Find(model.Id);
+				if (existingProduct != null)
+				{
+					existingProduct.Title = model.Title;
+					existingProduct.Description = model.Description;
+					existingProduct.Price = model.Price;
+					existingProduct.Quantity = model.Quantity;
+					existingProduct.ProductCategoryId = model.ProductCategoryId;
+					existingProduct.OriginalPrice2 = model.OriginalPrice2;
+					existingProduct.Detail = model.Detail;
+					existingProduct.PriceSale = model.PriceSale;
+					existingProduct.IsActive = model.IsActive;
+					existingProduct.IsSale = model.IsSale;
+					existingProduct.IsHome = model.IsHome;
+					existingProduct.IsFeature = model.IsFeature;
+
+					db.ProductSizes.RemoveRange(existingProduct.ProductSize);
+					existingProduct.ProductSize.Clear();
+
+					if (Sizes != null && Sizes.Count > 0)
+					{
+						for (int i = 0; i < Sizes.Count; i++)
+						{
+							existingProduct.ProductSize.Add(new ProductSize
+							{
+								ProductId = existingProduct.Id,
+								Size = Sizes[i],
+								Quantity = Quantities[i]
+							});
+						}
+					}
+
+					db.ProductImages.RemoveRange(existingProduct.ProductImage);
+					existingProduct.ProductImage.Clear();
+
+					if (Images != null && Images.Count > 0)
+					{
+						for (int i = 0; i < Images.Count; i++)
+						{
+							var isDefault = (i + 1 == rDefault[0]);
+
+							existingProduct.ProductImage.Add(new ProductImage
+							{
+								ProductId = existingProduct.Id,
+								Image = Images[i],
+								IsDefault = isDefault
+							});
+						}
+					}
+					db.SaveChanges();
+
+					return RedirectToAction("Index");
+				}
+			}
+			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+			return View(model);
+		}
+
+
+
+		[HttpPost]
         public ActionResult Delete(int id)
         {
             var item = db.Products.Find(id);
@@ -177,7 +262,8 @@ namespace WebShoeShop.Areas.Admin.Controllers
                         db.SaveChanges();
                     }
                 }
-                db.Products.Remove(item);
+				db.ProductSizes.RemoveRange(item.ProductSize);
+				db.Products.Remove(item);
                 db.SaveChanges();
                 return Json(new { success = true });
             }
