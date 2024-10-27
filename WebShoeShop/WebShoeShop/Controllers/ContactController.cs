@@ -33,7 +33,6 @@ namespace WebShoeShop.Controllers
 
             return View(contact);
         }
-       
         // GET: Contact/Create
         public ActionResult Create()
         {
@@ -66,6 +65,10 @@ namespace WebShoeShop.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        public ActionResult FAQs()
+        {
+            return View();
         }
     }
 }

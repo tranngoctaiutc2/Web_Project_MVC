@@ -466,13 +466,13 @@
     <Content Include="Content\assets\styles\categories_styles.css" />
     <Content Include="Content\assets\styles\contact_responsive.css" />
     <Content Include="Content\assets\styles\contact_styles.css" />
+    <Content Include="Content\assets\styles\FAQs.css" />
     <Content Include="Content\assets\styles\main.css" />
     <Content Include="Content\assets\styles\main_styles.css" />
     <Content Include="Content\assets\styles\responsive.css" />
     <Content Include="Content\assets\styles\single_responsive.css" />
     <Content Include="Content\assets\styles\single_styles.css" />
     <Content Include="Content\assets\styles\style.css" />
-    <Content Include="Content\assets\styles\Weather.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -3561,6 +3561,7 @@
     <Content Include="Views\Account\EmailConfirmation.cshtml" />
     <Content Include="Views\ShoppingCart\VnpayReturn.cshtml" />
     <Content Include="Views\Shared\_PartialWeather.cshtml" />
+    <Content Include="Views\Contact\FAQs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

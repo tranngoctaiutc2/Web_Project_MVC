@@ -19,6 +19,11 @@ namespace WebShoeShop
              namespaces: new[] { "WebShoeShop.Controllers" }
          );
             routes.MapRoute(
+            name: "FAQs",
+            url: "FAQs",
+            defaults: new { controller = "Contact", action = "FAQs" }
+        );
+            routes.MapRoute(
             name: "BaiViet",
             url: "post/{alias}",
             defaults: new { controller = "Article", action = "Index", alias = UrlParameter.Optional },
