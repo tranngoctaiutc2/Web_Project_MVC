@@ -1,85 +1,70 @@
-﻿@model WebShoeShop.Models.RegisterViewModel
+﻿﻿@model WebShoeShop.Models.RegisterViewModel
+@using WebShoeShop.Models
+
 @{
     ViewBag.Title = "Register";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/Login.css">
 
-<style>
-    body {
-        background-color: #f5f7fa;
-    }
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
 
-    .form-container {
-        max-width: 500px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        border-radius: 10px;
-        padding: 30px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        margin-top:160px;
-    }
-
-    .form-title {
-        text-align: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-label {
-        font-weight: bold;
-    }
-
-    .submit-button {
-        text-align: center;
-    }
-</style>
-
-<div class="form-container">
-    <h2 class="form-title"><i class="fa fa-user-plus"></i> Tạo tài khoản mới</h2>
-
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-group">
-            <label for="FullName" class="form-label">Họ tên</label>
-            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", id = "FullName" })
-             @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+            <!-- Breadcrumbs -->
+            <h1 class="text-center" style="margin-top:30px; color: #ffffff;">Đăng ký</h1>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="UserName" class="form-label">Tên đăng nhập</label>
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", id = "UserName" })
-            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-        </div>
+    <div class="row">
+        <div class="root">
+            <div class="main">
+                <div class="container1 b-container">
+                    <form class="form1" action="@Url.Action("Register", "Account")" method="post">
+                        @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            <label for="Email" class="form-label">Email</label>
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "Email" })
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-        </div>
+                        <h2 class="form_title title">Đăng ký</h2>
+                        <span class="form__span">Nhập vào thông tin của bạn</span>
 
-        <div class="form-group">
-            <label for="Password" class="form-label">Mật khẩu</label>
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "Password" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        </div>
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form__input", id = "FullName", placeholder = "Tên đầy đủ" })
+                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            <label for="ConfirmPassword" class="form-label">Xác nhận mật khẩu</label>
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", id = "ConfirmPassword" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-        </div>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form__input", id = "UserName", placeholder = "Tên đăng nhập" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
 
-        <div class="submit-button">
-            <button type="submit" class="btn btn-success">Đăng ký</button>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form__input", id = "Email", placeholder = "Email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+                        @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "Password", placeholder = "Mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form__input", id = "ConfirmPassword", placeholder = "Xác nhận mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+
+                        <!-- Nút Đăng ký -->
+                        <button type="submit" class="form__button button submit">Đăng ký</button>
+                    </form>
+
+                </div>
+                <div class="switch">
+                    <div class="switch__circle"></div>
+                    <div class="switch__container">
+                        <h2 class="switch__title title">Chào mừng bạn tới với Double 2T-2Q !</h2>
+                        <p class="switch__description description">Đã có tài khoản?</p>
+                        <button class="switch__button button switch-btn" onclick="window.location.href='@Url.Action("Login", "Account")'">Đăng nhập</button>
+                        <p class="switch__description description" style="margin-top: 50px;">Hoặc đăng ký với</p>
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                    </div>
+                </div>
+            </div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    Đăng ký không thành công. Vui lòng kiểm tra lại thông tin đăng ký.
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
