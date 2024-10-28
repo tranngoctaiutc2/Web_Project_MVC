@@ -34,6 +34,16 @@ namespace WebShoeShop
             defaults: new { controller = "Contact", action = "Security" }
         );
             routes.MapRoute(
+            name: "Career",
+            url: "tuyen-dung",
+            defaults: new { controller = "Contact", action = "Career" }
+        );
+            routes.MapRoute(
+            name: "Franchisepolicy",
+            url: "nhuong-quyen",
+            defaults: new { controller = "Contact", action = "Franchisepolicy" }
+        );
+            routes.MapRoute(
             name: "BaiViet",
             url: "post/{alias}",
             defaults: new { controller = "Article", action = "Index", alias = UrlParameter.Optional },

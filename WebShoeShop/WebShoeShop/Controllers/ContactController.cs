@@ -76,6 +76,14 @@ namespace WebShoeShop.Controllers
         }
         public ActionResult Security()
         {
+            return View(); 
+        }
+        public ActionResult Franchisepolicy()
+        {
+            return View();
+        }
+        public ActionResult Career()
+        {
             return View();
         }
     }
