@@ -24,6 +24,16 @@ namespace WebShoeShop
             defaults: new { controller = "Contact", action = "FAQs" }
         );
             routes.MapRoute(
+            name: "Policy",
+            url: "chinh-sach",
+            defaults: new { controller = "Contact", action = "Policy" }
+        );
+            routes.MapRoute(
+            name: "Security",
+            url: "bao-mat",
+            defaults: new { controller = "Contact", action = "Security" }
+        );
+            routes.MapRoute(
             name: "BaiViet",
             url: "post/{alias}",
             defaults: new { controller = "Article", action = "Index", alias = UrlParameter.Optional },

@@ -3562,6 +3562,8 @@
     <Content Include="Views\ShoppingCart\VnpayReturn.cshtml" />
     <Content Include="Views\Shared\_PartialWeather.cshtml" />
     <Content Include="Views\Contact\FAQs.cshtml" />
+    <Content Include="Views\Contact\Policy.cshtml" />
+    <Content Include="Views\Contact\Security.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
