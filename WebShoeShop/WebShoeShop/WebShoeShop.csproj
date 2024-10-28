@@ -467,6 +467,7 @@
     <Content Include="Content\assets\styles\contact_responsive.css" />
     <Content Include="Content\assets\styles\contact_styles.css" />
     <Content Include="Content\assets\styles\FAQs.css" />
+    <Content Include="Content\assets\styles\Login.css" />
     <Content Include="Content\assets\styles\main.css" />
     <Content Include="Content\assets\styles\main_styles.css" />
     <Content Include="Content\assets\styles\responsive.css" />
