@@ -1,42 +1,50 @@
 ﻿@model WebShoeShop.Models.EF.Subscribe
+@using (Ajax.BeginForm("Subscribe", "Home", new AjaxOptions
+{
+    OnBegin = "OnBeginSub",
+    OnSuccess = "OnSuccessSub",
+    OnFailure = "OnFailureSub"
+}))
+{
+    @Html.AntiForgeryToken()
+    <script>
+        function OnBeginSub() {
+            // Vô hiệu hóa nút gửi khi form bắt đầu gửi
+            document.getElementById("newsletter_submit").disabled = true;
+        }
 
-<div class="newsletter">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="newsletter_text d-flex flex-column justify-content-center align-items-lg-start align-items-md-center text-center">
-                    <h4>Đăng ký nhận tin</h4>
-                    <p>Nhận thông tin sản phẩm mới nhất, tin khuyến mãi và nhiều hơn nữa.</p>
-                </div>
-            </div>
+        function OnSuccessSub(rs) {
+            if (rs.Success) {
+                alert("Đăng ký thành công");
+                // Thiết lập lại trường email và kích hoạt lại nút gửi
+                document.getElementById("letter_email").value = "";
+            } else {
+                alert("Đăng ký không thành công. Vui lòng thử lại.");
+            }
+            // Kích hoạt lại nút gửi
+            document.getElementById("newsletter_submit").disabled = false;
+        }
 
-            <div class="col-lg-6">
-                @using (Ajax.BeginForm("Subscribe", "Home", new AjaxOptions
-                {
-                    OnBegin = "OnBeginSub",
-                    OnSuccess = "OnSuccessSub",
-                    OnFailure = "OnFailureSub"
-                }))
-                {
-                    @Html.AntiForgeryToken()
-                    <script>
-                        function OnBeginSub() {
+        function OnFailureSub(rs) {
+            // Xử lý khi có lỗi xảy ra và hiển thị thông báo lỗi
+            alert("Có lỗi xảy ra. Vui lòng kiểm tra kết nối và thử lại.");
+            // Kích hoạt lại nút gửi trong trường hợp có lỗi
+            document.getElementById("newsletter_submit").disabled = false;
+        }
+    </script>
 
-                        }
-                        function OnSuccessSub(rs) {
-                            if (rs.Success) {
-                                alert("Đăng kí thành công");
-                            }
-                        }
-                        function OnFailureSub(rs) { }
-                    </script>
-                    <div class="newsletter_form d-flex flex-md-row flex-column flex-xs-column align-items-center justify-content-lg-end justify-content-center">
-                        <input id="newsletter_email" name="Email" type="email" placeholder="Your email" required="required" data-error="Valid email is required.">
-                        <button id="newsletter_submit" class="btn btn-outline-primary" type="submit" class="newsletter_submit_btn trans_300" value="Submit">Đăng ký</button>
-                    </div>
-                }
-                
-            </div>
+    <div class="footer-widget">
+        <div class="footer-widget-heading">
+            <h3>Subscribe</h3>
+        </div>
+        <div class="footer-text mb-25">
+            <p> Đừng bỏ lỡ việc đăng ký các sản phẩm và khuyến mãi mới của chúng tôi, vui lòng nhập liên hệ bên dưới.</p>
+        </div>
+        <div class="subscribe-form">
+            <form action="#">
+                <input id="letter_email" type="email" placeholder="Địa chỉ Email hoặc số điện thoại" name="Email" required="required" oninvalid="this.setCustomValidity('Vui lòng điền Email.')" oninput="this.setCustomValidity('')" data-error="Định dạng Email không hợp lệ.">
+                <button id="newsletter_submit" type="submit"><i class="fa-regular fa-paper-plane"></i></button>
+            </form>
         </div>
     </div>
-</div>
+}

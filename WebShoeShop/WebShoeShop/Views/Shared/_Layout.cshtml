@@ -189,12 +189,9 @@
 
         @RenderBody()
 
-        <!-- Newsletter -->
-        @Html.Action("Partial_Subcrice", "Home")
         <!-- Footer -->
 
 
-        <!--Footer-->
         <!--<div class="footer-top">
         <div class="container">
             <div class="row">
@@ -307,20 +304,7 @@
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
-                        <div class="footer-widget">
-                            <div class="footer-widget-heading">
-                                <h3>Subscribe</h3>
-                            </div>
-                            <div class="footer-text mb-25">
-                                <p> Đừng bỏ lỡ việc đăng ký các sản phẩm và khuyến mãi mới của chúng tôi, vui lòng nhập liên hệ bên dưới.</p>
-                            </div>
-                            <div class="subscribe-form">
-                                <form action="#">
-                                    <input type="text" placeholder="Địa chỉ Email hoặc số điện thoại">
-                                    <button><i class="fa-regular fa-paper-plane "></i></button>
-                                </form>
-                            </div>
-                        </div>
+                        @Html.Action("Partial_Subcrice", "Home")
                     </div>
                 </div>
             </div>
