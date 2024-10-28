@@ -86,5 +86,9 @@ namespace WebShoeShop.Controllers
         {
             return View();
         }
+        public ActionResult ContactMe()
+        {
+            return PartialView();
+        }
     }
 }

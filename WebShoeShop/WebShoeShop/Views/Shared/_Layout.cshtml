@@ -55,17 +55,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="top_nav_left">
-                                <a href="/lien-he" title="Facebook">
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")" title="Facebook">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
-                                <a href="/lien-he" title="Instagram">
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")" title="Instagram">
                                     <i class="fab fa-instagram"></i>
                                 </a>
-                                <a href="/lien-he" title="Zalo">
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingZalo")" title="Zalo">
                                     <i class="fab fa-viber"></i>
                                 </a>
-                                <a href="/lien-he" title="Pinterest">
-                                    <i class="fab fa-pinterest"></i>
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingYoutube")" title="Youtube">
+                                    <i class="fab fa-youtube"></i>
                                 </a>
                                 Hotline: @SettingHelper.GetValue("SettingHotline")
                             </div>
@@ -233,33 +233,7 @@
         <div class="container">
             <div class="footer-cta pt-5 pb-5">
                 <div class="row">
-                    <div class="col-xl-4 col-md-4 mb-30">
-                        <div class="single-cta">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div class="cta-text">
-                                <h4>Find us</h4>
-                                <span>Chicago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4 mb-30">
-                        <div class="single-cta">
-                            <i class="fas fa-phone"></i>
-                            <div class="cta-text">
-                                <h4>Call us</h4>
-                                <span>999999999</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-4 mb-30">
-                        <div class="single-cta">
-                            <i class="far fa-envelope-open"></i>
-                            <div class="cta-text">
-                                <h4>Mail us</h4>
-                                <span>9999999999@info.com</span>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
             <div class="footer-content pt-5 pb-5">
@@ -276,9 +250,9 @@
                             </div>
                             <div class="footer-social-icon">
                                 <span>Theo dõi chúng tôi</span>
-                                <a href="/lien-he"><i class="fab fa-facebook-f facebook-bg"></i></a>
-                                <a href="/lien-he"><i class="fab fa-twitter twitter-bg"></i></a>
-                                <a href="/lien-he"><i class="fab fa-google-plus-g google-bg"></i></a>
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")"><i class="fab fa-facebook-f facebook-bg" title="Facebook"></i></a>
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingZalo")"><i class="fab fa-viber twitter-bg" title="Zalo"></i></a>
+                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingYoutube")"><i class="fab fa-youtube google-bg" title="Youtube"></i></a>
                             </div>
                         </div>
                     </div>
@@ -321,9 +295,9 @@
                         <div class="footer-menu">
                             <ul>
                                 <li><a href="/home">Trang chủ</a></li>
-                                <li><a href="#">Điều khoản</a></li>
-                                <li><a href="#">Bảo mật</a></li>
-                                <li><a href="#">Chính sách</a></li>
+                                <li><a href="/chinh-sach">Điều khoản</a></li>
+                                <li><a href="/bao-mat">Bảo mật</a></li>
+                                <li><a href="/chinh-sach">Chính sách</a></li>
                                 <li><a href="/lien-he">Liên hệ</a></li>
                             </ul>
                         </div>

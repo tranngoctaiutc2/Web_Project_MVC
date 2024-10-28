@@ -1,0 +1,17 @@
+﻿<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_responsive.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+
+
+<div class="follow_us_contents">
+    <h1>Theo dõi chúng tôi</h1>
+    <ul class="social d-flex flex-row">
+        <li><a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")" style="background-color: #3a61c9"><i class="fab fa-facebook" aria-hidden="true" title="Facebook"></i></a></li>
+        <li><a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingYoutube")" style="background-color: #f00000"><i class="fab fa-youtube" aria-hidden="true" title="Youtube"></i></a></li>
+        <li><a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingZalo")" style="background-color: #55ACEE"><i class="fab fa-viber" aria-hidden="true" title="Zalo"></i></a></li>
+    </ul>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/contact_custom.js"></script>
+}

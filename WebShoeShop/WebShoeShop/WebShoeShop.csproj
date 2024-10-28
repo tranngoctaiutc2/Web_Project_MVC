@@ -3566,6 +3566,7 @@
     <Content Include="Views\Contact\Security.cshtml" />
     <Content Include="Views\Contact\Career.cshtml" />
     <Content Include="Views\Contact\Franchisepolicy.cshtml" />
+    <Content Include="Views\Contact\ContactMe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
