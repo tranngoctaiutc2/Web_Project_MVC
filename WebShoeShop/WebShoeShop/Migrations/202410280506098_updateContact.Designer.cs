@@ -7,13 +7,13 @@ namespace WebShoeShop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class EditOrder : IMigrationMetadata
+    public sealed partial class updateContact : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(EditOrder));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(updateContact));
         
         string IMigrationMetadata.Id
         {
-            get { return "202405261546266_EditOrder"; }
+            get { return "202410280506098_updateContact"; }
         }
         
         string IMigrationMetadata.Source

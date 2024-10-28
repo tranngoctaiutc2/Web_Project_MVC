@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class EditOrder : DbMigration
+    public partial class updateContact : DbMigration
     {
         public override void Up()
         {
@@ -84,8 +84,8 @@
                         Name = c.String(nullable: false, maxLength: 150),
                         Email = c.String(maxLength: 150),
                         Message = c.String(maxLength: 4000),
-                        CreatedDate = c.DateTime(nullable: false),
                         CreatedBy = c.String(),
+                        CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                         Modifiedby = c.String(),
                     })
@@ -205,6 +205,7 @@
                         Id = c.Int(nullable: false, identity: true),
                         ProductId = c.Int(nullable: false),
                         Size = c.Int(nullable: false),
+                        Quantity = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.tb_Product", t => t.ProductId, cascadeDelete: true)
