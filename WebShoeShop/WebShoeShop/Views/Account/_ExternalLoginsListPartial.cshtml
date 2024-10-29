@@ -19,7 +19,7 @@
                 <p>
                     @foreach (AuthenticationDescription p in loginProviders)
                     {
-                        <button type="submit" class="btn btn-outline-info fab fa-@p.AuthenticationType.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Đăng nhập sử dụng tài khoản @p.Caption">@p.AuthenticationType</button>
+                        <button type="submit" class="btn btn-outline-info switch__button switch-btn fab fa-@p.AuthenticationType.ToLower()" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Đăng nhập sử dụng tài khoản @p.Caption">@p.AuthenticationType.Substring(1)</button>
                     }
                 </p>
             </div>
