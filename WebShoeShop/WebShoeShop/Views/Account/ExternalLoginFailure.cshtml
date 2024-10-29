@@ -1,10 +1,46 @@
-﻿@{
+﻿@using WebShoeShop.Models
+@{
     ViewBag.Title = "Login Failure";
 }
 
-<main>
-    <hgroup>
-        <h2>@ViewBag.Title.</h2>
-        <h3 class="text-danger">Unsuccessful login with service.</h3>
-    </hgroup>
-</main>
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/Login.css">
+
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+            <h1 class="text-center" style="margin-top:30px; color: #ffffff;">@ViewBag.Title</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="root">
+            <div class="main">
+                <div class="container1 b-container">
+                    <h2 class="form_title title">Đăng nhập thất bại! Hãy thử lại.</h2>
+                </div>
+                <div class="switch">
+                    <div class="switch__circle"></div>
+                    <div class="switch__container">
+                        <h2 class="switch__title title">Chào mừng bạn tới với Double 2T-2Q !</h2>
+                        <p class="switch__description description">Trở lại đăng nhập</p>
+                        <button class="switch__button button switch-btn" onclick="window.location.href='@Url.Action("Login", "Account")'">Đăng nhập</button>
+                        <p class="switch__description description" style="margin-top: 50px;">Hoặc đăng nhập với</p>
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                    </div>
+                </div>
+            </div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    Có lỗi xảy ra. Hãy thử lại
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,12 +1,14 @@
-﻿@model WebShoeShop.Models.SendCodeViewModel
+﻿@using WebShoeShop.Models
+@model WebShoeShop.Models.SendCodeViewModel
 @{
-    ViewBag.Title = "Send";
+    ViewBag.Title = "Gửi mã";
 }
 
-<main aria-labelledby="title">
+@*<main aria-labelledby="title">
     <h2 id="title">@ViewBag.Title.</h2>
 
-    @using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { role = "form" })) {
+    @using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+    {
         @Html.AntiForgeryToken()
         @Html.Hidden("rememberMe", @Model.RememberMe)
         <h4>Send verification code</h4>
@@ -19,8 +21,55 @@
             </div>
         </div>
     }
-</main>
+</main>*@
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/Login.css">
 
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+            <h1 class="text-center" style="margin-top:30px; color: #ffffff;">@ViewBag.Title</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="root">
+            <div class="main">
+                <div class="container1 b-container">
+                    <form class="form1" action="@Url.Action("SendCode", "Account")" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("rememberMe", @Model.RememberMe)
+                        <h2 class="form_title title">Gửi mã xác nhận</h2>
+                        <span class="form__span">Chọn nhà cung cấp xác thực hai yếu tố:</span>
+
+                        @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers)
+
+
+                        <button type="submit" class="form__button button submit">Gửi mã</button>
+                    </form>
+                </div>
+                <div class="switch">
+                    <div class="switch__circle"></div>
+                    <div class="switch__container">
+                        <h2 class="switch__title title">Chào mừng bạn tới với Double 2T-2Q !</h2>
+                        <p class="switch__description description">Trở lại đăng nhập</p>
+                        <button class="switch__button button switch-btn" onclick="window.location.href='@Url.Action("Login", "Account")'">Đăng nhập</button>
+                        <p class="switch__description description" style="margin-top: 50px;">Hoặc đăng nhập với</p>
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                    </div>
+                </div>
+            </div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    Có lỗi xảy ra. Hãy thử lại
+                </div>
+            }
+        </div>
+    </div>
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
