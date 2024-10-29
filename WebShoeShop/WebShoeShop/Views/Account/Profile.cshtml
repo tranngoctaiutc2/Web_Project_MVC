@@ -1,66 +1,121 @@
 ﻿@model WebShoeShop.Models.CreateAccountViewModel
 @{
-    ViewBag.Title = "Profile";
+    ViewBag.Title = "Thông tin cá nhân";
 
 }
-<style>
-    .product_section_container {
-        margin-top: 180px;
-    }
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/Login.css">
+@*<style>
+        .product_section_container {
+            margin-top: 180px;
+        }
 
-    .row-item-new {
-        margin-bottom: 20px;
-    }
+        .row-item-new {
+            margin-bottom: 20px;
+        }
 
-    .title-news {
-        font-size: 24px;
-        border-bottom: 1px solid;
-        padding: 15px 0;
-        margin-bottom: 25px;
-    }
+        .title-news {
+            font-size: 24px;
+            border-bottom: 1px solid;
+            padding: 15px 0;
+            margin-bottom: 25px;
+        }
 
-    .img-box img {
-        max-width: 100%;
-        max-height: 100%;
-    }
-</style>
-<link href="~/Content/assets/styles/main_styles.css" rel="stylesheet" />
-<div class="container product_section_container">
-    <div class="row">
-        @using (Html.BeginForm("PostProfile", "Account"))
-        {
-            @Html.ValidationSummary(false)
-            @Html.AntiForgeryToken()
+        .img-box img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+    <link href="~/Content/assets/styles/main_styles.css" rel="stylesheet" />
+    <div class="container product_section_container">
+        <div class="row">
+            @using (Html.BeginForm("PostProfile", "Account"))
+            {
+                @Html.ValidationSummary(false)
+                @Html.AntiForgeryToken()
+                <div class="col-md-12">
+                    <h2>Thông tin cá nhân</h2>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">Full Name</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelp" name="FullName" value="@Model.FullName">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">User Name</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelp" name="UserName" value="@Model.UserName" readonly>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">Phone</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelp" name="Phone" value="@Model.Phone">
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail">Email</label>
+                        <input type="text" class="form-control" aria-describedby="emailHelp" name="Email" value="@Model.Email" readonly>
+
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Cập nhật</button>
+                    </div>
+                </div>
+            }
             <div class="col-md-12">
-                <h2>Thông tin cá nhân</h2>
-                <div class="form-group">
-                    <label for="exampleInputEmail">Full Name</label>
-                    <input type="text" class="form-control" aria-describedby="emailHelp" name="FullName" value="@Model.FullName">
+                @Html.Action("HistoryOrder", "Account")
+            </div>
+        </div>*@
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
 
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail">User Name</label>
-                    <input type="text" class="form-control" aria-describedby="emailHelp" name="UserName" value="@Model.UserName" readonly>
+            <!-- Breadcrumbs -->
+            <h1 class="text-center" style="margin-top:30px; color: #ffffff;">@ViewBag.Title</h1>
+        </div>
+    </div>
 
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail">Phone</label>
-                    <input type="text" class="form-control" aria-describedby="emailHelp" name="Phone" value="@Model.Phone">
+    <div class="row">
+        <div class="root">
+            <div class="main1">
+                <div class="container1 c-container">
+                    <form class="form1" action="@Url.Action("PostProfile", "Account")">
+                        @Html.ValidationSummary(false)
+                        @Html.AntiForgeryToken()
 
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail">Email</label>
-                    <input type="text" class="form-control" aria-describedby="emailHelp" name="Email" value="@Model.Email" readonly>
+                        <h2 class="form_title title">Thông tin cá nhân</h2>
+                        <span class="form__span">Thông tin tài khoản của bạn</span>
 
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success">Cập nhật</button>
+                        <span style="display: block; font-weight: bold; margin-right: 280px;">
+                            Tên đầy đủ:
+                        </span>
+                        <input class="form__input" type="text" aria-describedby="emailHelp" placeholder="Tên đầy đủ" value="@Model.FullName">
+                        <span style="display: block; font-weight: bold; margin-right: 260px;">
+                            Tên đăng nhập:
+                        </span>
+                        <input class="form__input" type="text" aria-describedby="emailHelp" placeholder="Tên đăng nhập" value="@Model.UserName" readonly>
+                        <span style="display: block; font-weight: bold; margin-right: 270px;">
+                            Số điện thoại:
+                        </span>
+                        <input class="form__input" type="text" aria-describedby="emailHelp" placeholder="Số điện thoại" value="@Model.Phone">
+                        <span style="display: block; font-weight: bold; margin-right: 300px;">
+                            Email:
+                        </span>
+                        <input class="form__input" type="text" aria-describedby="emailHelp" placeholder="Email" value="@Model.Email" readonly>
+
+                        <small id="emailHelp" class="form-text text-muted">Thông tin của bạn luôn được chúng tôi bảo mật.</small>
+                        <button type="submit" class="form__button button submit">Cập nhật</button>
+                    </form>
                 </div>
             </div>
-        }
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    Cập nhật thất bại.
+                </div>
+            }
+        </div>
+    </div>
     <div class="col-md-12">
         @Html.Action("HistoryOrder", "Account")
-    </div>
     </div>
 </div>
 
