@@ -165,8 +165,95 @@
         </div>
 
     </div>
-    @Html.Action("Partial_ProductReleated", "Products")
-    @*    @Html.Action("Partial_ProductFeature", "Products")*@
+    <div class="best_sellers">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h3>Sản phẩm liên quan</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="product_slider_container">
+                        <div class="owl-carousel owl-theme product_slider" style="height:380px;">
+
+                            @foreach (var item in @ViewBag.RelatedProducts as IEnumerable<WebShoeShop.Models.EF.Product>)
+                            {
+                                var strImge = "";
+                                var img = item.ProductImage.FirstOrDefault(x => x.IsDefault);
+                                if (img != null)
+                                {
+                                    strImge = img.Image;
+                                }
+                                var wishlist = item.Wishlists.FirstOrDefault(x => x.UserName == User.Identity.Name);
+                                var isWishList = false;
+                                if (wishlist != null)
+                                {
+                                    isWishList = true;
+                                }
+                                <div class="owl-item product_slider_item">
+                                    <div class="product-item @item.ProductCategory.Alias">
+                                        <div class="product discount product_filter">
+                                            <div class="product_image">
+                                                <a href="/chi-tiet/@item.Alias-p@(item.Id)"><img src="@strImge" alt="@item.Title"> </a>
+                                            </div>
+                                            @if (isWishList == true)
+                                            {
+                                                <div data-id="@item.Id" class="favorite favorite_left active"></div>
+                                            }
+                                            else
+                                            {
+                                                <div data-id="@item.Id" class="favorite favorite_left"></div>
+                                            }
+                                            @if (item.PriceSale > 0)
+                                            {
+                                                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>sale</span></div>
+                                            }
+                                            @*                                             <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div>
+                                            *@
+                                            <div class="product_info">
+                                                <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
+                                                @if (item.PriceSale > 0)
+                                                {
+                                                    <div class="product_price">@WebShoeShop.Common.Common.FormatNumber(item.PriceSale, 0)<span>@WebShoeShop.Common.Common.FormatNumber(item.Price, 0)</span></div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div class="product_price">@WebShoeShop.Common.Common.FormatNumber(item.Price, 0)</div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="red_button add_to_cart_button">
+                                            <a href="#" class="btnAddToCart" data-id="@item.Id"><i class="fa fa-cart-plus"></i></a>
+
+                                        </div>
+                                        <div class="red_button add_to_cart_button">
+                                            <a href="/chi-tiet/@item.Alias-p@(item.Id)" class="btnAddToCartt" data-id="@item.Id"><i class="fa fa-search-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+
+                        <!-- Slider Navigation -->
+
+                        <div class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </div>
+                        <div class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 }
 @section scripts{
     <script src="~/Content/assets/js/single_custom.js"></script>
@@ -175,27 +262,45 @@
             var addToCartButton = document.querySelector('.btnAddToCart1');
             addToCartButton.addEventListener('click', function (event) {
                 event.preventDefault();
+
                 var quantityValue = parseInt(document.getElementById('quantity_value').innerText);
                 var quantityProduct = parseInt(document.getElementById('quantity_product').innerText);
 
-                if (quantityValue > quantityProduct) {
+                var selectedSizeElement = document.querySelector('.size-item.selected');
+                if (!selectedSizeElement) { 
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Vui lòng chọn size trước khi thêm vào giỏ hàng.'
+                    });
+                    return; 
+                }
 
+                var size = selectedSizeElement.getAttribute('data-size');
+
+                if (quantityValue > quantityProduct) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Lỗi',
                         text: 'Số lượng bạn muốn mua vượt quá số lượng hiện có trong kho.'
                     });
                 } else {
-                    //alert(id + " " + quatity);
                     var id = addToCartButton.getAttribute('data-id');
                     $.ajax({
                         url: '/shoppingcart/addtocart',
                         type: 'POST',
-                        data: { id: id, quantity: quantityValue },
+                        data: { id: id, quantity: quantityValue, size: size },
                         success: function (rs) {
                             if (rs.Success) {
                                 $('#checkout_items').html(rs.Count);
-                                toastr.success(rs.msg, null, { progressBar: true, positionClass: 'toast-top-right' });
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Thành công!',
+                                    text: rs.msg,
+                                    timer: 2000,
+                                    showConfirmButton: false,
+                                    position: 'center'
+                                });
                             } else {
                                 Swal.fire({
                                     icon: 'error',
@@ -203,19 +308,14 @@
                                     text: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng',
                                     confirmButtonText: "Đăng nhập",
                                     cancelButtonText: "Quay lại",
-                                    showCancelButton: true,
-                                    closeOnConfirm: false
+                                    showCancelButton: true
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         window.location.href = '/account/login';
-                                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-
-                                        Swal.close();
                                     }
                                 });
                             }
                         }
-
                     });
                 }
             });
@@ -227,6 +327,14 @@
             $('.size-item').click(function () {
                 $('.size-item').removeClass('active');
                 $(this).addClass('active');
+            });
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.size-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.size-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
             });
         });
     </script>

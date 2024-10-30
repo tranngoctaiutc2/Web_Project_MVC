@@ -3556,7 +3556,6 @@
     <Content Include="Views\Account\Profile.cshtml" />
     <Content Include="Views\Review\_load_review.cshtml" />
     <Content Include="Views\Wishlist\Index.cshtml" />
-    <Content Include="Views\Products\Partial_ProductReleated.cshtml" />
     <Content Include="Views\Account\HistoryOrder.cshtml" />
     <Content Include="Views\Account\ConfirmtionEmail.cshtml" />
     <Content Include="Views\Account\EmailConfirmation.cshtml" />

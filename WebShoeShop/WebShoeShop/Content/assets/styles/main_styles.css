@@ -1187,6 +1187,14 @@ section
 	padding-left: 10px;
 	padding-right: 10px;
 }
+	.product_info h6 {
+		height: 3em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2; 
+		-webkit-box-orient: vertical;
+	}
 .product_name
 {
 	margin-top: 27px;
@@ -1281,7 +1289,7 @@ section
 }
 .add_to_cart_button
 {
-	width: 48.5%;
+	width: 100%;
 	visibility: hidden;
 	opacity: 0;
 	-webkit-transition: all 0.3s ease;

@@ -8,48 +8,48 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <style>
     .promotion-card {
-        background-color: #ffffff; /* Màu nền trắng */
-        border: 2px solid #ff4081; /* Viền màu hồng */
-        border-radius: 15px; /* Bo góc */
-        padding: 15px; /* Khoảng cách bên trong */
-        text-align: center; /* Căn giữa nội dung */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-        transition: transform 0.3s, box-shadow 0.3s; /* Hiệu ứng chuyển động */
+        background-color: #ffffff; 
+        border: 2px solid #ff4081; 
+        border-radius: 15px; 
+        padding: 15px; 
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s; 
     }
 
         .promotion-card:hover {
-            transform: translateY(-5px); /* Nâng lên khi di chuột */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Bóng đổ đậm hơn */
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
         }
 
     .promo-image {
-        width: 50px; /* Kích thước hình ảnh */
-        height: 50px; /* Kích thước hình ảnh */
-        margin-bottom: 15px; /* Khoảng cách dưới hình ảnh */
+        width: 50px; 
+        height: 50px; 
+        margin-bottom: 15px;
     }
 
     .discount {
-        font-size: 20px; /* Kích thước chữ lớn hơn */
-        font-weight: bold; /* Chữ đậm */
-        color: #ff4081; /* Màu chữ hồng */
+        font-size: 20px; 
+        font-weight: bold; 
+        color: #ff4081; 
     }
 
     .expiry {
-        font-size: 14px; /* Kích thước chữ nhỏ hơn */
-        color: #6c757d; /* Màu chữ xám */
-        margin-top: 10px; /* Khoảng cách trên */
+        font-size: 14px; 
+        color: #6c757d; 
+        margin-top: 10px; 
     }
 
     .btn-info {
-        background-color: #ff4081; /* Màu nền nút */
-        border-color: #ff4081; /* Màu viền nút */
-        color: white; /* Màu chữ nút */
-        margin-top: 15px; /* Khoảng cách trên nút */
+        background-color: #ff4081; 
+        border-color: #ff4081; 
+        color: white; 
+        margin-top: 15px; 
     }
 
         .btn-info:hover {
-            background-color: #e91e63; /* Màu nền khi di chuột */
-            border-color: #e91e63; /* Màu viền khi di chuột */
+            background-color: #e91e63; 
+            border-color: #e91e63; 
         }
 </style>
 <div class="container product_section_container">
@@ -289,10 +289,6 @@
                                                         <div style="display:none;" class="in_product_price"> @item.Price</div>
                                                     }
                                                 </div>
-                                            </div>
-                                            <div class="red_button add_to_cart_button">
-                                                <a href="#" class="btnAddToCart" data-id="@item.Id"><i class="fa fa-cart-plus"></i></a>
-
                                             </div>
                                             <div class="red_button add_to_cart_button">
                                                 <a href="/chi-tiet/@item.Alias-p@(item.Id)" class="btnAddToCartt" data-id="@item.Id"><i class="fa fa-search-plus"></i></a>

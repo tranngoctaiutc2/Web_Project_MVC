@@ -30,10 +30,9 @@
                         closeOnConfirm: false
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/account/login';  // Thay /duong-dan-dang-nhap bằng đường dẫn thực tế của bạn
+                            window.location.href = '/account/login';  
                         } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // Hành động tắt thông báo (tự động đóng)
-                            Swal.close(); // Có thể gọi hàm này để tắt thông báo, nhưng mặc định nút Cancel đã đóng thông báo.
+                            Swal.close(); 
                         }
                     });
 
@@ -48,8 +47,8 @@
         var quantity = $('#Quantity_' + id).val();
         var size = $('#Size_' + id).val();
         Update(id, quantity, size);
-
     });
+
     $('body').on('click', '.btnDeleteAll', function (e) {
         e.preventDefault();
     
@@ -160,27 +159,6 @@ function updateProduct(element) {
         document.getElementById(inputQuantityId).value = "";
         return;
     }
-
-    if (inputValue1 > 45) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Giá trị không hợp lệ!',
-            text: 'Vui lòng nhập size dưới 45.'
-        });
-        document.getElementById(inputSizeId).value = "";
-        return;
-    }
-    if (inputValue1 < 35) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Giá trị không hợp lệ!',
-            text: 'Vui lòng nhập size trên 35.'
-        });
-        document.getElementById(inputSizeId).value = "";
-        return;
-    }
-
-    // Tiếp tục thực hiện cập nhật hoặc xử lý khác tại đây
 }
 
 function ShowCount() {
