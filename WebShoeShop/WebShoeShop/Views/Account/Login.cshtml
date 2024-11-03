@@ -27,11 +27,11 @@
 
                         <!-- Tên đăng nhập -->
                         @Html.TextBoxFor(m => m.UserName, new { @class = "form__input", placeholder = "Tài khoản" })
-                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger-username" })
 
                         <!-- Mật khẩu -->
                         @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Mật khẩu" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger-password" })
 
                         <!-- Link Quên mật khẩu -->
                         <a class="form__link" href="@Url.Action("ForgotPassword", "Account")">Bạn quên mật khẩu?</a>
