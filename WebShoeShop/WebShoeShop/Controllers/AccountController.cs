@@ -243,25 +243,24 @@ namespace WebShoeShop.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByEmailAsync(model.Email);
-                var it = (await UserManager.IsEmailConfirmedAsync(user.Id));
                 if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    ModelState.AddModelError("Email", "Email không tồn tại hoặc chưa được xác nhận.");
+                    return View(model);
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                WebShoeShop.Common.Common.SendMail("Double 2T-2Q Sneaker", "Quên mật khẩu", "Bạn click vào <a href='" + callbackUrl + "'>link này</a> để reset mật khẩu",model.Email);
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                WebShoeShop.Common.Common.SendMail("Double 2T-2Q Sneaker", "Quên mật khẩu",
+                    "Bạn click vào <a href='" + callbackUrl + "'>link này</a> để reset mật khẩu", model.Email);
+
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
 
         //
         // GET: /Account/ForgotPasswordConfirmation
