@@ -43,7 +43,8 @@ namespace WebShoeShop.Models
 
     public class ForgotViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email la bat buoc")]
+        [EmailAddress(ErrorMessage = "Email khong dung")]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
@@ -162,8 +163,8 @@ namespace WebShoeShop.Models
 
     public class ForgotPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email không được để trống")]
+        [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
