@@ -341,20 +341,49 @@ jQuery(document).ready(function ($) {
 	*/
 
 	function initPriceSlider() {
-		$("#slider-range").slider(
-			{
-				range: true,
-				min: 0,
-				max: 5000000,
-				values: [0, 1000000],
-				slide: function (event, ui) {
-					$("#amount").val("đ" + ui.values[0] + " - đ" + ui.values[1]);
-					$('#FromAmount').val(ui.values[0]);
-					$('#ToAmount').val(ui.values[1]);
-				}
-			});
+		// Khởi tạo thanh trượt
+		$("#slider-range").slider({
+			range: true,
+			min: 0,
+			max: 5000000,
+			values: [0, 1000000],
+			slide: function (event, ui) {
+				// Cập nhật giá trị thanh trượt trên input và slider với định dạng phần nghìn
+				$("#amount").val("đ" + ui.values[0] + " - đ" + ui.values[1]);
+				$('#minPrice').val(ui.values[0]);
+				$('#maxPrice').val(ui.values[1]);
+			}
+		});
 
 		$("#amount").val("đ" + $("#slider-range").slider("values", 0) + " - đ" + $("#slider-range").slider("values", 1));
+		// Sự kiện khi người dùng nhập giá trị vào input từ bàn phím cho minPrice
+		$("#minPrice").on('input', function () {
+			var minVal = parseInt($(this).val());
+			var maxVal = parseInt($("#maxPrice").val());
+			// Kiểm tra giá trị min không lớn hơn max
+			if (minVal >= 0 && minVal <= maxVal) {
+				// Cập nhật giá trị cho thanh trượt
+				$("#slider-range").slider("values", 0, minVal);
+				$("#amount").val("đ" + minVal + " - đ" + maxVal);
+			}
+		});
+		// Sự kiện khi người dùng nhập giá trị vào input từ bàn phím cho maxPrice
+		$("#maxPrice").on('input', function () {
+			var minVal = parseInt($("#minPrice").val());
+			var maxVal = parseInt($(this).val());
+			// Kiểm tra giá trị max không nhỏ hơn min
+			if (maxVal >= minVal && maxVal <= 5000000) {
+				// Cập nhật giá trị cho thanh trượt
+				$("#slider-range").slider("values", 1, maxVal);
+				$("#amount").val("đ" + minVal + " - đ" + maxVal);
+			}
+		});
+		// Tự động chọn giá trị khi nhấp vào input
+		$(document).ready(function () {
+			$('#minPrice, #maxPrice').on('focus', function () {
+				$(this).select();
+			});
+		});
 	}
 	//
 	/* 
