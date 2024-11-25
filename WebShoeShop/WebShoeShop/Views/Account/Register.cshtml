@@ -38,7 +38,7 @@
                         <div class="form__password-container" style="position: relative;">
                             <!-- Mật khẩu -->
                             @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "Password", placeholder = "Mật khẩu", oncopy = "return false;" })
-                            <i id="eyeIconPassword" class="fas fa-eye" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #888; cursor: pointer;" aria-hidden="true"></i>
+                            <i id="eyeIconPassword" class="fas fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #888; cursor: pointer;" aria-hidden="true"></i>
                         </div>
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
