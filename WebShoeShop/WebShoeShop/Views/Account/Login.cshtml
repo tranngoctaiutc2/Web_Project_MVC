@@ -29,8 +29,12 @@
                         @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger-username" })
 
                         <!-- Mật khẩu -->
-                        @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Mật khẩu" })
+                        <div class="form__password-container" style="position: relative;">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "passwordField", placeholder = "Mật khẩu" })
+                        <i id="eyeIcon" class="fas fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #888; cursor: pointer;" aria-hidden="true"></i>
+                        </div>                       
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger-password" })
+
 
                         <!-- Link Quên mật khẩu -->
                         <a class="form__link" href="@Url.Action("ForgotPassword", "Account")">Bạn quên mật khẩu?</a>
@@ -73,4 +77,22 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Lấy phần tử icon và trường mật khẩu
+        const eyeIcon = document.getElementById("eyeIcon");
+        const passwordField = document.getElementById("passwordField");
+
+        // Thêm sự kiện khi người dùng click vào biểu tượng con mắt
+        eyeIcon.addEventListener("click", function () {
+            if (passwordField.type === "password") {
+                passwordField.type = "text"; // Hiển thị mật khẩu
+                eyeIcon.classList.remove("fa-eye-slash"); // Thay đổi icon
+                eyeIcon.classList.add("fa-eye"); // Đổi thành icon mắt bị gạch chéo
+            } else {
+                passwordField.type = "password"; // Ẩn mật khẩu
+                eyeIcon.classList.remove("fa-eye"); // Thay đổi icon
+                eyeIcon.classList.add("fa-eye-slash"); // Đổi thành icon mắt bình thường
+            }
+        });
+    </script>
 }
