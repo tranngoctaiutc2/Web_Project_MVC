@@ -45,5 +45,38 @@
 
 @section scripts{
     <script src="~/Content/assets/js/categories_custom.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const paymentButton = document.querySelector(".btnpayment");
 
+            // Kiểm tra xem phần tử có tồn tại không
+            if (paymentButton) {
+                paymentButton.addEventListener("click", function (e) {
+                    const quantityInputs = document.querySelectorAll('.quantity-input');
+                    const sizeInputs = document.querySelectorAll('.size-input');
+                    let hasInvalidInput = false;
+
+                    for (let i = 0; i < quantityInputs.length; i++) {
+                        const quantityValue = parseInt(quantityInputs[i].value);
+                        const sizeValue = parseInt(sizeInputs[i].value);
+
+                        if (quantityValue === 0 || sizeValue === 0 || isNaN(quantityValue) || isNaN(sizeValue)) {
+                            hasInvalidInput = true;
+                            break;
+                        }
+                    }
+
+                    if (hasInvalidInput) {
+                        e.preventDefault();
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Vui lòng chọn số lượng và size hợp lệ!'
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 }

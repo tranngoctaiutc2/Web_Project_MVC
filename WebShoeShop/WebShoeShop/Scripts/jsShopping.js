@@ -105,35 +105,6 @@
     }
 
 });
-document.addEventListener("DOMContentLoaded", function () {
-    const paymentButton = document.querySelector(".btnpayment");
-
-    paymentButton.addEventListener("click", function (e) {
-        const quantityInputs = document.querySelectorAll('.quantity-input');
-        const sizeInputs = document.querySelectorAll('.size-input');
-        let hasInvalidInput = false;
-
-        for (let i = 0; i < quantityInputs.length; i++) {
-            const quantityValue = parseInt(quantityInputs[i].value);
-            const sizeValue = parseInt(sizeInputs[i].value);
-
-            if (quantityValue === 0 || sizeValue === 0 || isNaN(quantityValue) || isNaN(sizeValue)) {
-                hasInvalidInput = true;
-                break;
-            }
-        }
-
-        if (hasInvalidInput) {
-            e.preventDefault();
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Vui lòng chọn số lượng và size hợp lệ!'
-            });
-        }
-    });
-});
 function updateProduct(element) {
     var inputSizeId = "Size_" + element.dataset.id;
     var inputQuantityId = "Quantity_" + element.dataset.id;
