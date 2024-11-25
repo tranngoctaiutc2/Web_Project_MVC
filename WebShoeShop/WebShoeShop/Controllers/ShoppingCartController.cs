@@ -357,32 +357,32 @@ namespace WebShoeShop.Controllers
 			}
 			return Json(code);
 		}
-
 		[HttpPost]
 		public ActionResult Update(int id, int quantity, int size)
 		{
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null)
 			{
-				cart.UpdateQuantity(id, quantity, size);
-				Session["Cart"] = cart;
+				cart.UpdateQuantity(id, quantity, size); // Cập nhật giỏ hàng
+				Session["Cart"] = cart; // Lưu lại vào Session
 				return Json(new { Success = true });
 			}
 			return Json(new { Success = false });
 		}
 
+
 		[HttpPost]
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int id, int size)
 		{
 			var code = new { Success = false, msg = "", code = -1, Count = 0 };
 
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null)
 			{
-				var checkProduct = cart.Items.FirstOrDefault(x => x.ProductId == id);
+				var checkProduct = cart.Items.FirstOrDefault(x => x.ProductId == id && x.Size == size);
 				if (checkProduct != null)
 				{
-					cart.Remove(id);
+					cart.Remove(id, size);
 					code = new { Success = true, msg = "", code = 1, Count = cart.Items.Count };
 				}
 			}
