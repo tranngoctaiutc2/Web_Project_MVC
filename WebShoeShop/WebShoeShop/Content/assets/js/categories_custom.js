@@ -356,8 +356,18 @@ jQuery(document).ready(function ($) {
 		});
 
 		$("#amount").val("đ" + $("#slider-range").slider("values", 0) + " - đ" + $("#slider-range").slider("values", 1));
+
+		// Không cho phép nhập số âm và ký tự đặc biệt
+		function validateInput(event) {
+			// Chỉ cho phép nhập số (0-9)
+			const charCode = event.which || event.keyCode;
+			if (charCode < 48 || charCode > 57) {
+				event.preventDefault();
+			}
+		}
+
 		// Sự kiện khi người dùng nhập giá trị vào input từ bàn phím cho minPrice
-		$("#minPrice").on('input', function () {
+		$("#minPrice").on('keypress', validateInput).on('input', function () {
 			var minVal = parseInt($(this).val());
 			var maxVal = parseInt($("#maxPrice").val());
 			// Kiểm tra giá trị min không lớn hơn max
@@ -365,10 +375,13 @@ jQuery(document).ready(function ($) {
 				// Cập nhật giá trị cho thanh trượt
 				$("#slider-range").slider("values", 0, minVal);
 				$("#amount").val("đ" + minVal + " - đ" + maxVal);
+			} else {
+				$(this).val($("#slider-range").slider("values", 0)); // Reset nếu nhập không hợp lệ
 			}
 		});
+
 		// Sự kiện khi người dùng nhập giá trị vào input từ bàn phím cho maxPrice
-		$("#maxPrice").on('input', function () {
+		$("#maxPrice").on('keypress', validateInput).on('input', function () {
 			var minVal = parseInt($("#minPrice").val());
 			var maxVal = parseInt($(this).val());
 			// Kiểm tra giá trị max không nhỏ hơn min
@@ -376,8 +389,11 @@ jQuery(document).ready(function ($) {
 				// Cập nhật giá trị cho thanh trượt
 				$("#slider-range").slider("values", 1, maxVal);
 				$("#amount").val("đ" + minVal + " - đ" + maxVal);
+			} else {
+				$(this).val($("#slider-range").slider("values", 1)); // Reset nếu nhập không hợp lệ
 			}
 		});
+
 		// Tự động chọn giá trị khi nhấp vào input
 		$(document).ready(function () {
 			$('#minPrice, #maxPrice').on('focus', function () {
