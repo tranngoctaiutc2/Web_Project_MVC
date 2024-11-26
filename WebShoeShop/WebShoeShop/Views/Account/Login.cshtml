@@ -77,22 +77,20 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
+<script>
         // Lấy phần tử icon và trường mật khẩu
         const eyeIcon = document.getElementById("eyeIcon");
         const passwordField = document.getElementById("passwordField");
-
-        // Thêm sự kiện khi người dùng click vào biểu tượng con mắt
         eyeIcon.addEventListener("click", function () {
             if (passwordField.type === "password") {
-                passwordField.type = "text"; // Hiển thị mật khẩu
-                eyeIcon.classList.remove("fa-eye-slash"); // Thay đổi icon
-                eyeIcon.classList.add("fa-eye"); // Đổi thành icon mắt bị gạch chéo
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
             } else {
-                passwordField.type = "password"; // Ẩn mật khẩu
-                eyeIcon.classList.remove("fa-eye"); // Thay đổi icon
-                eyeIcon.classList.add("fa-eye-slash"); // Đổi thành icon mắt bình thường
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
             }
         });
-    </script>
+</script>
 }
