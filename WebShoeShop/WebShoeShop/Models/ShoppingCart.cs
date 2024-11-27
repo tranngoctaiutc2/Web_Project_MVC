@@ -91,5 +91,7 @@ namespace WebShoeShop.Models
 		public decimal Price { get; set; }
 		public decimal TotalPrice { get; set; }
 		public int Size { get; set; }
+		public int AvailableStock { get; set; }
+		public List<int> AvailableSizes { get; set; } = new List<int>();
 	}
 }

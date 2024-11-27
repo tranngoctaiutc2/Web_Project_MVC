@@ -38,17 +38,28 @@
                            data-id="@item.ProductId"
                            data-size="@item.Size"
                            value="@item.Quantity"
-                           min="1" pattern="[0-9]*" />
+                           min="1" 
+                           pattern="[0-9]*" />
                 </td>
                 <td>
                     <select class="form-control size-input"
                             id="Size_@(item.ProductId)_@(item.Size)"
-                            name="Size_@(item.ProductId)">
-                        @for (int a = 35; a <= 45; a++)
+                            name="Size_@(item.ProductId)"
+                            data-product-id="@item.ProductId">
+                        @if (item.AvailableSizes != null && item.AvailableSizes.Any())
                         {
-                            <option value="@a" @(item.Size == a ? "selected" : "")>@a</option>
+                            foreach (var size in item.AvailableSizes)
+                            {
+                                <option value="@size" @(item.Size == size ? "selected" : "")>@size</option>
+                            }
                         }
+                        else
+                        {
+                            <option disabled>Không có size</option>
+                        }
+
                     </select>
+                    <span class="stock-info text-muted" id="Stock_@(item.ProductId)">Có sẵn:</span>
                 </td>
                 <td>@Common.FormatNumber(item.TotalPrice, 2)</td>
                 <td>

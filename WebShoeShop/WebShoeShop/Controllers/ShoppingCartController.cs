@@ -55,14 +55,22 @@ namespace WebShoeShop.Controllers
 		// GET: ShoppingCart
 		public ActionResult Index()
 		{
-
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null && cart.Items.Any())
 			{
+				foreach (var item in cart.Items)
+				{
+					var productSize = db.ProductSizes.FirstOrDefault(ps => ps.ProductId == item.ProductId && ps.Size == item.Size);
+					if (productSize == null || productSize.Quantity < item.Quantity)
+					{
+						return View();
+					}
+				}
 				ViewBag.CheckCart = cart;
 			}
 			return View();
 		}
+
 		public ActionResult VnpayReturn()
 		{
 			if (Request.QueryString.Count > 0)
@@ -142,10 +150,44 @@ namespace WebShoeShop.Controllers
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null && cart.Items.Any())
 			{
+				foreach (var item in cart.Items)
+				{
+					var productSizes = db.ProductSizes.Where(p => p.ProductId == item.ProductId && p.Quantity > 0)
+						.Select(p => p.Size).ToList();
+					item.AvailableSizes = productSizes;
+					var stock = db.ProductSizes.FirstOrDefault(ps => ps.ProductId == item.ProductId && ps.Size == item.Size);
+					item.AvailableStock = stock?.Quantity ?? 0;
+				}
 				return PartialView(cart.Items);
 			}
 			return PartialView();
 		}
+		[HttpGet]
+		public ActionResult GetStockQuantity(int? productId, int? size)
+		{
+			if (productId == null || size == null)
+			{
+				return Json(new { Success = false, Message = "Tham số không hợp lệ." }, JsonRequestBehavior.AllowGet);
+			}
+
+			try
+			{
+				using (var db = new ApplicationDbContext())
+				{
+					var productSize = db.ProductSizes.FirstOrDefault(ps => ps.ProductId == productId && ps.Size == size);
+					if (productSize != null)
+					{
+						return Json(new { Success = true, Stock = productSize.Quantity }, JsonRequestBehavior.AllowGet);
+					}
+					return Json(new { Success = false, Message = "Không tìm thấy thông tin tồn kho." }, JsonRequestBehavior.AllowGet);
+				}
+			}
+			catch (Exception ex)
+			{
+				return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+			}
+		}
+
 
 		public ActionResult ShowCount()
 		{
@@ -363,8 +405,16 @@ namespace WebShoeShop.Controllers
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null)
 			{
-				cart.UpdateQuantity(id, quantity, size); // Cập nhật giỏ hàng
-				Session["Cart"] = cart; // Lưu lại vào Session
+				using (var db = new ApplicationDbContext())
+				{
+					var productSizes = db.ProductSizes.FirstOrDefault(x => x.ProductId == id && x.Size == size);
+					if (productSizes != null && productSizes.Quantity < quantity)
+					{
+						return Json(new { Success = false, Message = "Số lượng yêu cầu vượt quá số lượng tồn kho" });
+					}
+				}
+				cart.UpdateQuantity(id, quantity, size);
+				Session["Cart"] = cart;
 				return Json(new { Success = true });
 			}
 			return Json(new { Success = false });

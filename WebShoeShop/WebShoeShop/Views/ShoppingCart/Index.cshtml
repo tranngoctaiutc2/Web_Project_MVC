@@ -42,41 +42,50 @@
         </div>
     </div>
 </div>
-
 @section scripts{
     <script src="~/Content/assets/js/categories_custom.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const paymentButton = document.querySelector(".btnpayment");
 
-            // Kiểm tra xem phần tử có tồn tại không
             if (paymentButton) {
                 paymentButton.addEventListener("click", function (e) {
                     const quantityInputs = document.querySelectorAll('.quantity-input');
                     const sizeInputs = document.querySelectorAll('.size-input');
                     let hasInvalidInput = false;
 
+                    // Duyệt qua từng sản phẩm trong giỏ hàng
                     for (let i = 0; i < quantityInputs.length; i++) {
                         const quantityValue = parseInt(quantityInputs[i].value);
                         const sizeValue = parseInt(sizeInputs[i].value);
+                        const productId = sizeInputs[i].dataset.productId; // Lấy productId
 
+                        // Kiểm tra nếu số lượng hoặc size không hợp lệ
                         if (quantityValue === 0 || sizeValue === 0 || isNaN(quantityValue) || isNaN(sizeValue)) {
                             hasInvalidInput = true;
+                            break;
+                        }
+
+                        // Kiểm tra nếu số lượng yêu cầu vượt quá số lượng tồn kho
+                        const availableStock = parseInt(document.querySelector(`#Stock_${productId}`).textContent.replace('Có sẵn: ', ''));
+
+                        if (quantityValue > availableStock) {
+                            hasInvalidInput = true;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Số lượng yêu cầu lớn hơn số lượng sản phẩm có sẵn'
+                            });
                             break;
                         }
                     }
 
                     if (hasInvalidInput) {
-                        e.preventDefault();
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: 'Vui lòng chọn số lượng và size hợp lệ!'
-                        });
+                        e.preventDefault(); // Ngừng thao tác nếu có lỗi
                     }
                 });
             }
         });
+
     </script>
 }
