@@ -132,7 +132,7 @@ function fetchWards() {
 function getLatLong(address) {
     const url = `https://rsapi.goong.io/Geocode?address=${encodeURIComponent(address)}&api_key=${apiGoongKey}`;
 
-    fetch(url)
+    return fetch(url)  // Trả về một Promise
         .then(response => response.json())
         .then(data => {
             if (data.results && data.results.length > 0) {
@@ -141,15 +141,20 @@ function getLatLong(address) {
                 destiLon = location.lng;
             } else {
                 console.log('No results found for the address.');
+                destiLat = 0;
+                destiLon = 0;
             }
         })
         .catch(error => console.error('Error getting latitude and longitude:', error));
 }
 
 // Function to calculate shipping cost using the Distance Matrix API
-function calculateShippingCost() {
+async function calculateShippingCost() {
     fullAddress = document.getElementById('Address').value;
-    getLatLong(fullAddress);
+
+    // Đợi lấy tọa độ thành công trước khi tiếp tục
+    await getLatLong(fullAddress);
+
     const url = `https://rsapi.goong.io/DistanceMatrix?origins=${originLat},${originLon}&destinations=${destiLat},${destiLon}&api_key=${apiGoongKey}`;
 
     fetch(url)  // Gọi API để lấy dữ liệu
@@ -158,7 +163,6 @@ function calculateShippingCost() {
             // Kiểm tra dữ liệu có hợp lệ không
             if (data.rows && data.rows.length > 0) {
                 const distance = data.rows[0].elements[0].distance.value / 1000; // Chuyển từ mét sang km
-                //console.log(`Distance: ${distance} km`);  // In khoảng cách ra console
 
                 let shippingCost = 0;  // Khởi tạo chi phí vận chuyển
                 if (distance < 20) {
@@ -171,15 +175,14 @@ function calculateShippingCost() {
                     shippingCost = 45000;  // Nếu khoảng cách > 100 km, chi phí là 45,000 VND
                 }
 
-                //console.log(`Shipping Cost: ${shippingCost} VND`);  // In chi phí vận chuyển ra console
                 document.getElementById('cost').textContent = shippingCost;  // Cập nhật chi phí lên trang web
             } else {
-                //console.log('No distance data found.');  // Nếu không có dữ liệu khoảng cách
+                console.log('No distance data found.');  // Nếu không có dữ liệu khoảng cách
             }
         })
         .catch(error => console.error('Error calculating shipping cost:', error));  // Bắt và in lỗi nếu có
-
 }
+
 
 document.querySelector('select[name="TypeShip"]').addEventListener('change', function () {
     var totalElement = document.getElementById('total');
