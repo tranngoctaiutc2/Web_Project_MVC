@@ -146,20 +146,6 @@
     </div>
 </div>
 
-<!-- Deal of the week -->
-@*
-    <div class="deal_ofthe_week">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-
-                </div>
-                <div class="col-lg-6 text-right deal_ofthe_week_col">
-                </div>
-            </div>
-        </div>
-    </div>*@
-
 <!--Feature -->
 @Html.Action("Partial_ProductFeature", "Products")
 <!-- Best Sellers -->
@@ -168,3 +154,20 @@
 <!-- Blogs -->
 @Html.Action("Partial_News_Home", "News")
 @*@Html.Action("Chat","Home")*@
+@section Scripts{
+    <script>
+        @if (TempData.ContainsKey("LoginSuccess"))
+    {
+         <text>
+     document.addEventListener("DOMContentLoaded", function () {
+         Swal.fire({
+             icon: 'success',
+             title: 'Thành công',
+             text: '@Html.Raw(TempData["LoginSuccess"])',
+             confirmButtonText: "Đóng"
+         });
+     });
+ </text>
+    }
+    </script>
+} 

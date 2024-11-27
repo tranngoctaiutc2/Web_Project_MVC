@@ -14,7 +14,6 @@
             <h1 class="text-center" style="margin-top:30px; color: #ffffff;">Đăng nhập</h1>
         </div>
     </div>
-
     <div class="row">
         <div class="root">
             <div class="main">
@@ -30,16 +29,21 @@
                         @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger-username" })
 
                         <!-- Mật khẩu -->
-                        @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Mật khẩu" })
+                        <div class="form__password-container" style="position: relative;">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "passwordField", placeholder = "Mật khẩu" })
+                        <i id="eyeIcon" class="fas fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #888; cursor: pointer;" aria-hidden="true"></i>
+                        </div>                       
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger-password" })
+
 
                         <!-- Link Quên mật khẩu -->
                         <a class="form__link" href="@Url.Action("ForgotPassword", "Account")">Bạn quên mật khẩu?</a>
 
                         <!-- Nút Đăng nhập -->
                         <button type="submit" class="form__button button submit">Đăng nhập</button>
+
                     </form>
-                    
+
                 </div>
                 <div class="switch1">
                     <div class="switch__circle"></div>
@@ -55,13 +59,38 @@
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="error-message">
-                    Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi Đăng Nhập',
+                                text: 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.',
+                                confirmButtonText: "Thử lại"
+                            });
+                        });
+                    </script>
                 </div>
             }
         </div>
     </div>
 </div>
- 
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<script>
+        // Lấy phần tử icon và trường mật khẩu
+        const eyeIcon = document.getElementById("eyeIcon");
+        const passwordField = document.getElementById("passwordField");
+        eyeIcon.addEventListener("click", function () {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            }
+        });
+</script>
 }

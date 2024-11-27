@@ -35,11 +35,17 @@
                         @Html.TextBoxFor(m => m.Email, new { @class = "form__input", id = "Email", placeholder = "Email" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 
-                        @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "Password", placeholder = "Mật khẩu" })
+                        <div class="form__password-container" style="position: relative;">
+                            <!-- Mật khẩu -->
+                            @Html.PasswordFor(m => m.Password, new { @class = "form__input", id = "Password", placeholder = "Mật khẩu", oncopy = "return false;" })
+                            <i id="eyeIconPassword" class="fas fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #888; cursor: pointer;" aria-hidden="true"></i>
+                        </div>
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
+                        <!-- Xác nhận mật khẩu (Không có biểu tượng con mắt) -->
                         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form__input", id = "ConfirmPassword", placeholder = "Xác nhận mật khẩu" })
                         @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+
 
                         <!-- Nút Đăng ký -->
                         <button type="submit" class="form__button button submit">Đăng ký</button>
@@ -68,4 +74,26 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Ngăn sao chép nội dung trong trường mật khẩu
+        const passwordField = document.getElementById("Password");
+        passwordField.addEventListener("copy", function (e) {
+            e.preventDefault(); // Ngừng hành động sao chép
+            alert("Không thể sao chép nội dung mật khẩu.");
+        });
+
+        // Thêm sự kiện khi người dùng click vào biểu tượng con mắt cho mật khẩu
+        const eyeIconPassword = document.getElementById("eyeIconPassword");
+        eyeIconPassword.addEventListener("click", function () {
+            if (passwordField.type === "password") {
+                passwordField.type = "text"; // Hiển thị mật khẩu
+                eyeIconPassword.classList.remove("fa-eye"); // Thay đổi icon
+                eyeIconPassword.classList.add("fa-eye-slash"); // Đổi thành icon mắt bị gạch chéo
+            } else {
+                passwordField.type = "password"; // Ẩn mật khẩu
+                eyeIconPassword.classList.remove("fa-eye-slash"); // Thay đổi icon
+                eyeIconPassword.classList.add("fa-eye"); // Đổi thành icon mắt bình thường
+            }
+        });
+    </script>
 }

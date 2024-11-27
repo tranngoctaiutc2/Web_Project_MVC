@@ -190,122 +190,120 @@
         @RenderBody()
 
         <!-- Footer -->
-
-
         <!--<div class="footer-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="companyinfo">
-                        <img src="~/Content/assets/images/logoshop_visible.png" />
-                        <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
-                        <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
-                        <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="address">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <p style="margin-top:30px">Thống kê truy cập</p>
-                    <div class="address">
-                        @Html.Action("Refresh", "Home")
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="footer-bottom">
-        <div class="container">
-            <div class="row">
-                <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>-->
-        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
-        <!--</div>
-        </div>
-    </div>-->
- 
-    <footer id="footer">
-        <div class="container">
-            <div class="footer-cta pt-5 pb-5">
+            <div class="container">
                 <div class="row">
-                    
-                </div>
-            </div>
-            <div class="footer-content pt-5 pb-5">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-4 mb-50">
-                        <div class="footer-widget">
-                            <div class="footer-logo">
-                                <a href="/home"><img src="~/Content/assets/images/logoshop_visible.png" class="img-fluid" alt="logo"></a>
-                            </div>
-                            <div class="footer-text">
-                                <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
-                                <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
-                            </div>
-                            <div class="footer-social-icon">
-                                <span>Theo dõi chúng tôi</span>
-                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")"><i class="fab fa-facebook-f facebook-bg" title="Facebook"></i></a>
-                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingZalo")"><i class="fab fa-viber twitter-bg" title="Zalo"></i></a>
-                                <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingYoutube")"><i class="fab fa-youtube google-bg" title="Youtube"></i></a>
-                            </div>
+                    <div class="col-sm-4">
+                        <div class="companyinfo">
+                            <img src="~/Content/assets/images/logoshop_visible.png" />
+                            <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
+                            <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
+                            <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
-                        <div class="footer-widget">
-                            <div class="footer-widget-heading">
-                                <h3>Useful Links</h3>
-                            </div>
-                            <ul>
-                                <li><a href="/home" style="font-weight: bold;">Trang chủ</a></li>
-                                <li><a href="/lien-he" style="font-weight: bold;">Về chúng tôi</a></li>
-                                <li><a href="/lien-he" style="font-weight: bold;">Hỗ trợ</a></li>
-                                <li><a href="/san-pham">Sản phẩm</a></li>
-                                <li><a href="/tuyen-dung">Tuyển dụng</a></li>
-                                <li><a href="/FAQs">FAQs</a></li>
-                                <li><a href="/tin-tuc">Tin tức</a></li>
-                                <li><a href="/nhuong-quyen">Nhượng quyền</a></li>
-                                <li><a href="/chinh-sach">Chính sách</a></li>
-                                <li><a href="/post/khuyen-mai">Khuyến mãi</a></li>
-                                <li><a href="/home">Về 2T-2Q</a></li>
-                                <li><a href="/bao-mat">Bảo mật</a></li>
-                            </ul>
+                    <div class="col-sm-4">
+                        <div class="address">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
-                        @Html.Action("Partial_Subcrice", "Home")
+                    <div class="col-sm-4">
+                        <p style="margin-top:30px">Thống kê truy cập</p>
+                        <div class="address">
+                            @Html.Action("Refresh", "Home")
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
         <div class="footer-bottom">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-6 col-lg-6 text-center text-lg-left">
-                        <div class="copyright-text">
-                            <p>Copyright &copy; 2022 Double 2T-2Q, All Right Reserved</p>
-                        </div>
+                    <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>-->
+        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
+        <!--</div>
+            </div>
+        </div>-->
+
+        <footer id="footer">
+            <div class="container">
+                <div class="footer-cta pt-5 pb-5">
+                    <div class="row">
+
                     </div>
-                    <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
-                        <div class="footer-menu">
-                            <ul>
-                                <li><a href="/home">Trang chủ</a></li>
-                                <li><a href="/chinh-sach">Điều khoản</a></li>
-                                <li><a href="/bao-mat">Bảo mật</a></li>
-                                <li><a href="/chinh-sach">Chính sách</a></li>
-                                <li><a href="/lien-he">Liên hệ</a></li>
-                            </ul>
+                </div>
+                <div class="footer-content pt-5 pb-5">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 mb-50">
+                            <div class="footer-widget">
+                                <div class="footer-logo">
+                                    <a href="/home"><img src="~/Content/assets/images/logoshop_visible.png" class="img-fluid" alt="logo"></a>
+                                </div>
+                                <div class="footer-text">
+                                    <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
+                                    <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
+                                    <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
+                                </div>
+                                <div class="footer-social-icon">
+                                    <span>Theo dõi chúng tôi</span>
+                                    <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingFacebook")"><i class="fab fa-facebook-f facebook-bg" title="Facebook"></i></a>
+                                    <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingZalo")"><i class="fab fa-viber twitter-bg" title="Zalo"></i></a>
+                                    <a href="@WebShoeShop.Common.SettingHelper.GetValue("SettingYoutube")"><i class="fab fa-youtube google-bg" title="Youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                            <div class="footer-widget">
+                                <div class="footer-widget-heading">
+                                    <h3>Useful Links</h3>
+                                </div>
+                                <ul>
+                                    <li><a href="/home" style="font-weight: bold;">Trang chủ</a></li>
+                                    <li><a href="/lien-he" style="font-weight: bold;">Về chúng tôi</a></li>
+                                    <li><a href="/lien-he" style="font-weight: bold;">Hỗ trợ</a></li>
+                                    <li><a href="/san-pham">Sản phẩm</a></li>
+                                    <li><a href="/tuyen-dung">Tuyển dụng</a></li>
+                                    <li><a href="/FAQs">FAQs</a></li>
+                                    <li><a href="/tin-tuc">Tin tức</a></li>
+                                    <li><a href="/nhuong-quyen">Nhượng quyền</a></li>
+                                    <li><a href="/chinh-sach">Chính sách</a></li>
+                                    <li><a href="/post/khuyen-mai">Khuyến mãi</a></li>
+                                    <li><a href="/home">Về 2T-2Q</a></li>
+                                    <li><a href="/bao-mat">Bảo mật</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                            @Html.Action("Partial_Subcrice", "Home")
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                            <div class="copyright-text">
+                                <p>Copyright &copy; 2022 Double 2T-2Q, All Right Reserved</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                            <div class="footer-menu">
+                                <ul>
+                                    <li><a href="/home">Trang chủ</a></li>
+                                    <li><a href="/chinh-sach">Điều khoản</a></li>
+                                    <li><a href="/bao-mat">Bảo mật</a></li>
+                                    <li><a href="/chinh-sach">Chính sách</a></li>
+                                    <li><a href="/lien-he">Liên hệ</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
 
     </div>
@@ -342,7 +340,6 @@
     <script src="~/Content/assets/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
-
     <script src="~/Scripts/jsShopping.js"></script>
     @RenderSection("scripts", required: false)
 </body>

@@ -23,8 +23,8 @@
         foreach (var item in Model)
         {
             tongtien += item.TotalPrice;
-            <tr class="text-center" id="trow_@item.ProductId">
-                <td>@(i+1)</td>
+            <tr class="text-center" id="trow_@(item.ProductId)_@(item.Size)">
+                <td>@(i + 1)</td>
                 <td><img src="@item.ProductImg" width="60" /></td>
                 <td>
                     <a href="/chi-tiet/@item.Alias-p@(item.ProductId)">
@@ -34,25 +34,31 @@
                 <td>@item.CategoryName</td>
                 <td>@Common.FormatNumber(item.Price, 0)</td>
                 <td>
-                    <input type="number" class="form-control quantity-input" id="Quantity_@item.ProductId" value="@item.Quantity" min="0" pattern="[0-9]*" oninput="validity.valid||(value='');" />
+                    <input type="number" class="form-control quantity-input"
+                           data-id="@item.ProductId"
+                           data-size="@item.Size"
+                           value="@item.Quantity"
+                           min="1" pattern="[0-9]*" />
                 </td>
                 <td>
-                    @*<input type="number" class="form-control size-input" id="Size_@item.ProductId" value="@item.Size" min="0" max="45" pattern="^(3[5-9]|[4-9][0-9]|45)$" oninput="validity.valid||(value='');" />*@
-                    <select class="form-control size-input" id="Size_@item.ProductId" name="Size_@item.ProductId">
+                    <select class="form-control size-input"
+                            id="Size_@(item.ProductId)_@(item.Size)"
+                            name="Size_@(item.ProductId)">
                         @for (int a = 35; a <= 45; a++)
                         {
                             <option value="@a" @(item.Size == a ? "selected" : "")>@a</option>
                         }
                     </select>
                 </td>
-                
-                <th>@Common.FormatNumber(item.TotalPrice, 2)</th>
+                <td>@Common.FormatNumber(item.TotalPrice, 2)</td>
                 <td>
-                    <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDelete">Xóa</a>
-                    <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-success btnUpdate" onclick="updateProduct(this)">Cập nhật</a>
-                    <div id="error-message" style="color: red; display: none;"></div>
+                    <a href="#" data-id="@item.ProductId" data-size="@item.Size"
+                       class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                    <a href="#" data-id="@item.ProductId" data-size="@item.Size"
+                       class="btn btn-sm btn-success btnUpdate" onclick="updateProduct(this)">Cập nhật</a>
                 </td>
             </tr>
+
             i++;
         }
         <tr>
@@ -64,17 +70,13 @@
     }
     else
     {
-<tr>
-    <th colspan="7">Không có sản phẩm trong giỏ hàng!!</th>
-    <th>
-        <div class="text-left"><a href="/san-pham"><i class="fa fa-arrow-left" aria-hidden="true"></i>Quay về trang sản phẩm</a></div>
-    </th>
-</tr>
-  
+        <tr>
+            <th colspan="7">Không có sản phẩm trong giỏ hàng!!</th>
+            <th>
+                <div class="text-left"><a href="/san-pham"><i class="fa fa-arrow-left" aria-hidden="true"></i>Quay về trang sản phẩm</a></div>
+            </th>
+        </tr>
+
     }
 
 </table>
-
-<script>
-
-</script>
