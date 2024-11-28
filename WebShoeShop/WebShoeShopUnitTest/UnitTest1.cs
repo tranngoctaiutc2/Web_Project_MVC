@@ -143,17 +143,20 @@ namespace WebShoeShopUnitTest
             Assert.That(_driver.Url, Is.EqualTo("https://localhost:44390/account/login"));
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("invalidUser"); // Invalid username
+            username.SendKeys("invalidUser"); // Tên đăng nhập không hợp lệ
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
-            password.SendKeys("0985181215thanH@"); // Invalid password
+            password.SendKeys("0985181215thanH@"); // Mật khẩu hợp lệ   
 
             IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
             loginSubmitBtn.Click();
 
-            IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".error-message")));
-            Assert.IsNotNull(errorMessage);
-            Assert.That(errorMessage.Text, Is.EqualTo("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.")); // Adjusted error message
+
+            IWebElement toastError = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".swal2-html-container")));
+            Assert.IsNotNull(toastError);
+
+            string expectedErrorMessage = "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.";
+            Assert.That(toastError.Text, Is.EqualTo(expectedErrorMessage));
         }
 
         [Test]
@@ -161,7 +164,6 @@ namespace WebShoeShopUnitTest
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
-            // Navigate to the login page
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
             Assert.IsNotNull(profileBtn);
             profileBtn.Click();
@@ -173,17 +175,19 @@ namespace WebShoeShopUnitTest
             Assert.That(_driver.Url, Is.EqualTo("https://localhost:44390/account/login"));
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin"); // Invalid username
+            username.SendKeys("huutai09072003"); // Tên người dùng hợp lệ
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
-            password.SendKeys("invalidPassword"); // Invalid password
+            password.SendKeys("invalidPassword"); // Mật khẩu không hợp lệ
 
             IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
             loginSubmitBtn.Click();
 
-            IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".error-message")));
-            Assert.IsNotNull(errorMessage);
-            Assert.That(errorMessage.Text, Is.EqualTo("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.")); // Adjusted error message
+            IWebElement toastError = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".swal2-html-container")));
+            Assert.IsNotNull(toastError);
+
+            string expectedErrorMessage = "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.";
+            Assert.That(toastError.Text, Is.EqualTo(expectedErrorMessage));
         }
         [Test]
         public void LoginAndRedirectToDashboard()
@@ -234,9 +238,12 @@ namespace WebShoeShopUnitTest
             IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
             loginSubmitBtn.Click();
 
-            IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".error-message")));
-            Assert.IsNotNull(errorMessage);
-            Assert.That(errorMessage.Text, Is.EqualTo("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập."));
+
+            IWebElement toastError = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".swal2-html-container")));
+            Assert.IsNotNull(toastError);
+
+            string expectedErrorMessage = "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.";
+            Assert.That(toastError.Text, Is.EqualTo(expectedErrorMessage));
         }
 
         [TearDown]
