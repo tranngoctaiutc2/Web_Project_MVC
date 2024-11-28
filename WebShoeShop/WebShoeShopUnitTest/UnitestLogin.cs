@@ -43,6 +43,14 @@ namespace WebShoeShopUnitTest
 
             IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
             loginSubmitBtn.Click();
+
+            // Chờ cho đến khi thông báo "Đăng nhập thành công!" xuất hiện trong toast
+            IWebElement toastMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".swal2-html-container")));
+            Assert.IsNotNull(toastMessage);
+
+            // Kiểm tra nội dung của thông báo có phải là "Đăng nhập thành công!" hay không
+            string expectedSuccessMessage = "Đăng nhập thành công!";
+            Assert.That(toastMessage.Text, Is.EqualTo(expectedSuccessMessage), "Thông báo sau khi đăng nhập không đúng.");
         }
 
         [Test]
@@ -127,7 +135,7 @@ namespace WebShoeShopUnitTest
         }
 
         [Test]
-        public void loginFailedWithIncorrectUsername()
+        public void LoginFailedWithIncorrectUsername()
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
@@ -160,7 +168,7 @@ namespace WebShoeShopUnitTest
         }
 
         [Test]
-        public void loginFailedWithIncorrectPassword()
+        public void LoginFailedWithIncorrectPassword()
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
