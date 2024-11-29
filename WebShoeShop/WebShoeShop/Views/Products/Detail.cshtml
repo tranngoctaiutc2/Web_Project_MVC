@@ -66,8 +66,7 @@
                     <div class="product_details_title">
                         <h2>@Model.Title</h2>
                         <p>@Model.Description</p>
-                        <p>Lượt xem: <b>@Model.ViewCount</b></p>
-                        <p id="quantity_product" style="display:none;">@Model.Quantity</p>
+                        <p>Lượt xem: <b>@Model.ViewCount</b></p>  
                     </div>
                     @if (Model.PriceSale > 0)
                     {
@@ -90,7 +89,7 @@
                         <ul>
                             @foreach (var items in Model.ProductSize)
                             {
-                                <li class="size-item" data-size="@items.Size">@items.Size</li>
+                                <li class="size-item" data-size="@items.Size" data-quantity="@items.Quantity">@items.Size</li>
                             }
                         </ul>
                     </div>
@@ -263,9 +262,7 @@
             addToCartButton.addEventListener('click', function (event) {
                 event.preventDefault();
 
-                var quantityValue = parseInt(document.getElementById('quantity_value').innerText);
-                var quantityProduct = parseInt(document.getElementById('quantity_product').innerText);
-
+                var quantityValue = parseInt(document.getElementById('quantity_value').innerText); 
                 var selectedSizeElement = document.querySelector('.size-item.selected');
                 if (!selectedSizeElement) { 
                     Swal.fire({
@@ -275,9 +272,8 @@
                     });
                     return; 
                 }
-
                 var size = selectedSizeElement.getAttribute('data-size');
-
+                var quantityProduct = selectedSizeElement.getAttribute('data-quantity');
                 if (quantityValue > quantityProduct) {
                     Swal.fire({
                         icon: 'error',
