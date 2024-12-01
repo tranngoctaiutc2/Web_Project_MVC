@@ -251,7 +251,7 @@ namespace WebShoeShop.Controllers
 				string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
 				var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 				WebShoeShop.Common.Common.SendMail("Double 2T-2Q Sneaker", "Quên mật khẩu",
-					"Bạn click vào <a href='" + callbackUrl + "'>link này</a> để reset mật khẩu", model.Email);
+					"Bạn click vào <a href=\"" + callbackUrl + "\">link này</a> để reset mật khẩu", model.Email);
 
 				return RedirectToAction("ForgotPasswordConfirmation", "Account");
 			}
