@@ -33,7 +33,7 @@ namespace WebShoeShopUnitTest
             Assert.That(_driver.Url, Is.EqualTo("https://localhost:44390/account/login"));
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin");
+            username.SendKeys("admin1");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("0985181215thanH@");

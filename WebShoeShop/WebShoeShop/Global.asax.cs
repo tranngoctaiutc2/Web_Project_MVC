@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WebShoeShop.Helpers;
 
 namespace WebShoeShop
 {
@@ -16,6 +17,7 @@ namespace WebShoeShop
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            TestSeeder.SeedTestUsers();
 
             Application["HomNay"] = 0;
             Application["HomQua"] = 0;

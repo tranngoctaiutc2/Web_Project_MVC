@@ -69,6 +69,7 @@ namespace WebShoeShop.Models
         public string Id { get; set; }*/
         [Required(ErrorMessage ="Tên tài khoản không được để trống")]
         public string UserName { get; set; }
+
         [Required(ErrorMessage = "Họ tên không được để trống")]
         public string FullName { get; set; }
 
@@ -126,6 +127,7 @@ namespace WebShoeShop.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Tên đăng nhập không được để trống")]
+        [RegularExpression(@"^.{1,25}$", ErrorMessage = "Tên tài khoản không được vượt quá 25 ký tự")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
