@@ -11,7 +11,7 @@ using WebShoeShop.Models;
 
 namespace WebShoeShop.Areas.Admin.Controllers
 {
-	[Authorize(Roles = "Admin")]
+	/*[CustomAuthorize]*/
 	public class AccountController : Controller
 	{
 		private ApplicationSignInManager _signInManager;

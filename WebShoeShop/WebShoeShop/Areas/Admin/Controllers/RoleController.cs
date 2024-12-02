@@ -1,29 +1,27 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using WebShoeShop.Common;
 using WebShoeShop.Models;
 
 namespace WebShoeShop.Areas.Admin.Controllers
 {
-    [Authorize(Roles ="Admin")]
-    public class RoleController : Controller
-    {
-        private ApplicationDbContext db = new ApplicationDbContext();   
-        // GET: Admin/Role
-        public ActionResult Index()
-        {
-            var items = db.Roles.ToList();  
-            return View(items);
-        }
-        public ActionResult Create()
-        {
-            return View();
-        }
+	[CustomAuthorize]
+	public class RoleController : Controller
+	{
+		private ApplicationDbContext db = new ApplicationDbContext();
+		// GET: Admin/Role
+		public ActionResult Index()
+		{
+			var items = db.Roles.ToList();
+			return View(items);
+		}
+		public ActionResult Create()
+		{
+			return View();
+		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(IdentityRole model)
@@ -37,34 +35,34 @@ namespace WebShoeShop.Areas.Admin.Controllers
 			return View(model);
 		}
 		public ActionResult Edit(string id)
-        {
+		{
 			if (id == null)
 			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest); // Nếu không có id, trả về lỗi BadRequest
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
 
 			var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
-			var role = roleManager.FindById(id); // Tìm role trong cơ sở dữ liệu theo id
+			var role = roleManager.FindById(id);
 
 			if (role == null)
 			{
-				return HttpNotFound(); // Nếu không tìm thấy role, trả về trang lỗi
+				return HttpNotFound();
 			}
 
 			return View(role);
 		}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(IdentityRole model)
-        {
-            if (ModelState.IsValid)
-            {
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
-                roleManager.Update(model);
-                return RedirectToAction("Index");
-            }
-            return View(model);
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit(IdentityRole model)
+		{
+			if (ModelState.IsValid)
+			{
+				var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+				roleManager.Update(model);
+				return RedirectToAction("Index");
+			}
+			return View(model);
+		}
 		[HttpGet]
 		public ActionResult Delete(string id)
 		{
@@ -78,10 +76,10 @@ namespace WebShoeShop.Areas.Admin.Controllers
 
 			if (role == null)
 			{
-				return HttpNotFound(); // Nếu không tìm thấy role, trả về trang lỗi
+				return HttpNotFound();
 			}
 
-			return View(role); // Trả về View để hiển thị thông tin về role trước khi xóa
+			return View(role);
 		}
 
 		[HttpPost, ActionName("Delete")]
@@ -93,10 +91,10 @@ namespace WebShoeShop.Areas.Admin.Controllers
 
 			if (role != null)
 			{
-				roleManager.Delete(role); // Thực hiện xóa role khỏi cơ sở dữ liệu
+				roleManager.Delete(role);
 			}
 
-			return RedirectToAction("Index"); // Sau khi xóa, chuyển hướng về trang danh sách các role
+			return RedirectToAction("Index");
 		}
 
 	}

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Web.Mvc;
+using WebShoeShop.Common;
 using WebShoeShop.Models;
 using WebShoeShop.Models.EF;
 
 namespace WebShoeShop.Areas.Admin.Controllers
 {
-	[Authorize(Roles = "Admin")]
+	[CustomAuthorize]
 	public class CategoryController : Controller
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();

@@ -1,0 +1,23 @@
+﻿@model WebShoeShop.Models.EF.RolePermission
+
+@{
+    ViewBag.Title = "Xóa quyền";
+}
+
+<h2>Xóa quyền</h2>
+
+<p>Bạn có chắc chắn muốn xóa quyền này không?</p>
+
+<div>
+    <strong>Role:</strong> @Model.Role.Name <br />
+    <strong>Controller:</strong> @Model.Controller <br />
+    <strong>Action:</strong> @(Model.Action ?? "Tất cả Action")
+</div>
+
+@using (Html.BeginForm("DeleteConfirmed", "Permission", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="@Url.Action("Index", "Permission")" class="btn btn-secondary">Hủy</a>
+}

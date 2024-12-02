@@ -41,22 +41,58 @@
             }
         });
     });
-    $('.size-input').each(function () {
-        var selectedSize = $(this).val();
-        var productId = $(this).data('product-id');
-        var stockSpan = $('#Stock_' + productId);
+    function updateStockInfo(productId, size, stockSpan) {
         $.ajax({
             url: '/shoppingcart/GetStockQuantity',
             type: 'GET',
-            data: { productId: productId, size: selectedSize },
+            data: { productId: productId, size: size },
             success: function (response) {
                 if (response.Success) {
-                    stockSpan.text('Có sẵn: ' + response.Stock); 
+                    // Lưu thông tin tồn kho vào localStorage
+                    localStorage.setItem(`stock_${productId}_${size}`, response.Stock);
+                    stockSpan.text('Có sẵn: ' + response.Stock);
                 } else {
                     stockSpan.text('Có sẵn: Không xác định');
                 }
+            },
+            error: function () {
+                stockSpan.text('Có sẵn: Lỗi');
             }
         });
+    }
+
+    // Xử lý ban đầu khi tải trang
+    $('.size-input').each(function () {
+        var selectedSize = $(this).val();
+        var productId = $(this).data('product-id');
+        var stockSpan = $(this).siblings('.stock-info');
+
+        // Kiểm tra trong localStorage trước
+        var cachedStock = localStorage.getItem(`stock_${productId}_${selectedSize}`);
+
+        if (cachedStock) {
+            stockSpan.text('Có sẵn: ' + cachedStock);
+        } else {
+            // Nếu không có trong localStorage thì gọi AJAX
+            updateStockInfo(productId, selectedSize, stockSpan);
+        }
+    });
+
+    // Xử lý khi thay đổi size
+    $('body').on('change', '.size-input', function () {
+        var selectedSize = $(this).val();
+        var productId = $(this).data('product-id');
+        var stockSpan = $(this).siblings('.stock-info');
+
+        // Kiểm tra trong localStorage trước
+        var cachedStock = localStorage.getItem(`stock_${productId}_${selectedSize}`);
+
+        if (cachedStock) {
+            stockSpan.text('Có sẵn: ' + cachedStock);
+        } else {
+            // Nếu không có trong localStorage thì gọi AJAX
+            updateStockInfo(productId, selectedSize, stockSpan);
+        }
     });
     $('body').on('click', '.btnUpdate', function (e) {
         e.preventDefault();
@@ -76,33 +112,7 @@
         }
         Update(id, quantity, newSize);
     });
-    var stockInfo = {}; 
-    $('body').on('change', '.size-input', function () {
-        var selectedSize = $(this).val();
-        var productId = $(this).data('product-id');
-
-        // Kiểm tra thông tin tồn kho trong đối tượng
-        if (stockInfo[productId] && stockInfo[productId][selectedSize]) {
-            $('#Stock_' + productId).text('Có sẵn: ' + stockInfo[productId][selectedSize]);
-        } else {
-            // Gửi AJAX nếu thông tin không có trong bộ nhớ
-            $.ajax({
-                url: '/shoppingcart/GetStockQuantity',
-                type: 'GET',
-                data: { productId: productId, size: selectedSize },
-                success: function (response) {
-                    if (response.Success) {
-                        // Lưu thông tin tồn kho vào đối tượng
-                        if (!stockInfo[productId]) {
-                            stockInfo[productId] = {};
-                        }
-                        stockInfo[productId][selectedSize] = response.Stock;
-                        $('#Stock_' + productId).text('Có sẵn: ' + response.Stock);
-                    }
-                }
-            });
-        }
-    });
+  
 
     $('body').on('click', '.btnDeleteAll', function (e) {
         e.preventDefault();

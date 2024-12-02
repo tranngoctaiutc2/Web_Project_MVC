@@ -44,6 +44,7 @@ namespace WebShoeShop.Models
 		public DbSet<OrderDetail> OrderDetails { get; set; }
 		public DbSet<Subscribe> Subscribes { get; set; }
 		public DbSet<ProductSize> ProductSizes { get; set; }
+		public DbSet<RolePermission> RolePermissions { get; set; }
 		public static ApplicationDbContext Create()
 		{
 			return new ApplicationDbContext();

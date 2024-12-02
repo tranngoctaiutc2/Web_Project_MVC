@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.css" rel="stylesheet" />
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
@@ -96,6 +96,17 @@
         </div>
     </div>
     <!-- /.card -->
-  
+
 </section>
 <!-- /.content -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.min.js"></script>
+@if (TempData.Peek("ErrorMessage") != null)
+{
+    <script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi truy cập',
+        text: '@Html.Raw(TempData["ErrorMessage"].ToString())'
+    });
+    </script>
+}

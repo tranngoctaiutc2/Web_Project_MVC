@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class updateContact : DbMigration
+    public partial class CreateRolePermission : DbMigration
     {
         public override void Up()
         {
@@ -243,6 +243,17 @@
                 .Index(t => t.ProductId);
             
             CreateTable(
+                "dbo.RolePermissions",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        RoleName = c.String(nullable: false, maxLength: 50),
+                        Controller = c.String(nullable: false, maxLength: 100),
+                        Action = c.String(maxLength: 100),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -382,6 +393,7 @@
             DropTable("dbo.tb_Subscribe");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.RolePermissions");
             DropTable("dbo.tb_Wishlist");
             DropTable("dbo.tb_Review");
             DropTable("dbo.tb_ProductSize");

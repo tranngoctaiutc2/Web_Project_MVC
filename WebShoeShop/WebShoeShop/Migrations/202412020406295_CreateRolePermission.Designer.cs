@@ -7,13 +7,13 @@ namespace WebShoeShop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class updateContact : IMigrationMetadata
+    public sealed partial class CreateRolePermission : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(updateContact));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateRolePermission));
         
         string IMigrationMetadata.Id
         {
-            get { return "202410280506098_updateContact"; }
+            get { return "202412020406295_CreateRolePermission"; }
         }
         
         string IMigrationMetadata.Source

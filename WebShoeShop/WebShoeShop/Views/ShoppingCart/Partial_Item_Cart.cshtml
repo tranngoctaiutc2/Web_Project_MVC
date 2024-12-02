@@ -57,9 +57,8 @@
                         {
                             <option disabled>Không có size</option>
                         }
-
                     </select>
-                    <span class="stock-info text-muted" id="Stock_@(item.ProductId)">Có sẵn:</span>
+                    <span class="stock-info text-muted" id="Stock_@(item.ProductId)_@(item.Size)">Có sẵn:</span>
                 </td>
                 <td>@Common.FormatNumber(item.TotalPrice, 2)</td>
                 <td>

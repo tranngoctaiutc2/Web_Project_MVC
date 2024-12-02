@@ -1,0 +1,105 @@
+﻿@model IEnumerable<WebShoeShop.Models.EF.RolePermission>
+
+@{
+    ViewBag.Title = "Danh sách quyền";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/role" class="nav-link">Danh sách quyền</a>
+        </li>
+
+    </ul>
+}
+
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Danh sách quyền</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Vai trò</th>
+                        <th>Quản lý</th>
+                        <th>Chức năng</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Role.Name</td>
+                            <td>@item.Controller</td>
+                            <td>@(item.Action ?? "Tất cả Action")</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="confirmDelete(@item.Id)">Xóa</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a href="@Url.Action("Create", "Permission")" class="btn btn-primary">Thêm mới</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    function confirmDelete(permissionId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa quyền này?',
+            text: "Hành động này không thể hoàn tác!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Hủy bỏ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deletePermission(permissionId);
+            }
+        })
+    }
+
+    function deletePermission(permissionId) {
+        $.ajax({
+            url: '/Admin/Permission/DeleteConfirmed/' + permissionId,
+            type: 'POST',
+            data: {
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                Swal.fire(
+                    'Đã xóa!',
+                    'Quyền đã được xóa thành công.',
+                    'success'
+                ).then(() => {
+                    window.location.href = '/Admin/Permission/Index';
+                });
+            },
+            error: function () {
+                Swal.fire(
+                    'Lỗi!',
+                    'Đã xảy ra lỗi khi xóa quyền.',
+                    'error'
+                );
+            }
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

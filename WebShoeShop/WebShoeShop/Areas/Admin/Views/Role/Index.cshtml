@@ -4,9 +4,8 @@
     ViewBag.Title = "Danh sách Quyền";
 }
 
-<!-- Thêm vào phần head hoặc cuối file layout của bạn -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 @section naviheader{
     <!-- Left navbar links -->
@@ -72,7 +71,9 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-
+            <div class="card-tools">
+                <a href="/admin/permission/index" class="btn btn-success">Phân quyền chức năng</a>
+            </div>
         </div>
         <!-- /.card-footer-->
     </div>
@@ -80,9 +81,9 @@
 
 </section>
 <!-- /.content -->
+
 <script type="text/javascript">
     function confirmDelete(roleId) {
-        // Hiển thị SweetAlert2 với thông báo xác nhận xóa
         Swal.fire({
             title: 'Bạn có chắc chắn muốn xóa quyền này?',
             text: "Hành động này không thể hoàn tác!",
@@ -94,7 +95,6 @@
             cancelButtonText: 'Hủy bỏ'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Nếu xác nhận xóa, submit form bằng AJAX hoặc điều hướng đến action xóa
                 deleteRole(roleId);
             }
         })
@@ -126,4 +126,5 @@
         });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

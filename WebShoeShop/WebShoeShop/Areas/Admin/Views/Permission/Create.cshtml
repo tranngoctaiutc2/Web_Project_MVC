@@ -1,0 +1,54 @@
+﻿@model WebShoeShop.Models.EF.RolePermission
+
+@{
+    ViewBag.Title = "Thêm quyền mới";
+}
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/role" class="nav-link">Danh sách quyền</a>
+        </li>
+
+    </ul>
+}
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Danh sách quyền</h2>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Create", "Permission", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="RoleId">Role:</label>
+                    @Html.DropDownListFor(model => model.RoleId, (SelectList)ViewBag.Roles, "Chọn vai trò", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label for="Controller">Controller:</label>
+                    @Html.TextBoxFor(model => model.Controller, new { @class = "form-control", placeholder = "Nhập tên Controller" })
+                    @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label for="Action">Action:</label>
+                    @Html.TextBoxFor(model => model.Action, new { @class = "form-control", placeholder = "Nhập tên Action (hoặc để trống)" })
+                    @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="btn btn-success">Thêm</button>
+                <a href="@Url.Action("Index", "Permission")" class="btn btn-secondary">Hủy</a>
+            }
+        </div>
+    </div>
+</section>
