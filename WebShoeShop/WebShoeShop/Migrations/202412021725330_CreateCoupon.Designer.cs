@@ -7,13 +7,13 @@ namespace WebShoeShop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class CreateRolePermission : IMigrationMetadata
+    public sealed partial class CreateCoupon : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateRolePermission));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateCoupon));
         
         string IMigrationMetadata.Id
         {
-            get { return "202412020406295_CreateRolePermission"; }
+            get { return "202412021725330_CreateCoupon"; }
         }
         
         string IMigrationMetadata.Source

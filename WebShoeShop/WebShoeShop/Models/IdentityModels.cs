@@ -45,6 +45,7 @@ namespace WebShoeShop.Models
 		public DbSet<Subscribe> Subscribes { get; set; }
 		public DbSet<ProductSize> ProductSizes { get; set; }
 		public DbSet<RolePermission> RolePermissions { get; set; }
+		public DbSet<Coupon> Coupons { get; set; }
 		public static ApplicationDbContext Create()
 		{
 			return new ApplicationDbContext();

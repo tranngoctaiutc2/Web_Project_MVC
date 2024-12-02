@@ -162,6 +162,52 @@ namespace WebShoeShop.Controllers
 			}
 			return PartialView();
 		}
+		[HttpPost]
+		public JsonResult ApplyCoupon(string couponCode)
+		{
+			ShoppingCart cart = (ShoppingCart)Session["Cart"];
+			if (cart == null || !cart.Items.Any())
+			{
+				return Json(new { success = false, message = "Giỏ hàng của bạn đang trống!" });
+			}
+
+			// Tìm coupon từ database
+			var coupon = db.Coupons.FirstOrDefault(c => c.Code == couponCode && c.IsActive &&
+														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
+
+			if (coupon == null)
+			{
+				return Json(new { success = false, message = "Coupon không hợp lệ hoặc đã hết hạn!" });
+			}
+
+			// Áp dụng coupon
+			decimal totalDiscount = 0;
+
+			foreach (var item in cart.Items)
+			{
+				if (coupon.DiscountPercentage.HasValue)
+				{
+					item.Discount = (item.Price * coupon.DiscountPercentage.Value / 100) * item.Quantity;
+					if (coupon.MaxDiscountAmount.HasValue && item.Discount > coupon.MaxDiscountAmount.Value)
+					{
+						item.Discount = coupon.MaxDiscountAmount.Value;
+					}
+				}
+				else if (coupon.DiscountAmount.HasValue)
+				{
+					item.Discount = coupon.DiscountAmount.Value;
+				}
+
+				totalDiscount += item.Discount;
+			}
+
+			cart.CouponCode = couponCode;
+			cart.TotalDiscount = totalDiscount;
+			Session["Cart"] = cart;
+
+			return Json(new { success = true, message = "Áp dụng coupon thành công!", totalDiscount = totalDiscount });
+		}
+
 		[HttpGet]
 		public ActionResult GetStockQuantity(int? productId, int? size)
 		{

@@ -7,11 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using WebShoeShop.Common;
 using WebShoeShop.Models;
 
 namespace WebShoeShop.Areas.Admin.Controllers
 {
-	/*[CustomAuthorize]*/
+	[CustomAuthorize]
 	public class AccountController : Controller
 	{
 		private ApplicationSignInManager _signInManager;

@@ -6,6 +6,9 @@ namespace WebShoeShop.Models
 	public class ShoppingCart
 	{
 		public List<ShoppingCartItem> Items { get; set; }
+		public string CouponCode { get; set; }
+		public decimal TotalDiscount { get; set; }
+		public decimal TotalPrice => Items.Sum(i => i.TotalPrice);
 		public ShoppingCart()
 		{
 			this.Items = new List<ShoppingCartItem>();
@@ -93,5 +96,8 @@ namespace WebShoeShop.Models
 		public int Size { get; set; }
 		public int AvailableStock { get; set; }
 		public List<int> AvailableSizes { get; set; } = new List<int>();
+
+		public decimal Discount { get; set; }
+		public string CouponCode { get; set; }
 	}
 }
