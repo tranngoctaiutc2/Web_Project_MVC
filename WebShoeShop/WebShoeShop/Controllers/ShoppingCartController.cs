@@ -158,6 +158,7 @@ namespace WebShoeShop.Controllers
 					var stock = db.ProductSizes.FirstOrDefault(ps => ps.ProductId == item.ProductId && ps.Size == item.Size);
 					item.AvailableStock = stock?.Quantity ?? 0;
 				}
+				ViewBag.CouponCode = cart.CouponCode;
 				return PartialView(cart.Items);
 			}
 			return PartialView();
@@ -171,16 +172,34 @@ namespace WebShoeShop.Controllers
 				return Json(new { success = false, message = "Giỏ hàng của bạn đang trống!" });
 			}
 
-			// Tìm coupon từ database
+			if (string.IsNullOrWhiteSpace(couponCode))
+			{
+				foreach (var item in cart.Items)
+				{
+					item.Discount = 0;
+				}
+				cart.CouponCode = null;
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+
+				return Json(new { success = false, message = "Không có mã giảm giá áp dụng!", totalDiscount = 0 });
+			}
+
 			var coupon = db.Coupons.FirstOrDefault(c => c.Code == couponCode && c.IsActive &&
 														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
 
 			if (coupon == null)
 			{
-				return Json(new { success = false, message = "Coupon không hợp lệ hoặc đã hết hạn!" });
+				foreach (var item in cart.Items)
+				{
+					item.Discount = 0;
+				}
+				cart.CouponCode = null;
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+				return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn!", totalDiscount = 0 });
 			}
 
-			// Áp dụng coupon
 			decimal totalDiscount = 0;
 
 			foreach (var item in cart.Items)
@@ -205,8 +224,9 @@ namespace WebShoeShop.Controllers
 			cart.TotalDiscount = totalDiscount;
 			Session["Cart"] = cart;
 
-			return Json(new { success = true, message = "Áp dụng coupon thành công!", totalDiscount = totalDiscount });
+			return Json(new { success = true, message = "Áp dụng mã giảm giá thành công!", totalDiscount = totalDiscount });
 		}
+
 
 		[HttpGet]
 		public ActionResult GetStockQuantity(int? productId, int? size)
@@ -277,8 +297,8 @@ namespace WebShoeShop.Controllers
 					order.Phone = req.Phone;
 					order.Address = req.Address;
 					order.Email = req.Email;
-					order.Status = 1; // chưa duyệt
-					order.StatusPayMent = 1; // Chưa thanh toán
+					order.Status = 1;
+					order.StatusPayMent = 1;
 					cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
 					{
 						ProductId = x.ProductId,
@@ -286,6 +306,9 @@ namespace WebShoeShop.Controllers
 						Price = x.Price,
 						Size = x.Size
 					}));
+					order.CouponCode = cart.CouponCode;
+					decimal totaldiscout = cart.TotalDiscount;
+					order.TotalDiscount = totaldiscout;
 					order.Quantity = cart.GetTotalQuantity();
 					if (req.TypeShip == 1)
 					{
@@ -295,6 +318,7 @@ namespace WebShoeShop.Controllers
 					{
 						order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity) + 70000);
 					}
+					order.TotalAmount -= totaldiscout;
 					order.TypePayment = req.TypePayment;
 					order.TypeShip = req.TypeShip;
 					order.CreatedDate = DateTime.Now;
@@ -348,7 +372,7 @@ namespace WebShoeShop.Controllers
 					{
 						TongTien = thanhtien + 70000;
 					}
-
+					TongTien -= totaldiscout;
 					string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/invoice-1.html"));
 					contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
 					contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
@@ -388,6 +412,7 @@ namespace WebShoeShop.Controllers
 					{
 						contentAdmin = contentAdmin.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(70000, 0));
 					}
+
 					contentAdmin = contentAdmin.Replace("{{TongTien}}", WebShoeShop.Common.Common.FormatNumber(TongTien, 0));
 					WebShoeShop.Common.Common.SendMail("Double 2T-2Q Store", "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["EmailAdmin"]);
 					cart.ClearCart();

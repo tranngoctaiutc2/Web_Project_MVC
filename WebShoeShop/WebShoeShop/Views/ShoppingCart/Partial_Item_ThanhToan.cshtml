@@ -28,10 +28,15 @@
                     <td> @item.Quantity</td>
                     <td>@item.Size</td>
                 </tr>
+                tongtien = tongtien - Model.Sum(x => x.Discount);
             }
             <tr>
                 <td>Phí giao hàng</td>
                 <td id="cost">0</td>
+            </tr>
+            <tr>
+                <td>Giảm giá</td>
+                <td class="text-danger">-@Common.FormatNumber(Model?.Sum(x => x.Discount) ?? 0, 0)</td>
             </tr>
             <tr>
                 <td>Tổng tiền</td>
