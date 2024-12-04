@@ -97,14 +97,13 @@
                         <th>Hình ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
-                        <th>Số lượng</th>
+                        <th>Doanh số</th>
                         <th>Giá</th>
-                        <th>Ngày tạo</th>
+                        <th>Kho hàng</th>
                         <th>Sản phẩm mới</th>
                         <th>Khuyến mãi</th>
                         <th>Nổi bật</th>
                         <th>Hiển thị</th>
-
                         <th style="width:100px;">Thao tác</th>
                     </tr>
                 </thead>
@@ -112,8 +111,8 @@
                     @if (Model != null && Model.Any())
                     {
 
-                        int page = ViewBag.Page ?? 1; // Giá trị mặc định nếu ViewBag.Page là null
-                        int pageSize = ViewBag.PageSize ?? 10; // Giá trị mặc định nếu ViewBag.PageSize là null
+                        int page = ViewBag.Page ?? 1; 
+                        int pageSize = ViewBag.PageSize ?? 10; 
                         int i = ((page - 1) * pageSize) + 1;
 
                         foreach (var item in Model)
@@ -134,9 +133,9 @@
                                 <td><img class="imgproduct" data-id="@item.Id" src="@strImg" width="50" /></td>
                                 <td>@item.Title</td>
                                 <td>@item.ProductCategory.Title</td>
-                                <td>@item.Quantity</td>
+                                <td></td>
                                 <td>@WebShoeShop.Common.Common.FormatNumber(item.Price, 0)</td>
-                                <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                <td>@item.Quantity</td>
                                 <td class="text-center">
                                     <a href='#' data-id="@item.Id" class="btnHome">@Html.Raw(strCheckHome)</a>
                                 </td>

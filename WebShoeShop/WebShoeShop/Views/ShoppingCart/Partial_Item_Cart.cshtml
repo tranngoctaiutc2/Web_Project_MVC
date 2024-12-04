@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<WebShoeShop.Models.ShoppingCartItem>
 @using WebShoeShop.Common
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <table class="table">
     <tr class="text-center">
         <th>STT</th>
@@ -102,9 +101,8 @@
             <label for="couponCode" class="mr-2">Nhập mã giảm giá:</label>
             <input type="text" id="couponCode" name="couponCode"
                    value="@ViewBag.CouponCode"
-                   class="form-control form-control-sm"
-                   placeholder="Nhập mã giảm giá" style="width: 150px;" />
-            <button id="applyCouponButton" class="btn btn-primary btn-sm ml-2"
+                   class="form-control form-control-sm" style="width: 150px;" />
+            <button id="applyCouponButton" class="btn btn-outline-primary btn-sm ml-2"
                     onclick="applyCoupon()">
                 Áp dụng
             </button>
@@ -112,9 +110,23 @@
         <span id="couponMessage" class="text-danger mt-1"></span>
     </div>
 </div>
-
+<div id="alertMessage" class="alert alert-dismissible fade show col-md-4" role="alert" style="display:none;">
+    <span id="alertText"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 
 <script>
+    function showAlert(message, type = "success") {
+        const alertBox = $('#alertMessage');
+        const alertText = $('#alertText');
+        alertBox.removeClass('alert-success alert-danger alert-warning').addClass(`alert-${type}`);
+        alertText.text(message);
+        alertBox.fadeIn();
+        setTimeout(() => {
+            alertBox.fadeOut();
+        }, 1000);
+    }
+
     function applyCoupon() {
         var couponCode = $('#couponCode').val();
 
@@ -124,30 +136,17 @@
             data: { couponCode: couponCode },
             success: function (response) {
                 if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Thành công',
-                        text: response.message,
-                        confirmButtonText: 'Ok'
-                    }).then(() => {
-                        location.reload(); 
-                    });
+                    showAlert(response.message, "success");
+                    setTimeout(() => location.reload(),1000); 
                 } else {
-                    Swal.fire({
-                        icon: 'errors',
-                        title: 'Lỗi',
-                        text: response.message,
-                        confirmButtonText: 'Ok'
-                    }).then(() => {
-                        location.reload();
-                    });
+                    showAlert(response.message, "danger");
+                    setTimeout(() => location.reload(), 1000); 
                 }
             },
             error: function () {
-                $('#couponMessage').text("Có lỗi xảy ra, vui lòng thử lại!");
+                showAlert("Có lỗi xảy ra, vui lòng thử lại!", "danger");
             }
         });
     }
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
