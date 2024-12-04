@@ -43,6 +43,7 @@ namespace WebShoeShop.Areas.Admin.Controllers
 		public ActionResult Add()
 		{
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+			ViewBag.Brands = db.Brands.Where(b => b.IsActive).ToList();
 			return View();
 		}
 
@@ -158,13 +159,9 @@ namespace WebShoeShop.Areas.Admin.Controllers
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
 			return View(model);
 		}
-
-		// Hiển thị view chỉnh sửa sản phẩm
 		public ActionResult Edit(int id)
 		{
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
-
-			// Lấy thông tin sản phẩm theo id
 			var item = db.Products.Include("ProductSize").Include("ProductImage").FirstOrDefault(p => p.Id == id);
 
 			if (item == null)
@@ -175,7 +172,6 @@ namespace WebShoeShop.Areas.Admin.Controllers
 			return View(item);
 		}
 
-		// Xử lý khi submit form chỉnh sửa sản phẩm
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit(Product model, List<int> Sizes, List<int> Quantities, List<string> Images, List<int> rDefault)

@@ -1,9 +1,7 @@
-﻿@model IEnumerable<WebShoeShop.Models.EF.Coupon>
-
+﻿@model IEnumerable<WebShoeShop.Models.EF.Brand>
 @{
-    ViewBag.Title = "Danh sách mã giảm giá";
+    ViewBag.Title = "Index";
 }
-
 @section naviheader{
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -14,65 +12,59 @@
             <a href="/admin/home" class="nav-link">Trang chủ</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/coupons" class="nav-link">Danh sách mã giảm giá</a>
+            <a href="/admin/brands" class="nav-link">Danh sách thương hiệu</a>
         </li>
 
     </ul>
 }
-
 <section class="content">
 
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Danh sách mã giảm giá</h2>
+            <h2 class="card-title">Danh sách thương hiệu</h2>
             <div class="card-tools">
-                <a href="/admin/coupons/create" class="btn btn-success">Thêm mới</a>
+                <a href="/admin/brands/create" class="btn btn-success">Thêm mới</a>
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Mã giảm giá</th>
+                        <th>Tên thương hiệu</th>
                         <th>Mô tả</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày hết hạn</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var brand in Model)
                     {
                         <tr>
-                            <td>@item.Id</td>
-                            <td>@item.Code</td>
-                            <td>@item.Description</td>
-                            <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
-                            <td>@item.ExpirationDate.ToString("dd/MM/yyyy")</td>
-                            <td>@(item.IsActive ? "Có" : "Không")</td>
+                            <td></td>
+                            <td>@brand.Name</td>
+                            <td>@brand.Description</td>
+                            <td>@(brand.IsActive ? "Hoạt động" : "Không hoạt động")</td>
                             <td>
-                                <a href="/admin/coupons/edit/@item.Id" class="btn btn-sm btn-primary"> 
-                                <i class="fa fa-pen-square"></i>
+                                <a href="/admin/brands/edit/@brand.Id" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-pen-square"></i>
                                 </a>
-                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('@item.Id')">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('@brand.Id')">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                     }
                 </tbody>
-            </table>    
+            </table>
         </div>
     </div>
 </section>
-
 <script>
-    function confirmDelete(couponId) {
+    function confirmDelete(brandId) {
         Swal.fire({
-            title: 'Bạn có chắc chắn muốn xóa mã giảm giá này?',
+            title: 'Bạn có chắc chắn muốn xóa thương hiệu này?',
             text: "Hành động này không thể hoàn tác!",
             icon: 'warning',
             showCancelButton: true,
@@ -82,14 +74,13 @@
             cancelButtonText: 'Hủy bỏ'
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteCoupon(couponId);
+                deleteBrand(brandId);
             }
         })
     }
-
-    function deleteCoupon(couponId) {
+ function deleteBrand(couponId) {
         $.ajax({
-            url: '/Admin/Coupons/DeleteConfirmed/' + couponId,
+            url: '/Admin/Brands/DeleteConfirmed/' + couponId,
             type: 'POST',
             data: {
                 __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
@@ -97,16 +88,16 @@
             success: function (response) {
                 Swal.fire(
                     'Đã xóa!',
-                    'Quyền đã được xóa thành công.',
+                    'Xóa thành công.',
                     'success'
                 ).then(() => {
-                    window.location.href = '/Admin/Coupons/Index';
+                    window.location.href = '/Admin/Brands/Index';
                 });
             },
             error: function () {
                 Swal.fire(
                     'Lỗi!',
-                    'Đã xảy ra lỗi khi xóa quyền.',
+                    'Đã xảy ra lỗi khi xóa thương hiệu.',
                     'error'
                 );
             }
