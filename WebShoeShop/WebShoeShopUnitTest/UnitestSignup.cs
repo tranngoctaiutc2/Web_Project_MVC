@@ -24,6 +24,8 @@ namespace WebShoeShopUnitTest
         [Test]
         public void SignUpSuccessfully()
         {
+            var testUser = TestSeeder.username;
+
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
@@ -40,10 +42,10 @@ namespace WebShoeShopUnitTest
             fullname.SendKeys("Administrator");
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin2");
+            username.SendKeys(testUser);
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin2@example.com");
+            email.SendKeys($"{testUser}@example.com");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("Password1@");

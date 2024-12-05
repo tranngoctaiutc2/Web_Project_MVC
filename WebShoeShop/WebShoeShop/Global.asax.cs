@@ -18,6 +18,7 @@ namespace WebShoeShop
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             TestSeeder.SeedTestUsers();
+            TestSeeder.ClearTestUsers();
 
             Application["HomNay"] = 0;
             Application["HomQua"] = 0;
@@ -57,6 +58,11 @@ namespace WebShoeShop
             Application.Lock();
             Application["visitors_online"] = Convert.ToUInt32(Application["visitors_online"]) - 1;
             Application.UnLock();
+        }
+
+        protected void Application_End()
+        {
+            TestSeeder.ClearTestUsers();
         }
     }
 }

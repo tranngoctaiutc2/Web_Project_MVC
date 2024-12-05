@@ -5,13 +5,17 @@ using WebShoeShop.Models.EF;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using DocumentFormat.OpenXml.Packaging;
+using Microsoft.Ajax.Utilities;
 
 namespace WebShoeShop.Helpers
 {
     public static class TestSeeder
     {
+        public static string username = "admin2";
+
         public static void SeedTestUsers()
         {
+
             using (var context = new ApplicationDbContext())
             {
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
@@ -59,7 +63,7 @@ namespace WebShoeShop.Helpers
             {
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-                var user = userManager.FindByName("admin1");
+                var user = userManager.FindByName(username);
                 if (user != null)
                 {
                     userManager.Delete(user);
