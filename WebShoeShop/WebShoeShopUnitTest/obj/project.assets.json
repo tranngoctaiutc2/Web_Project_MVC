@@ -431,6 +431,15 @@
             "related": ".xml"
           }
         }
+      },
+      "WebShoeShop/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/WebShoeShop.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/WebShoeShop.dll": {}
+        }
       }
     }
   },
@@ -1097,6 +1106,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "WebShoeShop/1.0.0": {
+      "type": "project",
+      "path": "../WebShoeShop/WebShoeShop.csproj",
+      "msbuildProject": "../WebShoeShop/WebShoeShop.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -1109,23 +1123,24 @@
       "Selenium.WebDriver >= 4.26.1",
       "Selenium.WebDriver.ChromeDriver >= 130.0.6723.9100",
       "SeleniumExtras.WaitHelpers >= 1.0.2",
+      "WebShoeShop >= 1.0.0",
       "coverlet.collector >= 6.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "C:\\Users\\LENOVO1\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\WEBAPPc#\\WebShoeShop\\WebShoeShopUnitTest\\WebShoeShopUnitTest.csproj",
+      "projectUniqueName": "D:\\Web_Project_MVC\\WebShoeShop\\WebShoeShopUnitTest\\WebShoeShopUnitTest.csproj",
       "projectName": "WebShoeShopUnitTest",
-      "projectPath": "D:\\WEBAPPc#\\WebShoeShop\\WebShoeShopUnitTest\\WebShoeShopUnitTest.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "D:\\WEBAPPc#\\WebShoeShop\\WebShoeShopUnitTest\\obj\\",
+      "projectPath": "D:\\Web_Project_MVC\\WebShoeShop\\WebShoeShopUnitTest\\WebShoeShopUnitTest.csproj",
+      "packagesPath": "C:\\Users\\LENOVO1\\.nuget\\packages\\",
+      "outputPath": "D:\\Web_Project_MVC\\WebShoeShop\\WebShoeShopUnitTest\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\LENOVO1\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1138,13 +1153,22 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Web_Project_MVC\\WebShoeShop\\WebShoeShop\\WebShoeShop.csproj": {
+              "projectPath": "D:\\Web_Project_MVC\\WebShoeShop\\WebShoeShop\\WebShoeShop.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1204,7 +1228,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
