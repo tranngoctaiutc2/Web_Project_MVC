@@ -40,10 +40,10 @@ namespace WebShoeShopUnitTest
             fullname.SendKeys("Administrator");
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin1");
+            username.SendKeys("admin2");
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin1@example.com");
+            email.SendKeys("admin2@example.com");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("Password1@");
@@ -173,7 +173,7 @@ namespace WebShoeShopUnitTest
 
             IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".text-danger.field-validation-error")));
             Assert.IsNotNull(errorMessage);
-            Assert.That(errorMessage.Text, Is.EqualTo("Mật khẩu không trùng khớp"));
+            Assert.That(errorMessage.Text, Is.EqualTo("Mật khẩu không được để trống"));
         }
         [Test]
         public void SignUpWithInvalidPassword()
