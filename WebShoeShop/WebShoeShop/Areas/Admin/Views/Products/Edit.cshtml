@@ -118,7 +118,7 @@
                                                                 <td>
                                                                     <select name="Sizes[]" class="form-control" required>
                                                                         <option value="">Chọn size</option>
-                                                                        @for (int i = 35; i <= 45; i++)
+                                                                        @for (int i = 36; i < 45; i++)
                                                                         {
                                                                             <option value="@i" @(size.Size == i ? "selected" : "")>@i</option>
                                                                         }
@@ -389,7 +389,7 @@
                      <td>
                          <select name="Sizes[]" class="form-control" required>
                              <option value="">Chọn size</option>
-                             @for (int i = 35; i <= 45; i++)
+                             @for (int i = 36; i < 45; i++)
                              {
                                  <option value="@i">@i</option>
                              }

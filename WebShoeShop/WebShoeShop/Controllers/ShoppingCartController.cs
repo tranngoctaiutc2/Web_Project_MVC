@@ -359,6 +359,7 @@ namespace WebShoeShop.Controllers
 						{
 							product.ReduceQuantity(sp.Quantity, sp.Size);
 							product.Quantity -= sp.Quantity;
+							product.SoldQuantity += sp.Quantity;
 							db.Entry(product).State = EntityState.Modified;
 						}
 						strPrice = WebShoeShop.Common.Common.FormatNumber(sp.TotalPrice, 0);

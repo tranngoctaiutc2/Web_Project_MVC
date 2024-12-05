@@ -122,7 +122,28 @@ namespace WebShoeShop.Controllers
 			}
 			return PartialView();
 		}
-		//
+		public ActionResult CancelOrder(int orderId)
+		{
+			if (User.Identity.IsAuthenticated)
+			{
+				var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
+				var userManager = new UserManager<ApplicationUser>(userStore);
+				var user = userManager.FindByName(User.Identity.Name);
+				var order = db.Orders.FirstOrDefault(x => x.Id == orderId && x.CustomerId == user.Id);
+				if (order != null)
+				{
+					if (order.Status == 1 || order.Status == 2)
+					{
+						order.Status = 0;
+						db.SaveChanges();
+						return Json(new { success = true, message = "Đơn hàng đã được hủy thành công." });
+					}
+					return Json(new { success = false, message = "Không thể hủy đơn hàng ở trạng thái hiện tại." });
+				}
+				return Json(new { success = false, message = "Không tìm thấy đơn hàng." });
+			}
+			return Json(new { success = false, message = "Bạn chưa đăng nhập." });
+		}
 		// GET: /Account/VerifyCode
 		[AllowAnonymous]
 		public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)

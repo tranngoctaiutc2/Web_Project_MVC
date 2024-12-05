@@ -46,7 +46,7 @@ namespace WebShoeShop.Models.EF
 		public decimal? PriceSale { get; set; }
 		[Required(ErrorMessage = "Số lượng không được để trống")]
 		public int Quantity { get; set; }
-		public int? SoldQuantity { get; set; }
+		public int SoldQuantity { get; set; } = 0;
 		public int ViewCount { get; set; }
 		public bool IsHome { get; set; }
 		public bool IsSale { get; set; }

@@ -263,6 +263,10 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\Controllers\BrandsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CouponsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PermissionController.cs" />
+    <Compile Include="Common\CustomAuthorizeAttribute.cs" />
     <Compile Include="Helpers\TestSeeder.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
@@ -294,9 +298,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202410280506098_updateContact.cs" />
-    <Compile Include="Migrations\202410280506098_updateContact.Designer.cs">
-      <DependentUpon>202410280506098_updateContact.cs</DependentUpon>
+    <Compile Include="Migrations\202412041156148_AddBrand.cs" />
+    <Compile Include="Migrations\202412041156148_AddBrand.Designer.cs">
+      <DependentUpon>202412041156148_AddBrand.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -304,8 +308,10 @@
     <Compile Include="Models\Common\Filter.cs" />
     <Compile Include="Models\Common\ThongKeTruyCap.cs" />
     <Compile Include="Models\CustomerOrderViewModel.cs" />
+    <Compile Include="Models\EF\Brand.cs" />
     <Compile Include="Models\EF\Category.cs" />
     <Compile Include="Models\EF\Contact.cs" />
+    <Compile Include="Models\EF\Coupon.cs" />
     <Compile Include="Models\EF\News.cs" />
     <Compile Include="Models\EF\Order.cs" />
     <Compile Include="Models\EF\OrderDetail.cs" />
@@ -315,6 +321,7 @@
     <Compile Include="Models\EF\ProductImage.cs" />
     <Compile Include="Models\EF\ProductSize.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
+    <Compile Include="Models\EF\RolePermission.cs" />
     <Compile Include="Models\EF\Subscribe.cs" />
     <Compile Include="Models\EF\SystemSetting.cs" />
     <Compile Include="Models\EF\ThongKe.cs" />
@@ -3474,6 +3481,15 @@
     <Content Include="Areas\Admin\Views\Statistical\_OrdersInDay.cshtml" />
     <Content Include="Areas\Admin\Views\Statistical\_OrdersInMonth.cshtml" />
     <Content Include="Areas\Admin\Views\Role\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Permission\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Permission\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Permission\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Coupons\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Coupons\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Coupons\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Brands\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Brands\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Brands\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3603,8 +3619,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202410280506098_updateContact.resx">
-      <DependentUpon>202410280506098_updateContact.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202412041156148_AddBrand.resx">
+      <DependentUpon>202412041156148_AddBrand.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

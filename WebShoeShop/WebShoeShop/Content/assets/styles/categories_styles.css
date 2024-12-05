@@ -113,15 +113,7 @@ p a:hover::after
 {
 	opacity: 0.2;
 }
-::selection
-{
-	background: #fde0db;
-	color: #FF6347;
-}
-p::selection
-{
-	background: #fde0db;
-}
+
 h1{font-size: 72px;}
 h2{font-size: 40px;}
 h3{font-size: 28px;}
