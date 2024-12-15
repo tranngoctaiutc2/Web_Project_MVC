@@ -199,7 +199,19 @@ namespace WebShoeShop.Controllers
 				Session["Cart"] = cart;
 				return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn!", totalDiscount = 0 });
 			}
+			decimal orderTotal = cart.Items.Sum(item => item.Price * item.Quantity);
 
+			if (coupon.MinimumOrderAmount.HasValue && orderTotal < coupon.MinimumOrderAmount.Value)
+			{
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+				return Json(new
+				{
+					success = false,
+					message = $"Mã giảm giá chỉ áp dụng cho đơn hàng có tổng giá trị từ {coupon.MinimumOrderAmount.Value:C} trở lên!",
+					totalDiscount = 0
+				});
+			}
 			decimal totalDiscount = 0;
 
 			foreach (var item in cart.Items)
