@@ -38,10 +38,16 @@
     {
         foreach (var item in Model)
         {
-            <div class="row row-item-new">
+            var CheckImage = item.Product.ProductImage.FirstOrDefault(x => x.IsDefault);
+            var strImg = "";
+            if (CheckImage != null)
+            {
+                strImg = CheckImage.Image;
+            }
+            <div class="row row-item-new" id="wishlist-item-@item.ProductId">
                 <div class="col-md-3">
-                    <div class="img-box">
-                        <a href="/chi-tiet/@item.Product.Alias-p(@item.ProductId)" title="@item.Product.Title"><img src="@item.Product.Image" alt="@item.Product.Title" /></a>
+                    <div class="img">
+                        <a href="/chi-tiet/@item.Product.Alias-p(@item.Product.Id)" title="@item.Product.Title"><img src="@strImg" alt="@item.Product.Title" style="width:90px;height:90px;" /></a>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -53,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-md-1">
-                    <a href="#" data-id="@item.Id" class="btn btn-danger btnDeletee">Xóa</a>
+                    <a href="#" data-id="@item.ProductId" class="btn btn-danger btnDeletee">Xóa</a>
                 </div>
             </div>
         }
@@ -68,24 +74,62 @@
 </div>
 @section scripts{
     <script>
-    $(document).ready(function () {
-        $('body').on('click', '.btnDeletee', function () {
-            var id = $(this).data("id");
-            var conf = confirm('Bạn có muốn gỡ sản phẩm này không?');
-            if (conf == true) {
-                $.ajax({
-                    url: '/wishlist/PostDeleteWishlist',
-                    type: 'POST',
-                    data: { ProductId: id },
-                    success: function (res) {
-                        if (res.Success == false) {
-                            alert(res.Message);
-                        }
+        $(document).ready(function () {
+            $('body').on('click', '.btnDeletee', function (e) {
+                e.preventDefault();
+                var id = $(this).data("id");
 
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Sản phẩm này sẽ bị xóa khỏi danh sách yêu thích!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/wishlist/PostDeleteWishlist',
+                            type: 'POST',
+                            data: { ProductId: id },
+                            success: function (res) {
+                                if (res.Success) {
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-center',
+                                        icon: 'success',
+                                        title: res.Message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                    $('#wishlist-item-' + id).remove();
+                                } else {
+                                    Swal.fire({
+                                        toast: true,
+                                        position: 'top-end',
+                                        icon: 'error',
+                                        title: res.Message,
+                                        showConfirmButton: false,
+                                        timer: 3000
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: 'Đã xảy ra lỗi. Vui lòng thử lại!',
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            }
+                        });
                     }
                 });
-            }
+            });
         });
-    });
 </script>
     }
