@@ -187,7 +187,8 @@ namespace WebShoeShop.Controllers
 
 			var coupon = db.Coupons.FirstOrDefault(c => c.Code == couponCode && c.IsActive &&
 														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
-
+			if (coupon.UsageLimit.HasValue && coupon.UsageCount >= coupon.UsageLimit.Value)
+				return Json(new { success = false, message = "Mã giảm giá đã hết lượt sử dụng." });
 			if (coupon == null)
 			{
 				foreach (var item in cart.Items)
