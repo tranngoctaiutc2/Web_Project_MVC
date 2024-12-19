@@ -1376,6 +1376,9 @@ section
 	color: #f5c136;
 	font-size: 18px;
 }
+	.user_star_rating i.fa-star-o {
+		color: lightgray; /* Màu xám cho các sao rỗng */
+	}
 .review_submit_btn
 {
 	width: 170px;

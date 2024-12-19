@@ -249,7 +249,6 @@ jQuery(document).ready(function($)
 
 				star.on('click', function()
 				{
-					debugger;
 					var i = star.index();
 					dem = 0;
 					stars.find('i').each(function()

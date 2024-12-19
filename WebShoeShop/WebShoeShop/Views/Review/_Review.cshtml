@@ -13,12 +13,15 @@
         <script>
             function OnBeginRE() {
                 $('#review_submit').attr("disabled", "disabled");
-                $('#load_send').html('<div class="spinner"><i class="fa fa-spinner fa-spin"></i></div><h3>Đang xử lí...</h3>');
             }
             function OnSuccessRE(res) {
                 if (res.Success) {
+                    $('#load_review').html(res);
                     $("#review_form")[0].reset();
                 }
+            }
+            function OnFailureRE() {
+                alert('Đã xảy ra lỗi khi gửi đánh giá.');
             }
         </script>
 
@@ -47,7 +50,6 @@
         <div class="form-group" id="load_send"></div>
         <div class="text-left text-sm-left">
             <button id="review_submit" type="submit" class="red_button review_submit_btn btn btn-success" value="Submit">Gửi</button>
-
         </div>
     }
 </div>
