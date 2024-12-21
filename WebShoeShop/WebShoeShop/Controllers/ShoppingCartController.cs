@@ -11,7 +11,6 @@ using WebShoeShop.Models.EF;
 
 namespace WebShoeShop.Controllers
 {
-	[Authorize]
 	public class ShoppingCartController : Controller
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
@@ -449,10 +448,10 @@ namespace WebShoeShop.Controllers
 		{
 
 			var code = new { Success = false, msg = "", code = -1, Count = 0 };
-			if (Request.IsAuthenticated == false)
-			{
-				code = new { Success = false, msg = "Yêu cầu đăng nhập mới được thêm vào giỏ hàng", code = -1, Count = 0 };
-			}
+			/*			if (Request.IsAuthenticated == false)
+						{
+							code = new { Success = false, msg = "Yêu cầu đăng nhập mới được thêm vào giỏ hàng", code = -1, Count = 0 };
+						}*/
 			var db = new ApplicationDbContext();
 			var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
 			if (checkProduct != null)

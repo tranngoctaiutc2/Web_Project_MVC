@@ -170,9 +170,12 @@
                                         </a>
                                     </li>
                                     <li class="checkout">
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
                                         <a href="/Account/Profile">
                                             <i class="fa fa-address-card" aria-hidden="true" title="Hồ sơ người dùng"></i>
                                         </a>
+                                        }
                                     </li>
                                 </ul>
                                 <div class="hamburger_container">
@@ -188,44 +191,6 @@
 
 
         @RenderBody()
-
-        <!-- Footer -->
-        <!--<div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="companyinfo">
-                            <img src="~/Content/assets/images/logoshop_visible.png" />
-                            <p style="margin-bottom: 5px"><i class="fa fa-location-arrow"></i> Địa chỉ: @SettingHelper.GetValue("SettingAddress") </p>
-                            <p style="margin-bottom: 5px"><i class="fa fa-phone"></i> Hotline: @SettingHelper.GetValue("SettingHotline")</p>
-                            <p style="margin-bottom: 5px"><i class="fa fa-envelope-o"></i> Email: @SettingHelper.GetValue("SettingEmail")</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="address">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1510.8073743942664!2d106.7931500694451!3d10.845732355602227!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527158a0a5b81%3A0xf45c5d34ac580517!2zUGjDom4gaGnhu4d1IFRyxrDhu51uZyDEkOG6oWkgaOG7jWMgR1RWVCB04bqhaSBUcC4gSOG7kyBDaMOtIE1pbmg!5e0!3m2!1svi!2s!4v1698894898883!5m2!1svi!2s" width="800" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <p style="margin-top:30px">Thống kê truy cập</p>
-                        <div class="address">
-                            @Html.Action("Refresh", "Home")
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <p class="pull-left">Copyright © 2023 Double 2T-2Q Inc. All rights reserved.</p>-->
-        @*  <p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com"></a></span></p>*@
-        <!--</div>
-            </div>
-        </div>-->
 
         <footer id="footer">
             <div class="container">
