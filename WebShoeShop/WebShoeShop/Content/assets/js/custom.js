@@ -174,8 +174,6 @@ jQuery(document).ready(function ($) {
 		showSlide(prevSlideIndex);
 	}
 
-	arrowLeft.addEventListener('click', previousSlide);
-	arrowRight.addEventListener('click', nextSlide);
 
 	setInterval(nextSlide, 4000);
 	/* 

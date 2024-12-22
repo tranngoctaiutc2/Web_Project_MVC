@@ -47,7 +47,6 @@ jQuery(document).ready(function ($) {
 	});
 
 	initMenu();
-	initFavorite();
 	initFixProductBorder();
 	initIsotopeFiltering();
 	initPriceSlider();

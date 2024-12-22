@@ -163,7 +163,7 @@ namespace WebShoeShop.Controllers
 			return PartialView();
 		}
 		[HttpPost]
-		public JsonResult ApplyCoupon(string couponCode)
+		public JsonResult ApplyCouponCode(string couponCode)
 		{
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart == null || !cart.Items.Any())
@@ -186,8 +186,6 @@ namespace WebShoeShop.Controllers
 
 			var coupon = db.Coupons.FirstOrDefault(c => c.Code == couponCode && c.IsActive &&
 														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
-			if (coupon.UsageLimit.HasValue && coupon.UsageCount >= coupon.UsageLimit.Value)
-				return Json(new { success = false, message = "Mã giảm giá đã hết lượt sử dụng." });
 			if (coupon == null)
 			{
 				foreach (var item in cart.Items)
@@ -197,7 +195,11 @@ namespace WebShoeShop.Controllers
 				cart.CouponCode = null;
 				cart.TotalDiscount = 0;
 				Session["Cart"] = cart;
-				return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn!", totalDiscount = 0 });
+				return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn!", totalDiscount = 0 }, JsonRequestBehavior.AllowGet);
+			}
+			if (coupon.UsageLimit.HasValue && coupon.UsageCount >= coupon.UsageLimit.Value)
+			{
+				return Json(new { success = false, message = "Mã giảm giá đã hết lượt sử dụng." });
 			}
 			decimal orderTotal = cart.Items.Sum(item => item.Price * item.Quantity);
 
@@ -232,11 +234,113 @@ namespace WebShoeShop.Controllers
 				totalDiscount += item.Discount;
 			}
 
-			cart.CouponCode = couponCode;
+			cart.CouponCode = coupon.Code;
 			cart.TotalDiscount = totalDiscount;
 			Session["Cart"] = cart;
 
-			return Json(new { success = true, message = "Áp dụng mã giảm giá thành công!", totalDiscount = totalDiscount });
+			return Json(new { success = true, message = "Áp dụng mã giảm giá thành công!", totalDiscount = totalDiscount }, JsonRequestBehavior.AllowGet);
+		}
+		[HttpPost]
+		public JsonResult ApplyCoupon(int couponId)
+		{
+			ShoppingCart cart = (ShoppingCart)Session["Cart"];
+			if (cart == null || !cart.Items.Any())
+			{
+				return Json(new { success = false, message = "Giỏ hàng của bạn đang trống!" });
+			}
+
+			/*if (string.IsNullOrWhiteSpace(couponCode))
+			{
+				foreach (var item in cart.Items)
+				{
+					item.Discount = 0;
+				}
+				cart.CouponCode = null;
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+
+				return Json(new { success = false, message = "Không có mã giảm giá áp dụng!", totalDiscount = 0 });
+			}*/
+
+			var coupon = db.Coupons.FirstOrDefault(c => c.Id == couponId && c.IsActive &&
+														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
+			if (coupon == null)
+			{
+				foreach (var item in cart.Items)
+				{
+					item.Discount = 0;
+				}
+				cart.CouponCode = null;
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+				return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn!", totalDiscount = 0 }, JsonRequestBehavior.AllowGet);
+			}
+			if (coupon.UsageLimit.HasValue && coupon.UsageCount >= coupon.UsageLimit.Value)
+			{
+				return Json(new { success = false, message = "Mã giảm giá đã hết lượt sử dụng." });
+			}
+			decimal orderTotal = cart.Items.Sum(item => item.Price * item.Quantity);
+
+			if (coupon.MinimumOrderAmount.HasValue && orderTotal < coupon.MinimumOrderAmount.Value)
+			{
+				cart.TotalDiscount = 0;
+				Session["Cart"] = cart;
+				return Json(new
+				{
+					success = false,
+					message = $"Mã giảm giá chỉ áp dụng cho đơn hàng có tổng giá trị từ {coupon.MinimumOrderAmount.Value:C} trở lên!",
+					totalDiscount = 0
+				});
+			}
+			decimal totalDiscount = 0;
+
+			foreach (var item in cart.Items)
+			{
+				if (coupon.DiscountPercentage.HasValue)
+				{
+					item.Discount = (item.Price * coupon.DiscountPercentage.Value / 100) * item.Quantity;
+					if (coupon.MaxDiscountAmount.HasValue && item.Discount > coupon.MaxDiscountAmount.Value)
+					{
+						item.Discount = coupon.MaxDiscountAmount.Value;
+					}
+				}
+				else if (coupon.DiscountAmount.HasValue)
+				{
+					item.Discount = coupon.DiscountAmount.Value;
+				}
+
+				totalDiscount += item.Discount;
+			}
+
+			cart.CouponCode = coupon.Code;
+			cart.TotalDiscount = totalDiscount;
+			Session["Cart"] = cart;
+
+			return Json(new { success = true, message = "Áp dụng mã giảm giá thành công!", totalDiscount = totalDiscount }, JsonRequestBehavior.AllowGet);
+		}
+		public JsonResult GetAvailableCoupons()
+		{
+			var coupons = db.Coupons
+	.Where(c => c.IsActive && c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now)
+	.Select(c => new
+	{
+		c.Id,
+		c.Code,
+		c.Description,
+		ExpirationDate = c.ExpirationDate
+	})
+	.ToList()
+	.Select(c => new
+	{
+		c.Id,
+		c.Code,
+		c.Description,
+		ExpirationDate = c.ExpirationDate.ToString("yyyy-MM-ddTHH:mm:ss")
+	})
+	.ToList();
+
+
+			return Json(coupons, JsonRequestBehavior.AllowGet);
 		}
 
 

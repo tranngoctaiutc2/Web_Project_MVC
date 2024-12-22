@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<WebShoeShop.Models.ShoppingCartItem>
 @using WebShoeShop.Common
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <table class="table">
     <tr class="text-center">
         <th>STT</th>
@@ -103,7 +104,7 @@
                    value="@ViewBag.CouponCode"
                    class="form-control form-control-sm" style="width: 150px;" />
             <button id="applyCouponButton" class="btn btn-outline-primary btn-sm ml-2"
-                    onclick="applyCoupon()">
+                    onclick="applyCouponCode()">
                 Áp dụng
             </button>
         </div>
@@ -114,6 +115,32 @@
     <span id="alertText"></span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+<!-- Modal for selecting coupon -->
+<div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="couponModalLabel">Chọn mã giảm giá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="couponList" class="row">
+                    <!-- Coupons will be loaded dynamically here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button to open the modal -->
+<button type="button" class="btn btn-outline-primary btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#couponModal">
+    Chọn mã giảm giá
+</button>
+
+
 
 <script>
     function showAlert(message, type = "success") {
@@ -127,20 +154,20 @@
         }, 1000);
     }
 
-    function applyCoupon() {
+    function applyCouponCode() {
         var couponCode = $('#couponCode').val();
 
         $.ajax({
-            url: '/ShoppingCart/ApplyCoupon',
+            url: '/ShoppingCart/ApplyCouponCode',
             type: 'POST',
             data: { couponCode: couponCode },
             success: function (response) {
                 if (response.success) {
                     showAlert(response.message, "success");
-                    setTimeout(() => location.reload(),1000); 
+                    setTimeout(() => location.reload(), 1000);
                 } else {
                     showAlert(response.message, "danger");
-                    setTimeout(() => location.reload(), 1000); 
+                    setTimeout(() => location.reload(), 1000);
                 }
             },
             error: function () {
@@ -150,3 +177,87 @@
     }
 
 </script>
+<script>
+    $(document).ready(function () {
+        // Load available coupons when the modal is shown
+        $('#couponModal').on('show.bs.modal', function () {
+            $.ajax({
+                url: '/ShoppingCart/GetAvailableCoupons',
+                type: 'GET',
+                success: function (response) {
+                    var couponList = $('#couponList');
+                    couponList.empty(); // Clear existing list items
+
+                    if (response.length > 0) {
+                        response.forEach(function (coupon) {
+                            // Convert ExpirationDate string to Date object
+                            var expirationDate = new Date(coupon.ExpirationDate);
+                            var today = new Date();
+                            var isExpired = expirationDate < today ? 'text-danger' : 'text-success';
+
+                            // Format the expiration date
+                            var formattedExpirationDate = expirationDate.toLocaleDateString('vi-VN');
+
+                            // Determine the discount type
+                            var discountText = '';
+                            if (coupon.DiscountPercentage) {
+                                discountText = `Giảm ${coupon.DiscountPercentage}% giá trị đơn hàng`;
+                            } else if (coupon.DiscountAmount) {
+                                discountText = `Giảm ${coupon.DiscountAmount.toLocaleString()}₫`;
+                            }
+
+                            // Create the card for each coupon
+                            var cardHtml = `
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${coupon.Code}</h5>
+                                        <p class="card-text">${coupon.Description || 'Không có mô tả'}</p>
+                                        <p class="card-text"><strong>Hạn sử dụng:</strong> <span class="${isExpired}">${formattedExpirationDate}</span></p>
+                                        <p class="card-text">${discountText}</p>
+                                        <button class="btn btn-primary select-coupon" data-coupon-id="${coupon.Id}">Chọn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                            couponList.append(cardHtml);
+                        });
+                    } else {
+                        couponList.append('<p class="text-center">Không có mã giảm giá khả dụng.</p>');
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi khi tải mã giảm giá.");
+                }
+            });
+        });
+
+        // Handle coupon selection
+        $(document).on('click', '.select-coupon', function () {
+            var couponId = $(this).data('coupon-id');
+
+            // Apply selected coupon
+            $.ajax({
+                url: '/ShoppingCart/ApplyCoupon',
+                type: 'POST',
+                data: { couponId: couponId },
+                success: function (response) {
+                    if (response.success) {
+                        showAlert(response.message, "success");
+                        setTimeout(() => location.reload(), 1000); // Reload to update the cart
+                    } else {
+                        showAlert(response.message, "danger");
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                    $('#couponModal').modal('hide'); // Close the modal
+                },
+                error: function () {
+                    showAlert("Có lỗi xảy ra, vui lòng thử lại!", "danger");
+                }
+            });
+        });
+    });
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
