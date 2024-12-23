@@ -36,15 +36,44 @@ namespace WebShoeShop.Models
 				Items.Remove(checkExits);
 			}
 		}
-		public void UpdateQuantity(int id, int quantity)
+		public void UpdateQuantity(int id, int quantity, int size)
 		{
-			var checkExits = Items.FirstOrDefault(x => x.ProductId == id);
+			var checkExits = Items.FirstOrDefault(x => x.ProductId == id && x.Size == size);
 			if (checkExits != null)
 			{
 				checkExits.Quantity = quantity;
 				checkExits.TotalPrice = checkExits.Price * checkExits.Quantity;
 			}
 		}
+
+		public void UpdateSize(int productId, int oldSize, int newSize)
+		{
+			var existingItemWithNewSize = Items.FirstOrDefault(p =>
+			p.ProductId == productId && p.Size == newSize);
+
+			if (existingItemWithNewSize != null)
+			{
+				var itemToUpdate = Items.FirstOrDefault(p =>
+					p.ProductId == productId && p.Size == oldSize);
+
+				if (itemToUpdate != null)
+				{
+					existingItemWithNewSize.Quantity += itemToUpdate.Quantity;
+					Items.Remove(itemToUpdate);
+				}
+			}
+			else
+			{
+				var cartItem = Items.FirstOrDefault(p =>
+					p.ProductId == productId && p.Size == oldSize);
+
+				if (cartItem != null)
+				{
+					cartItem.Size = newSize;
+				}
+			}
+		}
+
 
 		public decimal GetTotalPrice()
 		{
@@ -64,6 +93,7 @@ namespace WebShoeShop.Models
 
 	public class ShoppingCartItem
 	{
+		public int CartItemId { get; set; }
 		public int ProductId { get; set; }
 		public string ProductName { get; set; }
 		public string Alias { get; set; }

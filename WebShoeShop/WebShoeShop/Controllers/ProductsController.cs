@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using WebShoeShop.Models;
+using WebShoeShop.Models.EF;
 
 namespace WebShoeShop.Controllers
 {
@@ -67,6 +69,43 @@ namespace WebShoeShop.Controllers
 		public ActionResult _Review()
 		{
 			return PartialView();
+		}
+		[HttpGet]
+		public ActionResult GetProductDetails(int id)
+		{
+			var product = db.Products
+		   .Where(p => p.Id == id)
+		   .Select(p => new ProductDetailsViewModel
+		   {
+			   Product = p,
+			   Image = p.ProductImage.FirstOrDefault(x => x.IsDefault).Image,
+			   ProductSizes = db.ProductSizes
+				   .Where(ps => ps.ProductId == p.Id)
+				   .Select(ps => new ProductSizeViewModel
+				   {
+					   Size = ps.Size,
+					   Quantity = ps.Quantity ?? 0
+				   })
+				   .ToList()
+		   })
+		   .FirstOrDefault();
+
+			if (product == null) return HttpNotFound();
+
+			return PartialView("_ProductDetailsPartial", product);
+
+		}
+		public class ProductDetailsViewModel
+		{
+			public Product Product { get; set; }
+			public List<ProductSizeViewModel> ProductSizes { get; set; }
+			public string Image { get; set; }
+		}
+
+		public class ProductSizeViewModel
+		{
+			public int Size { get; set; }
+			public int Quantity { get; set; }
 		}
 	}
 }

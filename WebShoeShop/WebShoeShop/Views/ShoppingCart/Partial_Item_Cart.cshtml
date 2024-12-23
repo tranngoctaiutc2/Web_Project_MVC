@@ -36,12 +36,19 @@
                 <td>
                     <input type="number" class="form-control quantity-input"
                            data-id="@item.ProductId"
+                           data-original-value="@item.Quantity"
+                           data-size="@item.Size"
                            value="@item.Quantity"
                            min="1"
                            pattern="[0-9]*" />
                 </td>
                 <td>
                     @item.Size
+                    <button class="btn btn-link btnUpdateSize"
+                            data-id="@item.ProductId"
+                            data-size="@item.Size">
+                        Cập nhật size
+                    </button>
                 </td>
                 <td>@Common.FormatNumber(item.TotalPrice, 2)</td>
                 <td>
@@ -122,6 +129,28 @@
 <button type="button" class="btn btn-outline-primary btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#couponModal">
     Chọn mã giảm giá
 </button>
+
+<!-- Modal UpdateSize -->
+<div class="modal fade" id="updateSizeModal" tabindex="-1" aria-labelledby="updateSizeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateSizeModalLabel">Cập nhật size</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung chi tiết sản phẩm -->
+                <div id="productDetailsContainer"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-app" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-dark btnSaveSize" disabled>Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Update Size-->
 <script>
     function showAlert(message, type = "success") {
         const alertBox = $('#alertMessage');

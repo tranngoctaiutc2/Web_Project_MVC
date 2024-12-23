@@ -1,0 +1,61 @@
+﻿<div class="row">
+    <div class="col-md-6 product-image-container">
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <div class="product-main-image mb-3">
+                <img src="@Model.Image"
+                     alt="@Model.Product.Title"
+                     class="img-fluid rounded shadow-sm"
+                     style="max-height: 400px; object-fit: cover; width: 100%;" />
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6 product-details">
+        <h4 class="product-name font-weight-bold">@Model.Product.Title</h4>
+        <div class="product-price-section mb-3">
+            @if (Model.Product.PriceSale > 0)
+            {
+                <span class="original-price text-muted ml-2 font-weight-bold">
+                    @WebShoeShop.Common.Common.FormatNumber(Model.Product.PriceSale, 0) VND
+                </span>
+                <span class="price">
+                    <del>@WebShoeShop.Common.Common.FormatNumber(Model.Product.Price, 0) VND</del>
+                </span>
+            }
+            else
+            {
+                <span class="price font-weight-bold">
+                    @WebShoeShop.Common.Common.FormatNumber(Model.Product.Price, 0) VND
+                </span>
+            }
+
+        </div>
+        <div class="product_size d-flex flex-column flex-sm-row align-items-sm-center">
+            <span class="font-weight-bold mr-2">Size:</span>
+            <ul class="list-inline d-flex flex-wrap">
+                @if (Model.ProductSizes != null)
+                {
+                    foreach (var sizeItem in Model.ProductSizes)
+                    {
+                        <li class="size-item list-inline-item px-3 py-2 border rounded mr-2 mb-2 text-center"
+                            style="cursor: @(sizeItem.Quantity > 0 ? "pointer" : "not-allowed"); background-color: @(sizeItem.Quantity > 0 ? "#f8f9fa" : "#e9ecef");"
+                            data-size="@sizeItem.Size"
+                            data-quantity="@sizeItem.Quantity"
+                            title="Size @sizeItem.Size: @(sizeItem.Quantity > 0 ? sizeItem.Quantity + " sản phẩm còn lại" : "Hết hàng")"
+                            @(sizeItem.Quantity <= 0 ? "disabled" : "")>
+                            @sizeItem.Size
+                            <small class="text-muted d-block">
+                                (@(sizeItem.Quantity > 0 ? sizeItem.Quantity : "Hết hàng"))
+                            </small>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="text-danger font-italic">Không có size nào khả dụng cho sản phẩm này.</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

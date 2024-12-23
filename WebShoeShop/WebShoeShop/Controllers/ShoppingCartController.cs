@@ -544,26 +544,73 @@ namespace WebShoeShop.Controllers
 			return Json(code);
 		}
 		[HttpPost]
-		public ActionResult Update(int id, int quantity)
+		public ActionResult Update(int id, int quantity, int size)
 		{
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null)
 			{
 				using (var db = new ApplicationDbContext())
 				{
-					var product = db.ProductSizes.FirstOrDefault(x => x.ProductId == id);
+					var product = db.ProductSizes.FirstOrDefault(x => x.ProductId == id && x.Size == size);
 					if (product != null && product.Quantity < quantity)
 					{
 						return Json(new { Success = false, Message = "Số lượng yêu cầu vượt quá số lượng tồn kho" });
 					}
 				}
-				cart.UpdateQuantity(id, quantity);
+				cart.UpdateQuantity(id, quantity, size);
 				Session["Cart"] = cart;
 				return Json(new { Success = true });
 			}
 			return Json(new { Success = false });
 		}
+		[HttpPost]
+		public JsonResult UpdateSize(int id, int oldSize, int newSize)
+		{
+			var cart = (ShoppingCart)Session["Cart"];
+			if (cart != null)
+			{
+				var currentCartItem = cart.Items.FirstOrDefault(p =>
+				 p.ProductId == id && p.Size == oldSize);
+				var productSizeInfo = db.ProductSizes
+		  .FirstOrDefault(ps => ps.ProductId == id && ps.Size == newSize);
 
+				var duplicateSize = cart.Items.Count(p =>
+					p.ProductId == id && p.Size == newSize) > 0;
+
+				if (duplicateSize)
+				{
+					return Json(new
+					{
+						success = false,
+						message = "Size này đã tồn tại trong giỏ hàng. Vui lòng chọn size khác hoặc điều chỉnh số lượng"
+					});
+				}
+				int currentQuantityInCart = currentCartItem.Quantity;
+				int availableQuantityInStock = (int)productSizeInfo.Quantity;
+				if (availableQuantityInStock < currentQuantityInCart)
+				{
+					return Json(new
+					{
+						success = false,
+						message = $"Size {newSize} chỉ còn {availableQuantityInStock} sản phẩm. Vui lòng giảm số lượng."
+					});
+				}
+				cart.UpdateSize(id, oldSize, newSize);
+				Session["Cart"] = cart;
+
+				return Json(new
+				{
+					success = true,
+					message = "Cập nhật size thành công"
+				});
+			}
+
+			return Json(new
+			{
+				success = false,
+				message = "Không tìm thấy giỏ hàng."
+			});
+		}
 
 		[HttpPost]
 		public ActionResult Delete(int id, int size)
