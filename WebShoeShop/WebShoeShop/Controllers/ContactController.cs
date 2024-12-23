@@ -87,5 +87,9 @@ namespace WebShoeShop.Controllers
 		{
 			return PartialView();
 		}
-	}
+        public ActionResult Instruct_SizeProducts()
+        {
+            return View();
+        }
+    }
 }

@@ -66,7 +66,7 @@
                     <div class="product_details_title">
                         <h2>@Model.Title</h2>
                         <p>@Model.Description</p>
-                        <p>Lượt xem: <b>@Model.ViewCount</b></p>  
+                        <p>Lượt xem: <b>@Model.ViewCount</b></p>
                     </div>
                     @if (Model.PriceSale > 0)
                     {
@@ -84,6 +84,11 @@
                         <li><i class="fa fa-star" aria-hidden="true"></i></li>
                         <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
                     </ul>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                        <i class="fa-solid fa-table" style="font-size: 20px;"></i>
+                        <a href="huong-dan" target="_blank" style="color: black; text-decoration: none;">Hướng dẫn chọn size</a>
+                    </div>
+
                     <div class="product_size d-flex flex-column flex-sm-row align-items-sm-center">
                         <span>Size: </span>
                         <ul>
