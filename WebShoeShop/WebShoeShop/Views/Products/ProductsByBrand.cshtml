@@ -42,9 +42,9 @@
                     <div class="sidebar_title">
                         <h6><strong>Thương hiệu:</strong></h6>
                     </div>
-                        <div class="form-group">
-                            @Html.Action("MenuBrand", "Menu")
-                        </div>
+                    <div class="form-group">
+                        @Html.Action("MenuBrand", "Menu")
+                    </div>
                     <div class="sidebar_title">
                         <h3><strong>Bộ lọc</strong></h3>
                     </div>
@@ -182,7 +182,10 @@
                                         </div>
                                     }
                                 }
-
+                                else
+                                {
+                                    <p>Không có sản phẩm nào cho thương hiệu này.</p>
+                                }
 
                             </div>
 

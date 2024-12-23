@@ -1186,6 +1186,59 @@ section
 	font-size: 16px !important;
 	font-weight: 500 !important;
 }
+.sidebar_container {
+	position: relative;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.sidebar_left {
+	max-height: 200px;
+	overflow-y: scroll;
+	transition: max-height 0.3s ease;
+	scrollbar-width: thin;
+	scrollbar-color: #c8c6c6 #f1f1f1;
+}
+
+	.sidebar_left::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	.sidebar_left::-webkit-scrollbar-thumb {
+		background-color: #007bff;
+		border-radius: 4px;
+	}
+
+	.sidebar_left::-webkit-scrollbar-track {
+		background-color: #f1f1f1;
+	}
+
+	.sidebar_left li {
+		padding: 10px 15px;
+		border-bottom: 1px solid #f0f0f0;
+	}
+
+		.sidebar_left li:last-child {
+			border-bottom: none;
+		}
+
+		.sidebar_left li a {
+			text-decoration: none;
+			color: #333;
+			display: block;
+		}
+
+		.sidebar_left li.active a {
+			color: #007bff;
+			font-weight: bold;
+		}
+.brand-logo {
+	width: 30px; 
+	height: auto; 
+	margin-right: 10px; 
+	vertical-align: middle;
+}
 .filter_button
 {
 	width: 100%;

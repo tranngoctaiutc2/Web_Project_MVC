@@ -91,6 +91,15 @@
                                             @Html.ValidationMessageFor(x => x.ProductCategoryId, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
+                                            <label for="exampleInputEmail1">Thương hiệu</label>
+                                            <select class="form-control" id="BrandId" name="BrandId">
+                                                @foreach (var brand in ViewBag.Brands as List<WebShoeShop.Models.EF.Brand>)
+                                                {
+                                                    <option value="@brand.Id">@brand.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="exampleInputEmail1">Mô tả</label>
                                             @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @placeholder = "Mô tả" })
                                             @Html.ValidationMessageFor(x => x.Description, null, new { @class = "text-danger" })

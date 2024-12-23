@@ -70,6 +70,12 @@ namespace WebShoeShop.Controllers
 		{
 			return PartialView();
 		}
+		public ActionResult ProductsByBrand(int brandId)
+		{
+			var products = db.Products.Where(p => p.BrandId == brandId).ToList();
+			return View(products);
+		}
+
 		[HttpGet]
 		public ActionResult GetProductDetails(int id)
 		{

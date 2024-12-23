@@ -162,6 +162,7 @@ namespace WebShoeShop.Areas.Admin.Controllers
 		public ActionResult Edit(int id)
 		{
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+			ViewBag.Brands = db.Brands.Where(b => b.IsActive).ToList();
 			var item = db.Products.Include("ProductSize").Include("ProductImage").FirstOrDefault(p => p.Id == id);
 
 			if (item == null)
@@ -198,7 +199,7 @@ namespace WebShoeShop.Areas.Admin.Controllers
 					existingProduct.IsSale = model.IsSale;
 					existingProduct.IsHome = model.IsHome;
 					existingProduct.IsFeature = model.IsFeature;
-
+					existingProduct.BrandId = model.BrandId;
 					db.ProductSizes.RemoveRange(existingProduct.ProductSize);
 					existingProduct.ProductSize.Clear();
 

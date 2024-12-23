@@ -1,0 +1,86 @@
+﻿@model IEnumerable<WebShoeShop.Models.EF.Brand>
+@if (Model != null && Model.Any())
+{
+    <div class="sidebar_container">
+        <ul class="sidebar_left">
+            @foreach (var item in Model)
+            {
+                var brandLogoUrl = "";
+
+                switch (item.Name)
+                {
+                    case "Adidas":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/180px-Adidas_Logo.svg.png";
+                        break;
+                    case "Nike":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/120px-Logo_NIKE.svg.png";
+                        break;
+                    case "Asics":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Asics_Logo.svg/120px-Asics_Logo.svg.png";
+                        break;
+                    case "Gucci":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/2/2e/Gucci_Logo.svg";
+                        break;
+                    case "Balenciaga":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Balenciaga_Logo.svg/1196px-Balenciaga_Logo.svg.png";
+                        break;
+                    case "Puma":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Puma-logo-%28text%29.svg/768px-Puma-logo-%28text%29.svg.png";
+                        break;
+                    case "Louis Vuitton":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Louis_Vuitton_logo_and_wordmark.svg/369px-Louis_Vuitton_logo_and_wordmark.svg.png";
+                        break;
+                    case "Mizuno":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/MIZUNO_logo.svg/120px-MIZUNO_logo.svg.png";
+                        break;
+                    case "Vans":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Vans_%28brand%29_logo.png/120px-Vans_%28brand%29_logo.png";
+                        break;
+                    case "New Balance":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/New_Balance_logo.svg/120px-New_Balance_logo.svg.png";
+                        break;
+                    case "Mira":
+                        brandLogoUrl = "https://mira.vn/thumb/200x200/2/upload/seo/logomira59269-2057.png";
+                        break;
+                    case "MLB":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/120px-Major_League_Baseball_logo.svg.png";
+                        break;
+                    case "Li-Ning":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/vi/thumb/d/d8/Logo_cong_ty_Li_Ning.png/120px-Logo_cong_ty_Li_Ning.png?20180223070258";
+                        break;
+                    case "Converse":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Converse_logo.svg/1200px-Converse_logo.svg.png";
+                        break;
+                    case "Dior":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Dior_Logo.svg/450px-Dior_Logo.svg.png";
+                        break;
+                    case "Biti’s":
+                        brandLogoUrl = "https://upload.wikimedia.org/wikipedia/vi/3/37/Bitis_logo.svg";
+                        break;
+                    default:
+                        brandLogoUrl = "/path/to/default/logo.png"; // Logo mặc định nếu không tìm thấy thương hiệu
+                        break;
+                }
+                if (ViewBag.BrandId == item.Id)
+                {
+                    <li class="active">
+                        <a href="/products/brand/@item.Id">
+                            <img src="@brandLogoUrl" alt="@item.Name" class="brand-logo" />
+                            <span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
+                            @item.Name
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="/products/brand/@item.Id">
+                            <img src="@brandLogoUrl" alt="@item.Name" class="brand-logo" />
+                            @item.Name
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
