@@ -389,7 +389,7 @@ namespace WebShoeShop.Controllers
 					}
 					else if (req.TypeShip == 2)
 					{
-						order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity) + 50000);
+						order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity) + 30000);
 					}
 					order.TotalAmount -= totaldiscout;
 					order.TypePayment = req.TypePayment;
@@ -445,7 +445,7 @@ namespace WebShoeShop.Controllers
 					}
 					else if (req.TypeShip == 2)
 					{
-						TongTien = thanhtien + 50000;
+						TongTien = thanhtien + 30000;
 					}
 					TongTien -= totaldiscout;
 					string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/invoice-1.html"));
@@ -466,7 +466,7 @@ namespace WebShoeShop.Controllers
 					}
 					else if (req.TypeShip == 2)
 					{
-						contentCustomer = contentCustomer.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(50000, 0));
+						contentCustomer = contentCustomer.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(30000, 0));
 					}
 					contentCustomer = contentCustomer.Replace("{{TongTien}}", WebShoeShop.Common.Common.FormatNumber(TongTien, 0));
 					WebShoeShop.Common.Common.SendMail("Double 2T-2Q Store", "Đơn hàng #" + order.Code, contentCustomer.ToString(), req.Email);
@@ -487,7 +487,7 @@ namespace WebShoeShop.Controllers
 					}
 					else if (req.TypeShip == 2)
 					{
-						contentAdmin = contentAdmin.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(50000, 0));
+						contentAdmin = contentAdmin.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(30000, 0));
 					}
 
 					contentAdmin = contentAdmin.Replace("{{TongTien}}", WebShoeShop.Common.Common.FormatNumber(TongTien, 0));
