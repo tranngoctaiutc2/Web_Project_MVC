@@ -249,19 +249,6 @@ namespace WebShoeShop.Controllers
 				return Json(new { success = false, message = "Giỏ hàng của bạn đang trống!" });
 			}
 
-			/*if (string.IsNullOrWhiteSpace(couponCode))
-			{
-				foreach (var item in cart.Items)
-				{
-					item.Discount = 0;
-				}
-				cart.CouponCode = null;
-				cart.TotalDiscount = 0;
-				Session["Cart"] = cart;
-
-				return Json(new { success = false, message = "Không có mã giảm giá áp dụng!", totalDiscount = 0 });
-			}*/
-
 			var coupon = db.Coupons.FirstOrDefault(c => c.Id == couponId && c.IsActive &&
 														 c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now);
 			if (coupon == null)
@@ -321,55 +308,25 @@ namespace WebShoeShop.Controllers
 		public JsonResult GetAvailableCoupons()
 		{
 			var coupons = db.Coupons
-	.Where(c => c.IsActive && c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now)
-	.Select(c => new
-	{
-		c.Id,
-		c.Code,
-		c.Description,
-		ExpirationDate = c.ExpirationDate
-	})
-	.ToList()
-	.Select(c => new
-	{
-		c.Id,
-		c.Code,
-		c.Description,
-		ExpirationDate = c.ExpirationDate.ToString("yyyy-MM-ddTHH:mm:ss")
-	})
-	.ToList();
-
-
+		.Where(c => c.IsActive && c.StartDate <= DateTime.Now && c.ExpirationDate >= DateTime.Now)
+		.Select(c => new
+		{
+			c.Id,
+			c.Code,
+			c.Description,
+			ExpirationDate = c.ExpirationDate
+		})
+		.ToList()
+		.Select(c => new
+		{
+			c.Id,
+			c.Code,
+			c.Description,
+			ExpirationDate = c.ExpirationDate.ToString("yyyy-MM-ddTHH:mm:ss")
+		})
+		.ToList();
 			return Json(coupons, JsonRequestBehavior.AllowGet);
 		}
-
-
-		[HttpGet]
-		public ActionResult GetStockQuantity(int? productId, int? size)
-		{
-			if (productId == null || size == null)
-			{
-				return Json(new { Success = false, Message = "Tham số không hợp lệ." }, JsonRequestBehavior.AllowGet);
-			}
-
-			try
-			{
-				using (var db = new ApplicationDbContext())
-				{
-					var productSize = db.ProductSizes.FirstOrDefault(ps => ps.ProductId == productId && ps.Size == size);
-					if (productSize != null)
-					{
-						return Json(new { Success = true, Stock = productSize.Quantity }, JsonRequestBehavior.AllowGet);
-					}
-					return Json(new { Success = false, Message = "Không tìm thấy thông tin tồn kho." }, JsonRequestBehavior.AllowGet);
-				}
-			}
-			catch (Exception ex)
-			{
-				return Json(new { Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
-			}
-		}
-
 
 		public ActionResult ShowCount()
 		{
@@ -552,10 +509,6 @@ namespace WebShoeShop.Controllers
 		{
 
 			var code = new { Success = false, msg = "", code = -1, Count = 0 };
-			/*			if (Request.IsAuthenticated == false)
-						{
-							code = new { Success = false, msg = "Yêu cầu đăng nhập mới được thêm vào giỏ hàng", code = -1, Count = 0 };
-						}*/
 			var db = new ApplicationDbContext();
 			var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
 			if (checkProduct != null)
@@ -591,20 +544,20 @@ namespace WebShoeShop.Controllers
 			return Json(code);
 		}
 		[HttpPost]
-		public ActionResult Update(int id, int quantity, int size)
+		public ActionResult Update(int id, int quantity)
 		{
 			ShoppingCart cart = (ShoppingCart)Session["Cart"];
 			if (cart != null)
 			{
 				using (var db = new ApplicationDbContext())
 				{
-					var productSizes = db.ProductSizes.FirstOrDefault(x => x.ProductId == id && x.Size == size);
-					if (productSizes != null && productSizes.Quantity < quantity)
+					var product = db.ProductSizes.FirstOrDefault(x => x.ProductId == id);
+					if (product != null && product.Quantity < quantity)
 					{
 						return Json(new { Success = false, Message = "Số lượng yêu cầu vượt quá số lượng tồn kho" });
 					}
 				}
-				cart.UpdateQuantity(id, quantity, size);
+				cart.UpdateQuantity(id, quantity);
 				Session["Cart"] = cart;
 				return Json(new { Success = true });
 			}

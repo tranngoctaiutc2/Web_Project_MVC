@@ -51,37 +51,23 @@
             if (paymentButton) {
                 paymentButton.addEventListener("click", function (e) {
                     const quantityInputs = document.querySelectorAll('.quantity-input');
-                    const sizeInputs = document.querySelectorAll('.size-input');
                     let hasInvalidInput = false;
 
-                    // Duyệt qua từng sản phẩm trong giỏ hàng
                     for (let i = 0; i < quantityInputs.length; i++) {
-                        const quantityValue = parseInt(quantityInputs[i].value);
-                        const sizeValue = parseInt(sizeInputs[i].value);
-                        const productId = sizeInputs[i].dataset.productId; // Lấy productId
+                        const quantityValue = parseInt(quantityInputs[i].value); // Lấy số lượng
 
-                        // Kiểm tra nếu số lượng hoặc size không hợp lệ
-                        if (quantityValue === 0 || sizeValue === 0 || isNaN(quantityValue) || isNaN(sizeValue)) {
-                            hasInvalidInput = true;
-                            break;
-                        }
-
-                        // Kiểm tra nếu số lượng yêu cầu vượt quá số lượng tồn kho
-                        const availableStock = parseInt(document.querySelector(`#Stock_${productId}`).textContent.replace('Có sẵn: ', ''));
-
-                        if (quantityValue > availableStock) {
+                        if (isNaN(quantityValue) || quantityValue <= 0) {
                             hasInvalidInput = true;
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Lỗi',
-                                text: 'Số lượng yêu cầu lớn hơn số lượng sản phẩm có sẵn'
+                                text: `Vui lòng nhập số lượng hợp lệ.`
                             });
                             break;
                         }
                     }
-
                     if (hasInvalidInput) {
-                        e.preventDefault(); // Ngừng thao tác nếu có lỗi
+                        e.preventDefault();
                     }
                 });
             }

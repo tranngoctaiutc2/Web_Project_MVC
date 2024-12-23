@@ -36,34 +36,13 @@ namespace WebShoeShop.Models
 				Items.Remove(checkExits);
 			}
 		}
-		public void UpdateQuantity(int id, int quantity, int size)
+		public void UpdateQuantity(int id, int quantity)
 		{
-			var checkExits = Items.FirstOrDefault(x => x.ProductId == id && x.Size == size);
+			var checkExits = Items.FirstOrDefault(x => x.ProductId == id);
 			if (checkExits != null)
 			{
 				checkExits.Quantity = quantity;
 				checkExits.TotalPrice = checkExits.Price * checkExits.Quantity;
-				checkExits.Size = size;
-			}
-			else
-			{
-				var item = Items.FirstOrDefault(x => x.ProductId == id);
-				if (item != null)
-				{
-					item.Quantity = quantity;
-					item.TotalPrice = item.Price * item.Quantity;
-					item.Size = size;
-				}
-				else
-				{
-					Items.Add(new ShoppingCartItem
-					{
-						ProductId = id,
-						Quantity = quantity,
-						Size = size,
-						TotalPrice = quantity * item.Price
-					});
-				}
 			}
 		}
 
