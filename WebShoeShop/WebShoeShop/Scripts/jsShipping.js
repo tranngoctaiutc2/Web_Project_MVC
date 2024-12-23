@@ -43,9 +43,11 @@ function resetLocationFields() {
     const totalElement = document.getElementById('total');
     totalElement.textContent = originalProductPrice.toLocaleString();
 
+    const shippingTypeElement = document.querySelector('select[name="TypeShip"]');
+    shippingTypeElement.value = '1';
+
     shippingCost = 0;
-    const costShipElement = document.getElementById('cost');
-    costShipElement.textContent = '0';
+    updateDisplayCost();
 }
 
 function getCoordinates(cityName) {
@@ -100,6 +102,8 @@ function fetchDistricts() {
                 option.textContent = district.DistrictName;
                 districtSelect.appendChild(option);
             });
+
+            updateDisplayCost();
         })
         .catch(error => console.error('Error fetching districts:', error));
 
@@ -125,6 +129,8 @@ function fetchWards() {
                 option.textContent = ward.WardName;
                 wardSelect.appendChild(option);
             });
+
+            updateDisplayCost();
         })
         .catch(error => console.error('Error fetching wards:', error));
 }
@@ -164,8 +170,7 @@ async function calculateShippingCost() {
             if (data.rows && data.rows.length > 0) {
                 const distance = data.rows[0].elements[0].distance.value / 1000; // Chuyển từ mét sang km
 
-                let shippingCost = 0;  // Khởi tạo chi phí vận chuyển
-                if (distance < 20) {
+                if (distance < 20) {    
                     shippingCost = 0;  // Nếu khoảng cách < 20 km, chi phí là 0
                 } else if (distance < 50) {
                     shippingCost = 16500;  // Nếu khoảng cách < 50 km, chi phí là 16,500 VND
@@ -175,7 +180,7 @@ async function calculateShippingCost() {
                     shippingCost = 45000;  // Nếu khoảng cách > 100 km, chi phí là 45,000 VND
                 }
 
-                document.getElementById('cost').textContent = shippingCost;  // Cập nhật chi phí lên trang web
+                updateDisplayCost();
             } else {
                 console.log('No distance data found.');  // Nếu không có dữ liệu khoảng cách
             }
@@ -183,24 +188,38 @@ async function calculateShippingCost() {
         .catch(error => console.error('Error calculating shipping cost:', error));  // Bắt và in lỗi nếu có
 }
 
-
 document.querySelector('select[name="TypeShip"]').addEventListener('change', function () {
+    // Lấy các phần tử DOM
     var totalElement = document.getElementById('total');
     var costShipElement = document.getElementById('cost');
-    var tongtien = parseFloat(totalElement.textContent.replace(/\D/g, '')); // Lấy giá trị số từ chuỗi trong <td>
+
     var phigiaohang = 0;
-    // Check the selected shipping type
-    if (this.value === '2') { // Shipping cost for option 2
-        phigiaohang = 50000; // Set shipping cost for option 2
+
+    // Kiểm tra loại giao hàng được chọn
+    if (this.value === '2') { // Nếu chọn giao hàng nhanh
+        phigiaohang = 30000; // Phí giao hàng nhanh là 30,000 VND
+    } else {
+        phigiaohang = 0; // Không áp dụng phí giao hàng nhanh
     }
 
-    // Calculate the new total based on the selected shipping type
-    var newTotal = originalProductPrice + phigiaohang + shippingCost; // Always base on the original product price
-
-    // Update the total and shipping cost display
-    totalElement.textContent = newTotal.toLocaleString(); // Update total value in <td>
-    costShipElement.textContent = (phigiaohang + shippingCost).toLocaleString(); // Update shipping cost display
+    // Tính tổng giá mới: giá sản phẩm + phí giao theo khoảng cách + phí giao hàng nhanh
+    var newTotal = originalProductPrice + shippingCost + phigiaohang;
+    // Cập nhật giao diện
+    totalElement.textContent = newTotal.toLocaleString(); // Cập nhật tổng giá trị
+    costShipElement.textContent = (shippingCost + phigiaohang).toLocaleString(); // Cập nhật phí vận chuyển
 });
+
+function updateDisplayCost() {
+    const totalElement = document.getElementById('total');
+    const costShipElement = document.getElementById('cost');
+
+    // Tính tổng giá: giá sản phẩm + phí giao theo khoảng cách + phí giao hàng nhanh
+    const newTotal = originalProductPrice + (shippingCost || 0);
+
+    // Cập nhật giao diện
+    totalElement.textContent = newTotal.toLocaleString(); // Hiển thị tổng giá
+    costShipElement.textContent = (shippingCost).toLocaleString(); // Hiển thị phí vận chuyển
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeOriginalProductPrice(); 
