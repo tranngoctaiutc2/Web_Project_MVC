@@ -383,14 +383,8 @@ namespace WebShoeShop.Controllers
 					decimal totaldiscout = cart.TotalDiscount;
 					order.TotalDiscount = totaldiscout;
 					order.Quantity = cart.GetTotalQuantity();
-					if (req.TypeShip == 1)
-					{
-						order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity));
-					}
-					else if (req.TypeShip == 2)
-					{
-						order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity) + 30000);
-					}
+					order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity));
+					order.TotalAmount += req.ShipCost;
 					order.TotalAmount -= totaldiscout;
 					order.TypePayment = req.TypePayment;
 					order.TypeShip = req.TypeShip;
@@ -507,8 +501,7 @@ namespace WebShoeShop.Controllers
 		[HttpPost]
 		public ActionResult AddToCart(int id, int quantity, int size)
 		{
-
-			var code = new { Success = false, msg = "", code = -1, Count = 0 };
+			var code = new { Success = false, msg = "", code = -1, Count = 0, ProductName = "", ProductImg = "", Size = 0, Quantity = 0, TotalPrice = 0m };
 			var db = new ApplicationDbContext();
 			var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
 			if (checkProduct != null)
@@ -539,10 +532,24 @@ namespace WebShoeShop.Controllers
 				item.TotalPrice = item.Quantity * item.Price;
 				cart.AddToCart(item, quantity);
 				Session["Cart"] = cart;
-				code = new { Success = true, msg = "Thêm sản phẩm vào giỏ hàng thành công!", code = 1, Count = cart.Items.Count };
+
+				// Return the necessary info for modal display
+				code = new
+				{
+					Success = true,
+					msg = "Thêm sản phẩm vào giỏ hàng thành công!",
+					code = 1,
+					Count = cart.Items.Count,
+					ProductName = item.ProductName,
+					ProductImg = item.ProductImg,
+					Size = item.Size,
+					Quantity = item.Quantity,
+					TotalPrice = (decimal)item.TotalPrice
+				};
 			}
 			return Json(code);
 		}
+
 		[HttpPost]
 		public ActionResult Update(int id, int quantity, int size)
 		{

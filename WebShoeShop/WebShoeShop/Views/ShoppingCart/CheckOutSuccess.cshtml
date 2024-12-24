@@ -1,6 +1,8 @@
 ﻿@model WebShoeShop.Models.EF.Order
 @{
     ViewBag.Title = "Đặt hàng thành công";
+
+
 }
 
 
@@ -26,7 +28,10 @@
             <div class="row">
                 <div class="col-md-12 justify-content-md-center" id="load_data">
                     <h2>Bạn đã mua hàng thành công</h2>
+                    @if (User.Identity.IsAuthenticated)
+                    {
                     <p>Bạn có thể xem chi tiết trong <a href="~/Account/Profile">đơn hàng của tôi</a></p>
+                    }
                     <p>Thời gian dự kiến nhận hàng là 3-5 ngày</p>
                     <a href="~/home"><i class="fa fa-arrow-left" aria-hidden="true"></i>Quay lại trang chủ</a>
                 </div>

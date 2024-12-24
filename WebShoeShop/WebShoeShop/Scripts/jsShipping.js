@@ -6,7 +6,7 @@ var destiLat = 0;
 var destiLon = 0;
 let shippingCost = 0;
 let originalProductPrice;
-
+let phigiaohang = 0;
 
 // Fetch and populate provinces
 fetch('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
@@ -193,8 +193,6 @@ document.querySelector('select[name="TypeShip"]').addEventListener('change', fun
     var totalElement = document.getElementById('total');
     var costShipElement = document.getElementById('cost');
 
-    var phigiaohang = 0;
-
     // Kiểm tra loại giao hàng được chọn
     if (this.value === '2') { // Nếu chọn giao hàng nhanh
         phigiaohang = 30000; // Phí giao hàng nhanh là 30,000 VND
@@ -206,7 +204,11 @@ document.querySelector('select[name="TypeShip"]').addEventListener('change', fun
     var newTotal = originalProductPrice + shippingCost + phigiaohang;
     // Cập nhật giao diện
     totalElement.textContent = newTotal.toLocaleString(); // Cập nhật tổng giá trị
-    costShipElement.textContent = (shippingCost + phigiaohang).toLocaleString(); // Cập nhật phí vận chuyển
+    costShipElement.textContent = (shippingCost + phigiaohang).toLocaleString();
+    const shipCostInput = document.querySelector('input[name="ShipCost"]');
+    if (shipCostInput) {
+        shipCostInput.value = shippingCost + phigiaohang; // Gán giá trị shippingCost vào input
+    }// Cập nhật phí vận chuyển
 });
 
 function updateDisplayCost() {
@@ -218,7 +220,11 @@ function updateDisplayCost() {
 
     // Cập nhật giao diện
     totalElement.textContent = newTotal.toLocaleString(); // Hiển thị tổng giá
-    costShipElement.textContent = (shippingCost).toLocaleString(); // Hiển thị phí vận chuyển
+    costShipElement.textContent = (shippingCost + phigiaohang).toLocaleString(); // Hiển thị phí vận chuyển
+    const shipCostInput = document.querySelector('input[name="ShipCost"]');
+    if (shipCostInput) {
+        shipCostInput.value = shippingCost + phigiaohang; // Gán giá trị shippingCost vào input
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
