@@ -7,7 +7,6 @@
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_responsive.css">
-
 @if (Model != null)
 {
 
@@ -95,7 +94,14 @@
                         <ul>
                             @foreach (var items in Model.ProductSize)
                             {
-                                <li class="size-item" data-size="@items.Size" data-quantity="@items.Quantity">@items.Size</li>
+                                if (items.Quantity > 0)
+                                {
+                                    <li class="size-item" data-size="@items.Size" data-quantity="@items.Quantity">@items.Size</li>
+                                }
+                                else
+                                {
+                                    <li class="size-item disabled" data-size="@items.Size" data-quantity="@items.Quantity">@items.Size <span class="not-available"></span></li>
+                                }
                             }
                         </ul>
                     </div>
@@ -293,186 +299,7 @@
 
 @section scripts{
     <script src="~/Content/assets/js/single_custom.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var addToCartButton = document.querySelector('.btnAddToCart1');
-            addToCartButton.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                var quantityValue = parseInt(document.getElementById('quantity_value').innerText);
-                var selectedSizeElement = document.querySelector('.size-item.selected');
-                if (!selectedSizeElement) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Vui lòng chọn size trước khi thêm vào giỏ hàng.'
-                    });
-                    return;
-                }
-                var size = selectedSizeElement.getAttribute('data-size');
-                var quantityProduct = selectedSizeElement.getAttribute('data-quantity');
-                if (quantityValue > quantityProduct) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Số lượng bạn muốn mua vượt quá số lượng hiện có trong kho.'
-                    });
-                } else {
-                    var id = addToCartButton.getAttribute('data-id');
-                    $.ajax({
-                        url: '/shoppingcart/addtocart',
-                        type: 'POST',
-                        data: { id: id, quantity: quantityValue, size: size },
-                        success: function (rs) {
-                            if (rs.Success) {
-                                $('#checkout_items').html(rs.Count);
-                                $('#modalProductImage').attr('src', rs.ProductImg);
-                                var productInfo = `
-                         <div class="d-flex align-items-center">
-        <div class="mr-4">
-            <img src="${rs.ProductImg}" 
-                 alt="${rs.ProductName}" 
-                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
-        </div>
-        <div>
-            <h6 class="mb-2">${rs.ProductName}</h6>
-            <p class="text-muted mb-1">Size: ${rs.Size}</p>
-            <p class="text-muted mb-1">Số lượng: ${rs.Quantity}</p>
-            <p class="font-weight-bold text-dark">${rs.TotalPrice} ₫</p>
-        </div>
-    </div>
-                        `;
-                                $('#modalProductInfo').html(productInfo);
-
-                                // Hiển thị modal
-                                $('#productAddedModal').modal('show');
-                                /*Swal.fire({
-                                    icon: 'success',
-                                    title: 'Thành công!',
-                                    text: rs.msg,
-                                    timer: 2000,
-                                    showConfirmButton: false,
-                                    position: 'center'
-                                });*/
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.size-item').click(function () {
-                $('.size-item').removeClass('active');
-                $(this).addClass('active');
-            });
-        });
-    </script>
-    <script>
-        document.querySelectorAll('.size-item').forEach(item => {
-            item.addEventListener('click', function () {
-                document.querySelectorAll('.size-item').forEach(i => i.classList.remove('selected'));
-                item.classList.add('selected');
-            });
-        });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        function initFavorite() {
-            $('.product_favorite').each(function () {
-                var $favoriteIcon = $(this);
-                var productId = $favoriteIcon.data('id');
-                var isActive = $favoriteIcon.hasClass('active');
-
-                $favoriteIcon.on('click', function (e) {
-                    e.preventDefault(); 
-                    isActive = !isActive;
-
-                    if (isActive) {
-                        AddWishlist(productId, $favoriteIcon);
-                    } else {
-                        DeleteWishlist(productId, $favoriteIcon);
-                    }
-                });
-            });
-        }
-
-        function AddWishlist(id, $iconElement) {
-            $.ajax({
-                url: '/wishlist/postwishlist',
-                type: 'POST',
-                data: { ProductId: id },
-                success: function (res) {
-                    if (res.Success) {
-                        $iconElement.addClass('active');
-                    } else {
-                        $iconElement.removeClass('active');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: res.Message || 'Không thể thêm sản phẩm vào danh sách yêu thích'
-                        });
-                    }
-                },
-                error: function () {
-                    // Xử lý lỗi kết nối
-                    $iconElement.removeClass('active');
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi kết nối',
-                        text: 'Vui lòng kiểm tra kết nối internet'
-                    });
-                }
-            });
-        }
-
-        function DeleteWishlist(id, $iconElement) {
-            $.ajax({
-                url: '/wishlist/PostDeleteWishlist',
-                type: 'POST',
-                data: { ProductId: id },
-                success: function (res) {
-                    if (res.Success) {
-                        // Xóa class active
-                        $iconElement.removeClass('active');
-
-                        // Hiển thị thông báo xóa thành công (tuỳ chọn)
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Đã xóa khỏi danh sách yêu thích',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    } else {
-                        // Nếu xóa không thành công, hoàn lại trạng thái ban đầu
-                        $iconElement.addClass('active');
-
-                        // Hiển thị thông báo lỗi
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: res.Message || 'Không thể xóa sản phẩm khỏi danh sách yêu thích'
-                        });
-                    }
-                },
-                error: function () {
-                    // Xử lý lỗi kết nối
-                    $iconElement.addClass('active');
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi kết nối',
-                        text: 'Vui lòng kiểm tra kết nối internet'
-                    });
-                }
-            });
-        }
-
-        // Gọi hàm khởi tạo
-        $(document).ready(function () {
-            initFavorite();
-        });
-    </script>
 }

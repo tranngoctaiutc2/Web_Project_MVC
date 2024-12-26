@@ -1074,6 +1074,11 @@ section
 		.product_size ul li.active {
 			background-color: #bebbbb;
 		}
+.size-item.disabled {
+	color: #aaa; /* Màu xám */
+	pointer-events: none; /* Không thể click */
+	cursor: not-allowed;
+}
 .quantity
 {
 	width: 100%;

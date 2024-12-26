@@ -278,17 +278,86 @@ jQuery(document).ready(function($)
 
 	function initFavorite()
 	{
-		if($('.product_favorite').length)
-		{
-			var fav = $('.product_favorite');
+		$('.product_favorite').each(function () {
+			var $favoriteIcon = $(this);
+			var productId = $favoriteIcon.data('id');
+			var isActive = $favoriteIcon.hasClass('active');
 
-			fav.on('click', function()
-			{
-				fav.toggleClass('active');
+			$favoriteIcon.on('click', function (e) {
+				e.preventDefault();
+				isActive = !isActive;
+
+				if (isActive) {
+					AddPrWishlist(productId, $favoriteIcon);
+				} else {
+					DeletePrWishlist(productId, $favoriteIcon);
+				}
 			});
-		}
+		});
+	}
+	function AddPrWishlist(id, $iconElement) {
+		$.ajax({
+			url: '/wishlist/postwishlist',
+			type: 'POST',
+			data: { ProductId: id },
+			success: function (res) {
+				if (res.Success) {
+					$iconElement.addClass('active');
+				} else {
+					$iconElement.removeClass('active');
+					Swal.fire({
+						icon: 'error',
+						title: 'Lỗi',
+						text: res.Message || 'Không thể thêm sản phẩm vào danh sách yêu thích'
+					});
+				}
+			},
+			error: function () {
+				// Xử lý lỗi kết nối
+				$iconElement.removeClass('active');
+				Swal.fire({
+					icon: 'error',
+					title: 'Lỗi kết nối',
+					text: 'Vui lòng kiểm tra kết nối internet'
+				});
+			}
+		});
 	}
 
+	function DeletePrWishlist(id, $iconElement) {
+		$.ajax({
+			url: '/wishlist/PostDeleteWishlist',
+			type: 'POST',
+			data: { ProductId: id },
+			success: function (res) {
+				if (res.Success) {
+					// Xóa class active
+					$iconElement.removeClass('active');
+					Swal.fire({
+						icon: 'success',
+						title: 'Đã xóa khỏi danh sách yêu thích',
+						showConfirmButton: false,
+						timer: 1500
+					});
+				} else {
+					$iconElement.addClass('active');
+					Swal.fire({
+						icon: 'error',
+						title: 'Lỗi',
+						text: res.Message || 'Không thể xóa sản phẩm khỏi danh sách yêu thích'
+					});
+				}
+			},
+			error: function () {
+				$iconElement.addClass('active');
+				Swal.fire({
+					icon: 'error',
+					title: 'Lỗi kết nối',
+					text: 'Vui lòng kiểm tra kết nối internet'
+				});
+			}
+		});
+	}
 	/* 
 
 	8. Init Tabs

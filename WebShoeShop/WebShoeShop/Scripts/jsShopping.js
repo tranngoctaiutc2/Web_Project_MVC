@@ -1,5 +1,66 @@
 ﻿$(document).ready(function () {
     ShowCount();
+    $(document).on('click', '.btnAddToCart1', function (event) {
+        event.preventDefault();
+
+        const quantityValue = parseInt($('#quantity_value').text());
+        const selectedSizeElement = $('.size-item.selected');
+
+        if (selectedSizeElement.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Vui lòng chọn size trước khi thêm vào giỏ hàng.'
+            });
+            return;
+        }
+
+        const size = selectedSizeElement.data('size');
+        const quantityProduct = selectedSizeElement.data('quantity');
+
+        if (quantityValue > quantityProduct) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Số lượng bạn muốn mua vượt quá số lượng hiện có trong kho.'
+            });
+        } else {
+            const id = $(this).data('id');
+
+            $.ajax({
+                url: '/shoppingcart/addtocart',
+                type: 'POST',
+                data: { id: id, quantity: quantityValue, size: size },
+                success: function (rs) {
+                    if (rs.Success) {
+                        $('#checkout_items').html(rs.Count);
+                        $('#modalProductImage').attr('src', rs.ProductImg);
+
+                        const productInfo = `
+                            <div class="d-flex align-items-center">
+                                <div class="mr-4">
+                                    <img src="${rs.ProductImg}" 
+                                         alt="${rs.ProductName}" 
+                                         style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">${rs.ProductName}</h6>
+                                    <p class="text-muted mb-1">Size: ${rs.Size}</p>
+                                    <p class="text-muted mb-1">Số lượng: ${rs.Quantity}</p>
+                                    <p class="font-weight-bold text-dark">${rs.TotalPrice} ₫</p>
+                                </div>
+                            </div>
+                        `;
+
+                        $('#modalProductInfo').html(productInfo);
+
+                        // Hiển thị modal
+                        $('#productAddedModal').modal('show');
+                    }
+                }
+            });
+        }
+    });
     $('body').on('click', '.btnAddToCart', function (e) {
         e.preventDefault();
         var id = $(this).data('id');

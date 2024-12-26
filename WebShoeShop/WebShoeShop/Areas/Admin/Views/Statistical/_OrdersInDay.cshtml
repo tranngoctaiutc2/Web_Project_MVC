@@ -32,10 +32,12 @@
                                     <td>@order.CustomerName</td>
                                     <td>@order.TotalAmount</td>
                                     
-                                    <td>@(order.Status ==1?"Chờ thanh toán":"Đã thanh toán")</td>
                                     <td>
-                                        @switch (order.StatusPayMent)
+                                        @switch (order.Status)
                                         {
+                                            case 0:
+                                                @:Đã hủy
+                                                break;
                                             case 1:
                                                 @:Chưa duyệt
                                                 break;
@@ -52,6 +54,9 @@
                                                 @:Không xác định
                                                 break;
                                         }
+                                    </td>
+                                    <td>
+                                        @(order.StatusPayMent ==1?"Chờ thanh toán":"Đã thanh toán")
                                     </td>
                                     <td>@order.CreatedDate</td>
                                 </tr>
