@@ -96,5 +96,15 @@ namespace WebShoeShop.Models.EF
 				throw new InvalidOperationException("Không đủ hàng trong kho để đặt.");
 			}
 		}
+		public void ReturnQuantity(int quantity, int size)
+		{
+			var sizeWithStock = ProductSize.FirstOrDefault(ps => ps.Size == size);
+
+			if (sizeWithStock == null)
+			{
+				throw new InvalidOperationException($"Size {size} không tồn tại trong kho.");
+			}
+			sizeWithStock.Quantity += quantity;
+		}
 	}
 }

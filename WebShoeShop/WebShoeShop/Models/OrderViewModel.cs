@@ -7,6 +7,7 @@ namespace WebShoeShop.Models
 {
 	public class OrderViewModel
 	{
+		public string Code { get; set; }
 		[Required(ErrorMessage = "Tên khách hàng không để trống")]
 		public string CustomerName { get; set; }
 		[Required(ErrorMessage = "Số điện thoại không để trống")]

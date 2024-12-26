@@ -4,6 +4,7 @@ using System;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebShoeShop.Models;
@@ -98,9 +99,10 @@ namespace WebShoeShop.Controllers
 				bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
 				if (checkSignature)
 				{
+					var itemOrder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
 					if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
 					{
-						var itemOrder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
+
 						if (itemOrder != null)
 						{
 							itemOrder.StatusPayMent = 2;//đã thanh toán    
@@ -114,15 +116,34 @@ namespace WebShoeShop.Controllers
 					}
 					else
 					{
+						itemOrder.Status = 0;
+						foreach (var detail in itemOrder.OrderDetails)
+						{
+							var product = db.Products
+								.Include(p => p.ProductSize)
+								.FirstOrDefault(p => p.Id == detail.ProductId);
+
+							if (product != null)
+							{
+								// Hoàn lại số lượng sản phẩm
+								product.ReturnQuantity(detail.Quantity, (int)detail.Size);
+								product.Quantity += detail.Quantity;
+								product.SoldQuantity -= detail.Quantity;
+								db.Entry(product).State = EntityState.Modified;
+							}
+						}
+						db.SaveChanges();
 						//Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
 						ViewBag.InnerText = "Có lỗi xảy ra trong quá trình xử lý. Xin vui lòng thử lại";
 					}
-
+				}
+				else
+				{
+					ViewBag.InnerText = "Chữ ký không hợp lệ";
 				}
 			}
 			return View();
 		}
-
 
 		public ActionResult CheckOut()
 		{
@@ -364,138 +385,206 @@ namespace WebShoeShop.Controllers
 				ShoppingCart cart = (ShoppingCart)Session["Cart"];
 				if (cart != null)
 				{
-					//Order order = new Order();
-					Models.EF.Order order = new Models.EF.Order();
-					order.CustomerName = req.CustomerName;
-					order.Phone = req.Phone;
-					order.Address = req.Address;
-					order.Email = req.Email;
-					order.Status = 1;
-					order.StatusPayMent = 1;
-					cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
-					{
-						ProductId = x.ProductId,
-						Quantity = x.Quantity,
-						Price = x.Price,
-						Size = x.Size
-					}));
-					order.CouponCode = cart.CouponCode;
-					decimal totaldiscout = cart.TotalDiscount;
-					order.TotalDiscount = totaldiscout;
-					order.Quantity = cart.GetTotalQuantity();
-					order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity));
-					order.TotalAmount += req.ShipCost;
-					order.TotalAmount -= totaldiscout;
-					order.TypePayment = req.TypePayment;
-					order.TypeShip = req.TypeShip;
-					order.CreatedDate = DateTime.Now;
-					order.ModifiedDate = DateTime.Now;
-					order.CreatedBy = req.Phone;
-					if (User.Identity.IsAuthenticated)
-						order.CustomerId = User.Identity.GetUserId();
-					Random rd = new Random();
-					order.Code = "DH" + rd.Next(0, 9) + rd.Next(0, 9) + rd.Next(0, 9) + rd.Next(0, 9);
-					//order.E = req.CustomerName;
+					// Tạo đơn hàng
+					Models.EF.Order order = CreateOrder(req, cart);
 					db.Orders.Add(order);
 					db.SaveChanges();
-					//send mail cho khachs hang
-					var strSanPham = "";
-					var thanhtien = decimal.Zero;
-					var TongTien = decimal.Zero;
-					var strPrice = "";
-					var strProductName = "";
-					foreach (var sp in cart.Items)
-					{
-						strSanPham += "<tr>";
-						strSanPham += "<td style=\"border-bottom:1px solid #e8e8e8; border-collapse:collapse; padding:10px;\">" + sp.ProductName + "</td>";
-						strSanPham += "<td style=\"color:#000; font-family:&#39;Roboto&#39;, Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;\">"
-							+ WebShoeShop.Common.Common.FormatNumber(sp.Price, 0) + "</td>";
-
-
-						strSanPham += "<td style=\"color:#000; font-family:&#39;Roboto&#39;, Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;\">"
-							+ sp.Quantity + "</td>";
-
-						strSanPham += "<td style =\"color:#000; font-family:&#39;Roboto&#39;, Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;\">"
-							 + WebShoeShop.Common.Common.FormatNumber(sp.TotalPrice, 0) + "</td>";
-
-						strSanPham += "</tr>";
-						thanhtien += sp.Price * sp.Quantity;
-						var product = db.Products.Include(p => p.ProductSize)
-							.FirstOrDefault(p => p.Id == sp.ProductId);
-						if (product != null)
-						{
-							product.ReduceQuantity(sp.Quantity, sp.Size);
-							product.Quantity -= sp.Quantity;
-							product.SoldQuantity += sp.Quantity;
-							db.Entry(product).State = EntityState.Modified;
-						}
-						strPrice = WebShoeShop.Common.Common.FormatNumber(sp.TotalPrice, 0);
-						strProductName = sp.ProductName;
-					}
-					db.SaveChanges();
-					if (req.TypeShip == 1)
-					{
-						TongTien = thanhtien;
-					}
-					else if (req.TypeShip == 2)
-					{
-						TongTien = thanhtien + 30000;
-					}
-					TongTien -= totaldiscout;
-					string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/invoice-1.html"));
-					contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
-					contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
-					contentCustomer = contentCustomer.Replace("{{Gia}}", strPrice);
-					contentCustomer = contentCustomer.Replace("{{TenSanPham}}", strProductName);
-					contentCustomer = contentCustomer.Replace("{{NgayDat}}", DateTime.Now.ToString("dd/MM/yyyy"));
-					contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
-					contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
-					contentCustomer = contentCustomer.Replace("{{Email}}", req.Email);
-					contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
-					contentCustomer = contentCustomer.Replace("{{GiamGia}}", WebShoeShop.Common.Common.FormatNumber(order.TotalDiscount, 0));
-					contentCustomer = contentCustomer.Replace("{{ThanhTien}}", WebShoeShop.Common.Common.FormatNumber(thanhtien, 0));
-					if (req.TypeShip == 1)
-					{
-						contentCustomer = contentCustomer.Replace("{{PhiVanChuyen}}", "0");
-					}
-					else if (req.TypeShip == 2)
-					{
-						contentCustomer = contentCustomer.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(30000, 0));
-					}
-					contentCustomer = contentCustomer.Replace("{{TongTien}}", WebShoeShop.Common.Common.FormatNumber(TongTien, 0));
-					WebShoeShop.Common.Common.SendMail("Double 2T-2Q Store", "Đơn hàng #" + order.Code, contentCustomer.ToString(), req.Email);
-
-					string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/templates/send1.html"));
-					contentAdmin = contentAdmin.Replace("{{MaDon}}", order.Code);
-					contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
-					contentAdmin = contentAdmin.Replace("{{NgayDat}}", DateTime.Now.ToString("dd/MM/yyyy"));
-					contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", order.CustomerName);
-					contentAdmin = contentAdmin.Replace("{{Phone}}", order.Phone);
-					contentAdmin = contentAdmin.Replace("{{Email}}", req.Email);
-					contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", order.Address);
-					contentAdmin = contentAdmin.Replace("{{GiamGia}}", WebShoeShop.Common.Common.FormatNumber(order.TotalDiscount, 0));
-					contentAdmin = contentAdmin.Replace("{{ThanhTien}}", WebShoeShop.Common.Common.FormatNumber(thanhtien, 0));
-					if (req.TypeShip == 1)
-					{
-						contentAdmin = contentAdmin.Replace("{{PhiVanChuyen}}", "0");
-					}
-					else if (req.TypeShip == 2)
-					{
-						contentAdmin = contentAdmin.Replace("{{PhiVanChuyen}}", WebShoeShop.Common.Common.FormatNumber(30000, 0));
-					}
-
-					contentAdmin = contentAdmin.Replace("{{TongTien}}", WebShoeShop.Common.Common.FormatNumber(TongTien, 0));
-					WebShoeShop.Common.Common.SendMail("Double 2T-2Q Store", "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["EmailAdmin"]);
+					UpdateProductQuantities(cart, order);
+					SendOrderEmails(order, req, cart);
 					cart.ClearCart();
-					code = new { Success = true, Code = req.TypePayment, Url = "" };
-					if (req.TypePayment == 2)
-					{
-						var url = UrlPayment(req.TypePaymentVN, order.Code);
-						code = new { Success = true, Code = req.TypePayment, Url = url };
-					}
+
+					// Xử lý thanh toán
+					code = HandlePayment(req, order);
 				}
 			}
 			return Json(code);
+		}
+
+		private Models.EF.Order CreateOrder(OrderViewModel req, ShoppingCart cart)
+		{
+			Models.EF.Order order = new Models.EF.Order
+			{
+				CustomerName = req.CustomerName,
+				Phone = req.Phone,
+				Address = req.Address,
+				Email = req.Email,
+				Status = 1,
+				StatusPayMent = 1,
+				CouponCode = cart.CouponCode,
+				TotalDiscount = cart.TotalDiscount,
+				Quantity = cart.GetTotalQuantity(),
+				TypePayment = req.TypePayment,
+				TypeShip = req.TypeShip,
+				CreatedDate = DateTime.Now,
+				ModifiedDate = DateTime.Now,
+				CreatedBy = req.Phone,
+				CustomerId = User.Identity.IsAuthenticated ? User.Identity.GetUserId() : null,
+				Code = GenerateOrderCode()
+			};
+
+			// Tính toán tổng tiền
+			decimal thanhtien = cart.Items.Sum(x => x.Price * x.Quantity);
+			order.TotalAmount = thanhtien + req.ShipCost - cart.TotalDiscount;
+
+			// Thêm chi tiết đơn hàng
+			foreach (var item in cart.Items)
+			{
+				order.OrderDetails.Add(new OrderDetail
+				{
+					ProductId = item.ProductId,
+					Quantity = item.Quantity,
+					Price = item.Price,
+					Size = item.Size
+				});
+			}
+
+			return order;
+		}
+
+		private string GenerateOrderCode()
+		{
+			Random rd = new Random();
+			return "DH" +
+				   rd.Next(0, 9).ToString() +
+				   rd.Next(0, 9).ToString() +
+				   rd.Next(0, 9).ToString() +
+				   rd.Next(0, 9).ToString();
+		}
+
+		private void UpdateProductQuantities(ShoppingCart cart, Models.EF.Order order)
+		{
+			foreach (var item in cart.Items)
+			{
+				var product = db.Products
+					.Include(p => p.ProductSize)
+					.FirstOrDefault(p => p.Id == item.ProductId);
+
+				if (product != null)
+				{
+					// Giảm số lượng sản phẩm
+					product.ReduceQuantity(item.Quantity, item.Size);
+					product.Quantity -= item.Quantity;
+					product.SoldQuantity += item.Quantity;
+					db.Entry(product).State = EntityState.Modified;
+				}
+			}
+			db.SaveChanges();
+		}
+
+		private void SendOrderEmails(Models.EF.Order order, OrderViewModel req, ShoppingCart cart)
+		{
+			// Tạo HTML chi tiết sản phẩm
+			string productDetailsHtml = GenerateProductDetailsHtml(cart);
+			decimal thanhtien = cart.Items.Sum(x => x.Price * x.Quantity);
+			decimal tongTien = (decimal)(thanhtien + req.ShipCost - order.TotalDiscount);
+			SendCustomerEmail(order, req, productDetailsHtml, thanhtien, tongTien);
+			SendAdminEmail(order, req, productDetailsHtml, thanhtien, tongTien);
+		}
+
+		private string GenerateProductDetailsHtml(ShoppingCart cart)
+		{
+			StringBuilder strSanPham = new StringBuilder();
+
+			foreach (var sp in cart.Items)
+			{
+				strSanPham.Append("<tr>");
+				strSanPham.Append($"<td style=\"border-bottom:1px solid #e8e8e8; border-collapse:collapse; padding:10px;\">{sp.ProductName}</td>");
+				strSanPham.Append($"<td style=\"text-align:center;\">{FormatCurrency(sp.Price)}</td>");
+				strSanPham.Append($"<td style=\"text-align:center;\">{sp.Quantity}</td>");
+				strSanPham.Append($"<td style=\"text-align:center;\">{FormatCurrency(sp.TotalPrice)}</td>");
+				strSanPham.Append("</tr>");
+			}
+
+			return strSanPham.ToString();
+		}
+
+		private void SendCustomerEmail(Models.EF.Order order, OrderViewModel req,
+			string productDetailsHtml, decimal thanhtien, decimal tongTien)
+		{
+			// Đọc template email
+			string contentCustomer = System.IO.File.ReadAllText(
+				Server.MapPath("~/Content/templates/invoice-1.html"));
+			contentCustomer = ReplaceEmailPlaceholders(
+				contentCustomer,
+				order,
+				req,
+				productDetailsHtml,
+				thanhtien,
+				tongTien
+			);
+			WebShoeShop.Common.Common.SendMail(
+				"Double 2T-2Q Store",
+				$"Đơn hàng #{order.Code}",
+				contentCustomer,
+				req.Email
+			);
+		}
+
+		private void SendAdminEmail(Models.EF.Order order, OrderViewModel req,
+			string productDetailsHtml, decimal thanhtien, decimal tongTien)
+		{
+			// Đọc template email
+			string contentAdmin = System.IO.File.ReadAllText(
+				Server.MapPath("~/Content/templates/send1.html"));
+			contentAdmin = ReplaceEmailPlaceholders(
+				contentAdmin,
+				order,
+				req,
+				productDetailsHtml,
+				thanhtien,
+				tongTien
+			);
+
+			WebShoeShop.Common.Common.SendMail(
+				"Double 2T-2Q Store",
+				$"Đơn hàng mới #{order.Code}",
+				contentAdmin,
+				ConfigurationManager.AppSettings["EmailAdmin"]
+			);
+		}
+
+		private string ReplaceEmailPlaceholders(string content, Models.EF.Order order,
+			OrderViewModel req, string productDetailsHtml,
+			decimal thanhtien, decimal tongTien)
+		{
+			return content
+				.Replace("{{MaDon}}", order.Code)
+				.Replace("{{SanPham}}", productDetailsHtml)
+				.Replace("{{NgayDat}}", DateTime.Now.ToString("dd/MM/yyyy"))
+				.Replace("{{TenKhachHang}}", order.CustomerName)
+				.Replace("{{Phone}}", order.Phone)
+				.Replace("{{Email}}", req.Email)
+				.Replace("{{DiaChiNhanHang}}", order.Address)
+				.Replace("{{GiamGia}}", FormatCurrency((decimal)order.TotalDiscount))
+				.Replace("{{ThanhTien}}", FormatCurrency(thanhtien))
+				.Replace("{{PhiVanChuyen}}", FormatCurrency(req.ShipCost))
+				.Replace("{{TongTien}}", FormatCurrency(tongTien));
+		}
+
+		private dynamic HandlePayment(OrderViewModel req, Models.EF.Order order)
+		{
+			// Mặc định
+			var code = new { Success = true, Code = req.TypePayment, Url = "" };
+
+			// Nếu là thanh toán online
+			if (req.TypePayment == 2)
+			{
+				string orderCode = GenerateOrderCode();
+				req.Code = orderCode;
+				Session[$"TempOrder_{orderCode}"] = req;
+				order.Status = (int?)OrderStatus.Pending;
+				db.SaveChanges();
+
+				var url = UrlPayment(req.TypePaymentVN, order.Code);
+				code = new { Success = true, Code = req.TypePayment, Url = url };
+			}
+
+			return code;
+		}
+
+		private string FormatCurrency(decimal value)
+		{
+			return WebShoeShop.Common.Common.FormatNumber(value, 0);
 		}
 
 		[HttpPost]
@@ -699,6 +788,15 @@ namespace WebShoeShop.Controllers
 			urlPayment = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 			//log.InfoFormat("VNPAY URL: {0}", paymentUrl);
 			return urlPayment;
+		}
+		public enum OrderStatus
+		{
+			Pending = 1,      // Chờ thanh toán
+			Paid = 2,         // Đã thanh toán
+			PaymentFailed = 3,// Thanh toán thất bại
+			Shipping = 4,     // Đang vận chuyển
+			Completed = 5,    // Hoàn thành
+			Cancelled = 6     // Đã hủy
 		}
 		#endregion
 	}

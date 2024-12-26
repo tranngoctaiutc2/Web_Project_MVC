@@ -5,6 +5,7 @@ using Microsoft.Owin.Security;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -135,6 +136,21 @@ namespace WebShoeShop.Controllers
 					if (order.Status == 1 || order.Status == 2)
 					{
 						order.Status = 0;
+						foreach (var detail in order.OrderDetails)
+						{
+							var product = db.Products
+								.Include(p => p.ProductSize)
+								.FirstOrDefault(p => p.Id == detail.ProductId);
+
+							if (product != null)
+							{
+								// Hoàn lại số lượng sản phẩm
+								product.ReturnQuantity(detail.Quantity, (int)detail.Size);
+								product.Quantity += detail.Quantity;
+								product.SoldQuantity -= detail.Quantity;
+								db.Entry(product).State = EntityState.Modified;
+							}
+						}
 						db.SaveChanges();
 						return Json(new { success = true, message = "Đơn hàng đã được hủy thành công." });
 					}
