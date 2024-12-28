@@ -156,9 +156,9 @@
                             <!-- User Reviews -->
 
                             <div class="col-lg-6 reviews_col">
-
-
-                                @Html.Action("_load_Review", "Review", new { productId = Model.Id })
+                                <div id="load_review">
+                                    @Html.Action("_load_Review", "Review", new { productId = Model.Id })
+                                </div>
                             </div>
 
                             <!-- Add Review -->

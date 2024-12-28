@@ -3588,6 +3588,7 @@
     <Content Include="Views\Contact\Instruct_SizeProducts.cshtml" />
     <Content Include="Views\Menu\_MenuBrand.cshtml" />
     <Content Include="Views\Products\ProductsByBrand.cshtml" />
+    <Content Include="Views\Review\_NotAuthorizedReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

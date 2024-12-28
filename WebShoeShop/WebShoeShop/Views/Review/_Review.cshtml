@@ -15,11 +15,40 @@
                 $('#review_submit').attr("disabled", "disabled");
             }
             function OnSuccessRE(res) {
-                if (res.Success) {
-                    $('#load_review').html(res);
-                    $("#review_form")[0].reset();
+    if (res.Success) {
+        if (typeof res === 'string' && res.trim() !== '') {
+            $('#load_review').html(res);
+        }
+        $("#review_form")[0].reset();
+        location.reload();
+    } else {
+        if (res.ShowNotAuthorizedView) {
+            $.ajax({
+                url: '@Url.Action("_Review", "Review")',
+                type: 'GET',
+                data: { productId: @ViewBag.ProductId },
+                success: function (partialView) { 
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: res.Message,
+                        didClose: () => {
+                            location.reload();
+                        }
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Đã xảy ra lỗi khi kiểm tra quyền đánh giá.'
+                    });
                 }
-            }
+            });
+        } 
+    }
+}
+
             function OnFailureRE() {
                 alert('Đã xảy ra lỗi khi gửi đánh giá.');
             }
