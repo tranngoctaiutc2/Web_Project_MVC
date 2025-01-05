@@ -304,8 +304,8 @@ jQuery(document).ready(function ($) {
 		$("#slider-range").slider({
 			range: true,
 			min: 0,
-			max: 5000000,
-			values: [0, 1000000],
+			max: 50000000,
+			values: [0, 5000000],
 			slide: function (event, ui) {
 				// Cập nhật giá trị thanh trượt trên input và slider với định dạng phần nghìn
 				$("#amount").val("đ" + ui.values[0] + " - đ" + ui.values[1]);

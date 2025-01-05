@@ -53,61 +53,14 @@ namespace WebShoeShop.Areas.Admin.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var existingProduct = db.Products.FirstOrDefault(p => p.Id == model.Id);
+				var existingProduct = db.Products.FirstOrDefault(p => p.Title.Trim().ToLower() == model.Title.Trim().ToLower() && p.Id != model.Id);
+
 				if (existingProduct != null)
 				{
-					// Cập nhật sản phẩm
-					existingProduct.Title = model.Title;
-					existingProduct.Description = model.Description;
-					existingProduct.Price = model.Price;
-					existingProduct.Quantity = model.Quantity;
-					existingProduct.ProductCategoryId = model.ProductCategoryId;
-					existingProduct.ModifiedDate = DateTime.Now;
-					existingProduct.OriginalPrice2 = model.OriginalPrice2;
-					existingProduct.Detail = model.Detail;
-					existingProduct.PriceSale = model.PriceSale;
-					existingProduct.IsActive = model.IsActive;
-					existingProduct.IsSale = model.IsSale;
-					existingProduct.IsHome = model.IsHome;
-					existingProduct.IsFeature = model.IsFeature;
-
-					existingProduct.ProductSize.Clear(); // Xóa size cũ
-					if (Sizes != null && Sizes.Count > 0)
-					{
-						for (int i = 0; i < Sizes.Count; i++)
-						{
-							existingProduct.ProductSize.Add(new ProductSize
-							{
-								ProductId = existingProduct.Id,
-								Size = Sizes[i],
-								Quantity = Quantities[i]
-							});
-						}
-					}
-
-					// Quản lý hình ảnh
-					if (Images != null && Images.Count > 0)
-					{
-						var currentImages = existingProduct.ProductImage.Select(i => i.Image).ToList();
-						db.ProductImages.RemoveRange(existingProduct.ProductImage.Where(i => !Images.Contains(i.Image)).ToList());
-
-						for (int i = 0; i < Images.Count; i++)
-						{
-							var isDefault = (i + 1 == rDefault[0]);
-							if (!currentImages.Contains(Images[i]))
-							{
-								existingProduct.ProductImage.Add(new ProductImage
-								{
-									ProductId = existingProduct.Id,
-									Image = Images[i],
-									IsDefault = isDefault
-								});
-							}
-						}
-					}
-
-					db.SaveChanges();
-					return RedirectToAction("Index");
+					// Nếu sản phẩm tồn tại, trả về thông báo lỗi
+					ModelState.AddModelError("Title", "Sản phẩm đã tồn tại với tên này!");
+					ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+					return View(model);
 				}
 				else
 				{
@@ -159,6 +112,12 @@ namespace WebShoeShop.Areas.Admin.Controllers
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
 			return View(model);
 		}
+		public JsonResult CheckProductTitleExists(string title)
+		{
+			var productExists = db.Products.Any(p => p.Title.Trim().ToLower() == title.Trim().ToLower());
+			return Json(new { exists = productExists }, JsonRequestBehavior.AllowGet);
+		}
+
 		public ActionResult Edit(int id)
 		{
 			ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
@@ -187,6 +146,18 @@ namespace WebShoeShop.Areas.Admin.Controllers
 				var existingProduct = db.Products.Find(model.Id);
 				if (existingProduct != null)
 				{
+					if (existingProduct.Title.Trim().ToLower() != model.Title.Trim().ToLower())
+					{
+						var existingProductWithSameTitle = db.Products
+							.FirstOrDefault(p => p.Title.Trim().ToLower() == model.Title.Trim().ToLower() && p.Id != model.Id);
+
+						if (existingProductWithSameTitle != null)
+						{
+							ModelState.AddModelError("Title", "Sản phẩm đã tồn tại với tên này!");
+							ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+							return View(model);
+						}
+					}
 					existingProduct.Title = model.Title;
 					existingProduct.Description = model.Description;
 					existingProduct.Price = model.Price;
