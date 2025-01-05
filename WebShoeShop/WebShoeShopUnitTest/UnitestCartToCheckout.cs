@@ -94,17 +94,28 @@ namespace WebShoeShopUnitTest
             Assert.IsNotNull(sizeInput, "Không tìm thấy nút thay đổi size.");
             sizeInput.Click();
 
-            // Tìm danh sách trong lớp "list-inline d-flex flex-warp"
+            // Lấy danh sách kích thước và loại trừ kích thước đầu tiên
             IWebElement sizeListContainer = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".product_size.d-flex.flex-column.flex-sm-row.align-items-sm-center")));
             IList<IWebElement> sizeOptions = sizeListContainer.FindElements(By.TagName("li")); // Giả định mỗi option là một thẻ <li>
 
             // Kiểm tra danh sách không rỗng
             Assert.IsTrue(sizeOptions.Count > 0, "Không tìm thấy các tùy chọn kích thước.");
 
-            // Chọn ngẫu nhiên một giá trị
+            // Lấy kích thước đầu tiên để loại trừ
+            IWebElement firstSizeOption = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".size-item:first-child")));
+            Assert.IsNotNull(firstSizeOption, "Không tìm thấy size.");
+            string firstSizeText = firstSizeOption.Text;
+
+            // Loại bỏ kích thước đầu tiên khỏi danh sách
+            IList<IWebElement> filteredSizeOptions = sizeOptions.Where(option => option.Text != firstSizeText).ToList();
+
+            // Đảm bảo danh sách còn lại không rỗng
+            Assert.IsTrue(filteredSizeOptions.Count > 0, "Không có tùy chọn kích thước nào ngoài kích thước đầu tiên.");
+
+            // Chọn ngẫu nhiên một kích thước từ danh sách đã lọc
             Random random = new Random();
-            int randomIndex = random.Next(sizeOptions.Count);
-            IWebElement randomSizeOption = sizeOptions[randomIndex];
+            int randomIndex = random.Next(filteredSizeOptions.Count);
+            IWebElement randomSizeOption = filteredSizeOptions[randomIndex];
 
             // Click vào tùy chọn kích thước ngẫu nhiên
             randomSizeOption.Click();
