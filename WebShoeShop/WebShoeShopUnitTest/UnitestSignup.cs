@@ -69,6 +69,8 @@ namespace WebShoeShopUnitTest
         [Test]
         public void SignUpWithInvalidFullName()
         {
+            var testUser = TestSeeder.username;
+
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
@@ -85,10 +87,10 @@ namespace WebShoeShopUnitTest
             fullname.SendKeys("");
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin1");
+            username.SendKeys(testUser);
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin1@example.com");
+            email.SendKeys($"{testUser}@example.com");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("Password1@");
@@ -106,6 +108,8 @@ namespace WebShoeShopUnitTest
         [Test]
         public void SignUpWithInvalidUserName()
         {
+            var testUser = TestSeeder.username;
+
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
@@ -125,7 +129,7 @@ namespace WebShoeShopUnitTest
             username.SendKeys("");
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin1@example.com");
+            email.SendKeys($"{testUser}@example.com");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("Password1@");
@@ -143,6 +147,8 @@ namespace WebShoeShopUnitTest
         [Test]
         public void SignUpWithInvalidEmail()
         {
+            var testUser = TestSeeder.username;
+
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
@@ -159,44 +165,7 @@ namespace WebShoeShopUnitTest
             fullname.SendKeys("Administrator");
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin1");
-
-            IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin1@example.com");
-
-            IWebElement password = _driver.FindElement(By.Name("Password"));
-            password.SendKeys("");
-
-            IWebElement confirmpassword = _driver.FindElement(By.Name("ConfirmPassword"));
-            confirmpassword.SendKeys("Password1@");
-
-            IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
-            loginSubmitBtn.Click();
-
-            IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".text-danger.field-validation-error")));
-            Assert.IsNotNull(errorMessage);
-            Assert.That(errorMessage.Text, Is.EqualTo("Mật khẩu không được để trống"));
-        }
-        [Test]
-        public void SignUpWithInvalidPassword()
-        {
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
-
-            IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
-            Assert.IsNotNull(profileBtn);
-            profileBtn.Click();
-
-            IWebElement loginBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("a[href='/account/Register']")));
-            Assert.IsNotNull(loginBtn);
-            loginBtn.Click();
-
-            Assert.That(_driver.Url, Is.EqualTo("https://localhost:44390/account/Register"));
-
-            IWebElement fullname = _driver.FindElement(By.Name("FullName"));
-            fullname.SendKeys("Administrator");
-
-            IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin1");
+            username.SendKeys(testUser);
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
             email.SendKeys("");
@@ -215,8 +184,10 @@ namespace WebShoeShopUnitTest
             Assert.That(errorMessage.Text, Is.EqualTo("Email không được để trống"));
         }
         [Test]
-        public void SignUpWithInvalidConfirmPassword()
+        public void SignUpWithInvalidPassword()
         {
+            var testUser = TestSeeder.username;
+
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
             IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
@@ -233,10 +204,49 @@ namespace WebShoeShopUnitTest
             fullname.SendKeys("Administrator");
 
             IWebElement username = _driver.FindElement(By.Name("UserName"));
-            username.SendKeys("admin1");
+            username.SendKeys(testUser);
 
             IWebElement email = _driver.FindElement(By.Name("Email"));
-            email.SendKeys("admin1@example.com");
+            email.SendKeys($"{testUser}@example.com");
+
+            IWebElement password = _driver.FindElement(By.Name("Password"));
+            password.SendKeys("");
+
+            IWebElement confirmpassword = _driver.FindElement(By.Name("ConfirmPassword"));
+            confirmpassword.SendKeys("Password1@");
+
+            IWebElement loginSubmitBtn = _driver.FindElement(By.ClassName("form__button"));
+            loginSubmitBtn.Click();
+
+            IWebElement errorMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".text-danger.field-validation-error")));
+            Assert.IsNotNull(errorMessage);
+            Assert.That(errorMessage.Text, Is.EqualTo("Mật khẩu không trùng khớp"));
+        }
+        [Test]
+        public void SignUpWithInvalidConfirmPassword()
+        {
+            var testUser = TestSeeder.username;
+
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
+
+            IWebElement profileBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-user")));
+            Assert.IsNotNull(profileBtn);
+            profileBtn.Click();
+
+            IWebElement loginBtn = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("a[href='/account/Register']")));
+            Assert.IsNotNull(loginBtn);
+            loginBtn.Click();
+
+            Assert.That(_driver.Url, Is.EqualTo("https://localhost:44390/account/Register"));
+
+            IWebElement fullname = _driver.FindElement(By.Name("FullName"));
+            fullname.SendKeys("Administrator");
+
+            IWebElement username = _driver.FindElement(By.Name("UserName"));
+            username.SendKeys(testUser);
+
+            IWebElement email = _driver.FindElement(By.Name("Email"));
+            email.SendKeys($"{testUser}@example.com");
 
             IWebElement password = _driver.FindElement(By.Name("Password"));
             password.SendKeys("Password1@");

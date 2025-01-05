@@ -73,15 +73,15 @@ namespace WebShoeShopUnitTest
 		[Test]
 		public void CheckoutCartSuccessfully()
 		{
-			WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
+			WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
 
-			// Kiểm tra giỏ hàng, click vào biểu tượng giỏ hàng
-			IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-shopping-bag")));
-			Assert.IsNotNull(cartIcon, "Không tìm thấy biểu tượng giỏ hàng.");
+			// Kiểm tra giỏ hàng, click vào nút xem giỏ hàng
+			IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-outline-dark.btn-sm")));
+			Assert.IsNotNull(cartIcon, "Không tìm thấy nút xem giỏ hàng.");
 			cartIcon.Click();
 
 			// Chờ đến khi giỏ hàng có sản phẩm và kiểm tra chuyển hướng tới trang giỏ hàng
-			bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/gio-hang"));
+			bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/shoppingcart"));
 			Assert.IsTrue(isOnCartPage, "Không chuyển hướng đến trang giỏ hàng.");
 
 			// Kiểm tra và nhập số lượng sản phẩm (1 sản phẩm)
@@ -89,21 +89,34 @@ namespace WebShoeShopUnitTest
 			quantityInput.Clear(); // Xóa giá trị hiện tại
 			quantityInput.SendKeys("1");
 
-			// Lấy dropdown chọn size sản phẩm
-			IWebElement dropdown = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("Size_55_40")));
+			// Kiểm tra size sản phẩm
+			IWebElement sizeInput = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-link.btnUpdateSize")));
+            Assert.IsNotNull(sizeInput, "Không tìm thấy nút thay đổi size.");
+            sizeInput.Click();
 
-			// Khởi tạo đối tượng SelectElement để thao tác với dropdown
-			SelectElement selectElement = new SelectElement(dropdown);
+            // Tìm danh sách trong lớp "list-inline d-flex flex-warp"
+            IWebElement sizeListContainer = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".product_size.d-flex.flex-column.flex-sm-row.align-items-sm-center")));
+            IList<IWebElement> sizeOptions = sizeListContainer.FindElements(By.TagName("li")); // Giả định mỗi option là một thẻ <li>
 
-			// Lấy option đã chọn mặc định ban đầu
-			string firstOptionValue = selectElement.Options.First().GetAttribute("value"); // Lấy giá trị của option đầu tiên
-			selectElement.SelectByValue(firstOptionValue); // Chọn option đầu tiên
+            // Kiểm tra danh sách không rỗng
+            Assert.IsTrue(sizeOptions.Count > 0, "Không tìm thấy các tùy chọn kích thước.");
 
-			IWebElement confirmChange = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-sm.btn-success.btnUpdate")));
+            // Chọn ngẫu nhiên một giá trị
+            Random random = new Random();
+            int randomIndex = random.Next(sizeOptions.Count);
+            IWebElement randomSizeOption = sizeOptions[randomIndex];
+
+            // Click vào tùy chọn kích thước ngẫu nhiên
+            randomSizeOption.Click();
+
+            IWebElement confirmChange = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-dark.btnSaveSize")));
 			confirmChange.Click();
 
-			// Tiến hành thanh toán
-			IWebElement checkoutButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-success.btnpayment")));
+            IWebElement confirmFinalChange = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-sm.btn-success.btnUpdate")));
+            confirmFinalChange.Click();
+
+            // Tiến hành thanh toán
+            IWebElement checkoutButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-success.btnpayment")));
 			checkoutButton.Click();
 
 			// Kiểm tra xem có chuyển hướng đến trang thanh toán thành công hay không
@@ -117,61 +130,60 @@ namespace WebShoeShopUnitTest
 		{
 			WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
-			// Kiểm tra giỏ hàng, click vào biểu tượng giỏ hàng
-			IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-shopping-bag")));
-			Assert.IsNotNull(cartIcon, "Không tìm thấy biểu tượng giỏ hàng.");
-			cartIcon.Click();
+            // Kiểm tra giỏ hàng, click vào nút xem giỏ hàng
+            IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-outline-dark.btn-sm")));
+            Assert.IsNotNull(cartIcon, "Không tìm thấy nút xem giỏ hàng.");
+            cartIcon.Click();
 
-			// Chờ đến khi giỏ hàng có sản phẩm và kiểm tra chuyển hướng tới trang giỏ hàng
-			bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/gio-hang"));
+            // Chờ đến khi giỏ hàng có sản phẩm và kiểm tra chuyển hướng tới trang giỏ hàng
+            bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/shoppingcart"));
 			Assert.IsTrue(isOnCartPage, "Không chuyển hướng đến trang giỏ hàng.");
 
 			IWebElement quantityInput = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".form-control.quantity-input")));
 			quantityInput.Clear(); // Clear the existing value
 			quantityInput.SendKeys("1");
 
-			IWebElement dropdown = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("Size_55_40")));
+            // Kiểm tra size sản phẩm
+            IWebElement sizeInput = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-link.btnUpdateSize")));
+            Assert.IsNotNull(sizeInput, "Không tìm thấy nút thay đổi size.");
+            sizeInput.Click();
 
-			// Khởi tạo đối tượng SelectElement để thao tác với dropdown
-			SelectElement selectElement = new SelectElement(dropdown);
+            // Tìm danh sách trong lớp "list-inline d-flex flex-warp"
+            IWebElement sizeListContainer = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".product_size.d-flex.flex-column.flex-sm-row.align-items-sm-center")));
+            IList<IWebElement> sizeOptions = sizeListContainer.FindElements(By.TagName("li")); // Giả định mỗi option là một thẻ <li>
 
-			// Lấy option đã chọn mặc định ban đầu
-			string defaultSelectedOption = selectElement.SelectedOption.Text;
+            // Kiểm tra danh sách không rỗng
+            Assert.IsTrue(sizeOptions.Count > 0, "Không tìm thấy các tùy chọn kích thước.");
 
-			// Kiểm tra xem option "0" có tồn tại hay không
-			bool optionExists = selectElement.Options.Any(option => option.GetAttribute("value") == "0");
+            // Kiểm tra danh sách size có giá trị 0 hay không
+            bool hasZeroValue = sizeOptions.Any(option =>
+            {
+                string value = option.GetAttribute("data-value"); // Giả sử giá trị nằm trong thuộc tính "data-value"
+                return value == "0";
+            });
 
-			if (optionExists)
-			{
-				// Chọn option "0" nếu tồn tại
-				selectElement.SelectByValue("0");
+            // Đảm bảo không có giá trị 0
+            Assert.IsFalse(hasZeroValue, "Danh sách kích thước có chứa giá trị 0, không đúng mong đợi.");
 
-				// Kiểm tra option đã chọn đúng
-				Assert.AreEqual("0", selectElement.SelectedOption.GetAttribute("value"), "Không chọn được option 0.");
-			}
-			else
-			{
-				// Nếu option không tồn tại, coi như test thành công và không cần chọn
-				Assert.Pass("Option 0 không tồn tại, đây là hành vi mong đợi.");
-			}
-		}
+        }
 
 
-		[Test]
+        [Test]
 		public void CheckoutCartWithInvalidQuantity()
 		{
 			WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(20));
 
-			// Kiểm tra giỏ hàng, click vào biểu tượng giỏ hàng
-			IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".fa.fa-shopping-bag")));
-			Assert.IsNotNull(cartIcon, "Không tìm thấy biểu tượng giỏ hàng.");
-			cartIcon.Click();
+            // Kiểm tra giỏ hàng, click vào biểu tượng giỏ hàng
+            // Kiểm tra giỏ hàng, click vào nút xem giỏ hàng
+            IWebElement cartIcon = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".btn.btn-outline-dark.btn-sm")));
+            Assert.IsNotNull(cartIcon, "Không tìm thấy nút xem giỏ hàng.");
+            cartIcon.Click();
 
-			// Chờ đến khi giỏ hàng có sản phẩm và kiểm tra chuyển hướng tới trang giỏ hàng
-			bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/gio-hang"));
-			Assert.IsTrue(isOnCartPage, "Không chuyển hướng đến trang giỏ hàng.");
+            // Chờ đến khi giỏ hàng có sản phẩm và kiểm tra chuyển hướng tới trang giỏ hàng
+            bool isOnCartPage = wait.Until(drv => drv.Url.Contains("/shoppingcart"));
+            Assert.IsTrue(isOnCartPage, "Không chuyển hướng đến trang giỏ hàng.");
 
-			IWebElement quantityInput = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".form-control.quantity-input")));
+            IWebElement quantityInput = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector(".form-control.quantity-input")));
 			quantityInput.Clear(); // Clear the existing value
 			quantityInput.SendKeys("0");
 
@@ -185,7 +197,7 @@ namespace WebShoeShopUnitTest
 			Assert.IsNotNull(toastMessage, "Không tìm thấy thông báo toast.");
 
 			// Kiểm tra nội dung của thông báo toast
-			string expectedMessage = "Vui lòng nhập số lượng và size hợp lệ.";
+			string expectedMessage = "Vui lòng nhập số lượng hợp lệ.";
 			Assert.That(toastMessage.Text, Is.EqualTo(expectedMessage), "Thông báo không đúng.");
 		}
 

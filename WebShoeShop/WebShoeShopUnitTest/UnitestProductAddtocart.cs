@@ -78,12 +78,12 @@ namespace WebShoeShopUnitTest
             // Click vào nút "Thêm vào giỏ hàng" sau khi chọn size
             addToCartButton.Click();
 
-            // Chờ cho đến khi thông báo toast xuất hiện với class "swal2-html-container"
-            IWebElement toastMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".swal2-html-container")));
+            // Chờ cho đến khi thông báo toast xuất hiện với class "modal-title mb-0"
+            IWebElement toastMessage = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".modal-title.mb-0")));
             Assert.IsNotNull(toastMessage, "Không tìm thấy thông báo toast.");
 
             // Kiểm tra nội dung của thông báo toast
-            string expectedMessage = "Thêm sản phẩm vào giỏ hàng thành công!";
+            string expectedMessage = "Đã được thêm vào giỏ hàng";
             Assert.That(toastMessage.Text, Is.EqualTo(expectedMessage), "Thông báo không đúng.");
         }
 

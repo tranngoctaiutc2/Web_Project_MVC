@@ -11,7 +11,7 @@ namespace WebShoeShop.Helpers
 {
     public static class TestSeeder
     {
-        public static string username = "admin2";
+        public static string username = "admin1";
 
         public static void SeedTestUsers()
         {
