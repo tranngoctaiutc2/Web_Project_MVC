@@ -1,10 +1,41 @@
-﻿@model IEnumerable<WebShoeShop.Models.EF.Product>
+﻿@model PagedList.IPagedList<WebShoeShop.Models.EF.Product>
+    @using PagedList.Mvc
 @{
     ViewBag.Title = "Danh sách sản phẩm";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<style>
+    .pagination-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+        .pagination-container .pagination {
+            display: inline-block;
+        }
+
+            .pagination-container .pagination li {
+                display: inline;
+                margin: 0 5px;
+            }
+
+            .pagination-container .pagination a,
+            .pagination-container .pagination span {
+                padding: 5px 10px;
+                border: 1px solid #ddd;
+                color: #337ab7;
+                text-decoration: none;
+            }
+
+            .pagination-container .pagination .active span {
+                background-color: #337ab7;
+                color: white;
+                border: 1px solid #337ab7;
+            }
+
+</style>
 <div class="container product_section_container">
     <div class="row">
         <div class="col product_section clearfix">
@@ -42,9 +73,9 @@
                     <div class="sidebar_title">
                         <h6><strong>Thương hiệu:</strong></h6>
                     </div>
-                        <div class="form-group">
-                            @Html.Action("MenuBrand", "Menu")
-                        </div>
+                    <div class="form-group">
+                        @Html.Action("MenuBrand", "Menu")
+                    </div>
                     <div class="sidebar_title">
                         <h3><strong>Bộ lọc</strong></h3>
                     </div>
@@ -108,19 +139,6 @@
                                         </ul>
                                     </li>
                                 </ul>
-                                <div class="pages d-flex flex-row align-items-center">
-                                    <div class="page_current">
-                                        <span>1</span>
-                                        <ul class="page_selection">
-                                            <li><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="page_total"><span>trong</span> 3</div>
-                                    <div id="next_page" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
-                                </div>
-
                             </div>
 
                             <!-- Product Grid -->
@@ -182,11 +200,24 @@
                                         </div>
                                     }
                                 }
-
-
                             </div>
-
                         </div>
+
+                    </div>
+
+                    <div class="pagination-container">
+                        @Html.PagedListPager(
+                            Model,
+                            page => Url.Action("Index", new { page }),
+                            new PagedListRenderOptions
+                            {
+                                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                MaximumPageNumbersToDisplay = 5,
+                                DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                                Display = PagedListDisplayMode.IfNeeded
+                            }
+                        )
                     </div>
                 </div>
             </div>

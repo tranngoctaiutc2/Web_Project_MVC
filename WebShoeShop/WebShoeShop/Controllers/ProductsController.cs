@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PagedList;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using WebShoeShop.Models;
@@ -10,12 +11,19 @@ namespace WebShoeShop.Controllers
 	{
 		private ApplicationDbContext db = new ApplicationDbContext();
 		// GET: Products
-		public ActionResult Index()
+		public ActionResult Index(int? page)
 		{
+			int pageSize = 15;
+			int pageNumber = (page ?? 1);
 
-			var items = db.Products.Where(x => x.IsActive).Take(100).ToList();
-			return View(items);
+			var products = db.Products
+				.Where(x => x.IsActive)
+				.OrderByDescending(x => x.Id)
+				.ToPagedList(pageNumber, pageSize);
+
+			return View(products);
 		}
+
 
 		public ActionResult Detail(string alias, int? id)
 		{
